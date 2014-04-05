@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[])
 {
-    Steuerwerk* pic = new Steuerwerk();
+    /*Steuerwerk* pic = new Steuerwerk();
     string filename;
 
     if(argc == 2)
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     getchar();
 
-    pic->run();
+    pic->run();*/
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
