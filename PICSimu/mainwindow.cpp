@@ -26,15 +26,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotLoadLstFile()
 {
-    std::cout << "slotLoadLstFile() gestartet" << std::endl;
+
     list<string> lst;
     Steuerwerk* pic = new Steuerwerk();
 
-    std::cout << "vor auslesen" << std::endl;
+
 
     Parser::auslesen(&lst, ui->le_filename->text().toStdString(), pic);
 
-    std::cout << "nach auslesen" << std::endl;
+
 
     for(list<string>::iterator it=lst.begin(); it!=lst.end(); it++)
     {
