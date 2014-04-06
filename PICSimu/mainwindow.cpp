@@ -1,7 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "ui_selectfiledialog.h"
+#include "selectfiledialog.h"
 #include "parser.h"
 #include <iostream>
+#include <QDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->pb_load, SIGNAL(clicked()), SLOT(slotLoadLstFile()));
     connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(load_FileDialog()));
+    //connect(selectFileDialog.ui->buttonBox,SIGNAL(accepted()),this,SLOT(writePath()));
 }
 
 MainWindow::~MainWindow()
@@ -46,5 +50,14 @@ void MainWindow::slotLoadLstFile()
 
 void MainWindow::load_FileDialog()
 {
-    FileDialog.exec(); //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
+   if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
+   {
+       ui->le_filename->clear();
+       ui->le_filename->setText(FileDialog.acceptedPath);
+       //Hier code wenn ok geklickt wurde
+   }
 }
+
+
+
+

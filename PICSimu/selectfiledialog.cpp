@@ -1,5 +1,7 @@
 #include "selectfiledialog.h"
 #include "ui_selectfiledialog.h"
+#include "mainwindow.h"
+#include <iostream>
 
 selectFileDialog::selectFileDialog(QWidget *parent) :
     QDialog(parent),
@@ -27,4 +29,13 @@ void selectFileDialog::on_FolderTree_clicked(const QModelIndex &index)
 {
     QString sPath = dirmodel->fileInfo(index).absoluteFilePath();
     ui->FileList->setRootIndex(filemodel->setRootPath(sPath));
+}
+
+
+
+
+
+void selectFileDialog::on_FileList_clicked(const QModelIndex &index)
+{
+    acceptedPath = filemodel->fileInfo(index).absoluteFilePath();
 }
