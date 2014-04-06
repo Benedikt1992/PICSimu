@@ -46,5 +46,5 @@ void MainWindow::slotLoadLstFile()
 
 void MainWindow::load_FileDialog()
 {
-    FileDialog.exec();
+    FileDialog.exec(); //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
 }
