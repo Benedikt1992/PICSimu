@@ -69,6 +69,10 @@ void Prozessor::bsf(int command)
     file = command & 0x7F;
 
     ref= speicher.getFileReference(file);
+
+    if(ref == 0)
+        return;
+
     *ref |= 1 << bit;
 }
 
