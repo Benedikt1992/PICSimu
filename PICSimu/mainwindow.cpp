@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lw_lstFile->setFont(font);
 
     connect(ui->pb_load, SIGNAL(clicked()), SLOT(slotLoadLstFile()));
+    connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(load_FileDialog()));
 }
 
 MainWindow::~MainWindow()
@@ -41,4 +42,9 @@ void MainWindow::slotLoadLstFile()
         QString qstr = QString::fromStdString(*it);
         ui->lw_lstFile->addItem(qstr);
     }
+}
+
+void MainWindow::load_FileDialog()
+{
+    FileDialog.exec();
 }

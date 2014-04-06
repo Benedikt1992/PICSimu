@@ -18,13 +18,16 @@ SOURCES += main.cpp\
     parser.cpp \
     prozessor.cpp \
     speicher.cpp \
-    steuerwerk.cpp
+    steuerwerk.cpp \
+    selectfiledialog.cpp
 
 HEADERS  += mainwindow.h \
     codeline.h \
     parser.h \
     prozessor.h \
     speicher.h \
-    steuerwerk.h
+    steuerwerk.h \
+    selectfiledialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    selectfiledialog.ui

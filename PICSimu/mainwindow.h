@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "selectfiledialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,9 +18,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
+    selectFileDialog FileDialog;
 private slots:
     void slotLoadLstFile(void);
+    void load_FileDialog(void);
 };
 
 #endif // MAINWINDOW_H
