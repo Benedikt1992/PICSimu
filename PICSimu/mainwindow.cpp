@@ -31,21 +31,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotLoadLstFile()
 {
+    ui->lw_lstFile->clear();
 
     list<string> lst;
     Steuerwerk* pic = new Steuerwerk();
 
 
 
-    Parser::auslesen(&lst, ui->le_filename->text().toStdString(), pic);
-
-
-
-    for(list<string>::iterator it=lst.begin(); it!=lst.end(); it++)
-    {
-        QString qstr = QString::fromStdString(*it);
-        ui->lw_lstFile->addItem(qstr);
-    }
+    if(Parser::auslesen(&lst, ui->le_filename->text().toStdString(), pic))
+        for(list<string>::iterator it=lst.begin(); it!=lst.end(); it++)
+        {
+            QString qstr = QString::fromStdString(*it);
+            ui->lw_lstFile->addItem(qstr);
+        }
+    else
+        ui->lw_lstFile->addItem("File does not exist!");
 }
 
 void MainWindow::load_FileDialog()

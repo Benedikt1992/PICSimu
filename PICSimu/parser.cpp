@@ -8,11 +8,13 @@ Parser::Parser()
 {
 }
 
-void Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
+bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
 {
     string line;
     ifstream fin(filename.c_str());
 
+    if(!fin)
+        return false;
 
     while(!fin.eof())
     {
@@ -45,7 +47,7 @@ void Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
 
     fin.close();
 
-
+    return true;
 }
 
 void Parser::ausgeben(list<string> lstDatei)
