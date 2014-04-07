@@ -3,18 +3,25 @@
 
 #include <QMainWindow>
 #include "selectfiledialog.h"
+//#include "steuerwerk.h"
 
 namespace Ui {
 class MainWindow;
 }
+
+class Steuerwerk;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    Steuerwerk* steuerwerk;
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    void connectSteuerwerk(Steuerwerk*);
 
 private:
     Ui::MainWindow *ui;

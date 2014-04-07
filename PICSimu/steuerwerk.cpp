@@ -1,9 +1,13 @@
 #include "steuerwerk.h"
+#include "parser.h"
 #include <iostream>
 #include <stdio.h>
 
-Steuerwerk::Steuerwerk(void)
+Steuerwerk::Steuerwerk(MainWindow* mainWindow)
 {
+    this->mainWindow = mainWindow;
+    mainWindow->connectSteuerwerk(this);
+    alu = new Prozessor();
 }
 
 
@@ -11,12 +15,17 @@ Steuerwerk::~Steuerwerk(void)
 {
 }
 
+bool Steuerwerk::loadFile(string filename)
+{
+    return Parser::auslesen(&lstFile, filename, this);
+}
+
 bool Steuerwerk::executeStep(void)
 {
-    if(pc != sourcecode.end())
+    if(pc != maschinencode.end())
     {
         cout << pc->command << " execute" << endl;
-        mainProcessor.execute(pc->command);
+        alu->execute(pc->command);
         pc++;
     }
     else
@@ -26,17 +35,16 @@ bool Steuerwerk::executeStep(void)
 
 void Steuerwerk::run(void)
 {
-    mainProcessor.speicher.ausgeben(0);
+    alu->speicher.ausgeben(0);
     getchar();
-    mainProcessor.speicher.ausgeben(1);
+    alu->speicher.ausgeben(1);
     getchar();
 
     while(!executeStep())
         getchar();
 
-    mainProcessor.speicher.ausgeben(0);
+    alu->speicher.ausgeben(0);
     getchar();
-    mainProcessor.speicher.ausgeben(1);
+    alu->speicher.ausgeben(1);
     getchar();
 }
-

@@ -9,7 +9,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
-{
+{    
     ui->setupUi(this);
 
     // Schriftart für ListWidget festlegen
@@ -29,18 +29,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::connectSteuerwerk(Steuerwerk* steuerwerk)
+{
+    this->steuerwerk = steuerwerk;
+}
+
 void MainWindow::slotLoadLstFile()
 {
-    ui->lw_lstFile->clear();    // LineWidget leeren
+    // cout << "slotLoadLstFile() gestartet" << endl;
 
-    list<string> lst;
-    Steuerwerk* pic = new Steuerwerk();
+    if(steuerwerk->loadFile(ui->le_filename->text().toStdString()))  // auslesen erfolgreich?
+    {
+        ui->lw_lstFile->clear();    // LineWidget leeren
 
-    if(Parser::auslesen(&lst, ui->le_filename->text().toStdString(), pic))  // auslesen erfolgreich?
-        for(list<string>::iterator it=lst.begin(); it!=lst.end(); it++)
+        // cout << "Ausgabe gestartet" << endl;
+
+        for(list<string>::iterator it=steuerwerk->lstFile.begin(); it!=steuerwerk->lstFile.end(); it++)
             ui->lw_lstFile->addItem(QString::fromStdString(*it));   // Code zeilenweise in ListWidget einfügen
+
+    }
     else
         ui->lw_lstFile->addItem("File does not exist!");
+
+    // cout << "slotLoadLstFile() beendet" << endl;
 }
 
 void MainWindow::slotLoad_FileDialog()

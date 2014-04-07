@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     pic->run();*/
     QApplication a(argc, argv);
     MainWindow w;
+    Steuerwerk steuerwerk(&w);
     w.show();
 
 

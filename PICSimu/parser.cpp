@@ -8,8 +8,10 @@ Parser::Parser()
 {
 }
 
-bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
+bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* steuerwerk)
 {
+    // cout << "auslesen() gestartet" << endl;
+
     string line;
     ifstream lesestream(filename.c_str());
 
@@ -18,14 +20,17 @@ bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
 
     while(!lesestream.eof())
     {
-
+        // cout << "while-Schleife Anfang" << endl;
         getline(lesestream, line, '\n');
-
+        //cout << line << endl;
+        // cout << "Zeile an lst-Liste anfügen" << endl;
         lstDatei->push_back(line);
+
+        // cout << "push_back() erfolgreich" << endl;
 
         if(line[0] != ' ' && line[0] != 0)	// Codezeile erkennen!
         {
-
+            // cout << "if-Bedingung erfüllt" << endl;
             int address = 0;
             int command = 0;
 
@@ -44,10 +49,12 @@ bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
 
             Codeline* newLine = new Codeline(address, command);
 
-            pic->sourcecode.push_back(*newLine);
+            // cout << "Zeile zu Maschinencode hinzufügen" << endl;
+            steuerwerk->maschinencode.push_back(*newLine);
         }
 
-        pic->pc = pic->sourcecode.begin();
+        // cout << "Programmcounter gesetzt" << endl;
+        steuerwerk->pc = steuerwerk->maschinencode.begin();
     }
 
     lesestream.close();
