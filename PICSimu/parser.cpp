@@ -11,15 +11,15 @@ Parser::Parser()
 bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
 {
     string line;
-    ifstream fin(filename.c_str());
+    ifstream lesestream(filename.c_str());
 
-    if(!fin)
+    if(!lesestream)
         return false;
 
-    while(!fin.eof())
+    while(!lesestream.eof())
     {
 
-        getline(fin, line, '\n');
+        getline(lesestream, line, '\n');
 
         lstDatei->push_back(line);
 
@@ -27,7 +27,14 @@ bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
         {
 
             int address = 0;
-            int command= 0;
+            int command = 0;
+
+            /*
+             *
+             * stringstream
+             * korrekt Hexzahlen einlesen und konvertieren!
+             *
+             */
 
             for(int i=0; i<4; i++)		// Wert einlesen und in int speichern
                 address += (line[i]-48)*pow(16,(3-i));
@@ -40,16 +47,16 @@ bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* pic)
             pic->sourcecode.push_back(*newLine);
         }
 
-
         pic->pc = pic->sourcecode.begin();
-
     }
 
-    fin.close();
+    lesestream.close();
 
     return true;
 }
 
+
+// für Testzwecke auf Console
 void Parser::ausgeben(list<string> lstDatei)
 {
     for(list<string>::iterator i=lstDatei.begin(); i != lstDatei.end(); i++)

@@ -15,7 +15,7 @@ class selectFileDialog : public QDialog
     Q_OBJECT
 
 public:
-    QString acceptedPath;
+    QString lastClickedPath;
     explicit selectFileDialog(QWidget *parent = 0);
     ~selectFileDialog();
 

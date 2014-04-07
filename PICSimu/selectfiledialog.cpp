@@ -37,5 +37,5 @@ void selectFileDialog::on_FolderTree_clicked(const QModelIndex &index)
 
 void selectFileDialog::on_FileList_clicked(const QModelIndex &index)
 {
-    acceptedPath = filemodel->fileInfo(index).absoluteFilePath();
+    lastClickedPath = filemodel->fileInfo(index).absoluteFilePath();
 }

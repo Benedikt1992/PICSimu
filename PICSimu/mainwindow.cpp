@@ -48,8 +48,7 @@ void MainWindow::slotLoad_FileDialog()
    if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
    {
        ui->le_filename->clear();
-       ui->le_filename->setText(FileDialog.acceptedPath);
-       //Hier code wenn ok geklickt wurde
+       ui->le_filename->setText(FileDialog.lastClickedPath);
    }
 }
 
