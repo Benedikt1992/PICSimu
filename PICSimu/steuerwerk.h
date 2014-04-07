@@ -3,7 +3,7 @@
 
 #include "prozessor.h"
 #include "codeline.h"
-#include <list>
+#include <vector>
 #include "mainwindow.h"
 
 using namespace std;
@@ -14,8 +14,8 @@ public:
     MainWindow* mainWindow;
     Prozessor* alu;
     list<string> lstFile;
-    list<Codeline> maschinencode;
-    list<Codeline>::iterator pc;
+    vector<Codeline> maschinencode;
+    vector<Codeline>::iterator pc;
 
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);
@@ -24,6 +24,7 @@ public:
     bool loadFile(string);
     bool executeStep(void);
     void run(void);
+    void execute(int);
 };
 
 

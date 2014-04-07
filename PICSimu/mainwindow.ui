@@ -76,8 +76,8 @@
    <widget class="QListWidget" name="lw_lstFile">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>40</y>
+      <x>520</x>
+      <y>60</y>
       <width>611</width>
       <height>311</height>
      </rect>
@@ -96,6 +96,16 @@
      <string>select File</string>
     </property>
    </widget>
+   <widget class="QTableWidget" name="tw_lstFile">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>551</width>
+      <height>331</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -103,7 +113,7 @@
      <x>0</x>
      <y>0</y>
      <width>1014</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

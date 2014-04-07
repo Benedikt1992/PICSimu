@@ -4,7 +4,7 @@
 class Codeline
 {
 public:
-    int address;
+    int textzeile;
     int command;
 
     Codeline(void);

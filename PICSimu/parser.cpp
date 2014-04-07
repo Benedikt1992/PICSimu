@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include <sstream>
 #include "parser.h"
 
 using namespace std;
@@ -9,6 +10,7 @@ Parser::Parser()
 }
 
 bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* steuerwerk)
+// lstDatei nicht notwendig... Zugriff über steuerwerk
 {
     // cout << "auslesen() gestartet" << endl;
 
@@ -31,7 +33,7 @@ bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* steue
         if(line[0] != ' ' && line[0] != 0)	// Codezeile erkennen!
         {
             // cout << "if-Bedingung erfüllt" << endl;
-            int address = 0;
+            int textZeile = 0;
             int command = 0;
 
             /*
@@ -41,13 +43,20 @@ bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* steue
              *
              */
 
-            for(int i=0; i<4; i++)		// Wert einlesen und in int speichern
-                address += (line[i]-48)*pow(16,(3-i));
+            stringstream stream;
+            stream << std::hex << line.substr(5, 4);
+            stream >> command;
+            stream.clear();
 
-            for(int i=0; i<4; i++)
-                command += (line[i+5]-48)*pow(16,(3-i));
+            cout << command << " - ";
 
-            Codeline* newLine = new Codeline(address, command);
+            stream << std::dec << line.substr(21, 4);
+            stream >> textZeile;
+            stream.clear();
+
+            cout << textZeile << endl;
+
+            Codeline* newLine = new Codeline(textZeile, command);
 
             // cout << "Zeile zu Maschinencode hinzufügen" << endl;
             steuerwerk->maschinencode.push_back(*newLine);

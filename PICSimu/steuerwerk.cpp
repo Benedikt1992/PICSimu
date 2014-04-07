@@ -25,7 +25,7 @@ bool Steuerwerk::executeStep(void)
     if(pc != maschinencode.end())
     {
         cout << pc->command << " execute" << endl;
-        alu->execute(pc->command);
+        execute(pc->command);
         pc++;
     }
     else
@@ -47,4 +47,47 @@ void Steuerwerk::run(void)
     getchar();
     alu->speicher.ausgeben(1);
     getchar();
+}
+
+void Steuerwerk::execute(int command)
+{
+    command = command & 0x3FFF;
+
+    // BYTE-ORIENTED FILE REGISTER OPERATIONS
+
+    // ADDWF
+    // ANDWF
+    // ...
+    // NOP
+    if( command == 0 )
+        cout << " NOP";
+    // ...
+    // SWAPF
+    // XORWF
+
+
+    // BIT-ORIENTED FILE REGISTER OPERATIONS
+
+    // BCF
+    // BSF
+    //      01 01bb bfff ffff = 0x1400
+    //  &   11 1100 0000 0000 = 0x3C00
+    if( (command & 0x3C00) == 0x1400 )
+        alu->bsf(command);
+    // BTFSC
+    // BTFSS
+
+
+    // LITERAL AND CONTROL OPERATIONS
+
+    // ADDLW
+    // ANDLW
+    // CALL
+    // CLRWDT
+    // GOTO
+    if( (command & 0x3800) == 0x2800 )
+        cout << " GOTO";
+    // ...
+    // SUBLW
+    // XORLW
 }

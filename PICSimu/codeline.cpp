@@ -3,13 +3,13 @@
 
 Codeline::Codeline(void)
 {
-    address = -1;
+    textzeile = -1;
     command = -1;
 }
 
-Codeline::Codeline(int p_address, int p_command)
+Codeline::Codeline(int p_textzeile, int p_command)
 {
-    address = p_address;
+    textzeile = p_textzeile;
     command = p_command;
 }
 
