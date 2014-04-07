@@ -33,6 +33,8 @@ void Prozessor::execute(int command)
 
     // BCF
     // BSF
+    //      01 01bb bfff ffff = 0x1400
+    //  &   11 1100 0000 0000 = 0x3C00
     if( (command & 0x3C00) == 0x1400 )
         bsf(command);
     // BTFSC

@@ -21,7 +21,7 @@ private:
     selectFileDialog FileDialog;
 private slots:
     void slotLoadLstFile(void);
-    void load_FileDialog(void);
+    void slotLoad_FileDialog(void);
 };
 
 #endif // MAINWINDOW_H

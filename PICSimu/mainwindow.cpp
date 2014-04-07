@@ -12,16 +12,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Schriftart für ListWidget festlegen
     QFont font = QFont ("Courier");
     font.setStyleHint (QFont::Monospace);
     font.setPointSize (8);
     font.setFixedPitch (true);
-
     ui->lw_lstFile->setFont(font);
 
+    // SLOT-SIGNAL-Verbindungen
     connect(ui->pb_load, SIGNAL(clicked()), SLOT(slotLoadLstFile()));
-    connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(load_FileDialog()));
-    //connect(selectFileDialog.ui->buttonBox,SIGNAL(accepted()),this,SLOT(writePath()));
+    connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(slotLoad_FileDialog()));
 }
 
 MainWindow::~MainWindow()
@@ -31,24 +31,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotLoadLstFile()
 {
-    ui->lw_lstFile->clear();
+    ui->lw_lstFile->clear();    // LineWidget leeren
 
     list<string> lst;
     Steuerwerk* pic = new Steuerwerk();
 
-
-
-    if(Parser::auslesen(&lst, ui->le_filename->text().toStdString(), pic))
+    if(Parser::auslesen(&lst, ui->le_filename->text().toStdString(), pic))  // auslesen erfolgreich?
         for(list<string>::iterator it=lst.begin(); it!=lst.end(); it++)
-        {
-            QString qstr = QString::fromStdString(*it);
-            ui->lw_lstFile->addItem(qstr);
-        }
+            ui->lw_lstFile->addItem(QString::fromStdString(*it));   // Code zeilenweise in ListWidget einfügen
     else
         ui->lw_lstFile->addItem("File does not exist!");
 }
 
-void MainWindow::load_FileDialog()
+void MainWindow::slotLoad_FileDialog()
 {
    if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
    {
