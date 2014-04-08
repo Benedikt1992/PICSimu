@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ui_selectfiledialog.h"
-#include "selectfiledialog.h"
 #include "parser.h"
 #include "codeline.h"
 #include <iostream>
@@ -77,19 +75,13 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
 
 void MainWindow::slotLoad_FileDialog()
 {
-	//Variante 1
-   /*if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
-   {
-       ui->le_filename->clear();
-       ui->le_filename->setText(FileDialog.lastClickedPath);
-   }*/
 
-	//Variante 2
-	/*QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
 													 "",
 													 tr("Files (*.*)"));
 	ui->le_filename->clear();
-	ui->le_filename->setText(fileName);*/
+	ui->le_filename->setText(fileName);
 }
 
 // Mario
