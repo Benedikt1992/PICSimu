@@ -145,18 +145,17 @@ void MainWindow::slotExecuteStep()
 
     // nächsten Befehl in der GUI einfärben
     zeile = steuerwerk->pc->textzeile - 1;
-
     QColor green(0,255,0);
     ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
 
-    ui->lw_lstFile->setCurrentRow(zeile);   // springt zur aktuellen Stelle in der Dateiansicht
+    // zur aktuellen Stelle in der Dateiansicht springen
+    ui->lw_lstFile->setCurrentRow(zeile);
     ui->lw_lstFile->clearSelection();
 }
 
 //Benedikt:
 void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 {
-
 	if(steuerwerk->toggleBreakpoint(index.row()+1))
 	{
 		QColor myColor(255,0,0);

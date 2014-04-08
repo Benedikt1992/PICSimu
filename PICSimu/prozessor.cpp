@@ -48,7 +48,16 @@ void Prozessor::bsf(int command)
 
 void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
 {
+    //      10 1fff ffff ffff
+    //  &   00 0111 1111 1111  = 0x7FF
+    //      00 0fff ffff ffff
+
     int sprungAdresse = command & 0x7FF;
+
+    /*
+     *  Da in Steuerwerk::executeStep() der PC nach dem Ausführen inkrementiert wird,
+     *  muss die neue Adresse im PC eine Stelle vor die gewünschte gesetzt werden.
+     */
 
     steuerwerk->pc = steuerwerk->maschinencode.begin() + sprungAdresse - 1;
 }

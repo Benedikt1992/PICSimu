@@ -51,13 +51,9 @@ bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steu
             stream >> command;
             stream.clear();
 
-            cout << command << " - ";
-
             stream << std::dec << line.substr(21, 4);
             stream >> textZeile;
             stream.clear();
-
-            cout << textZeile << endl;
 
             Codeline* newLine = new Codeline(textZeile, command);
 

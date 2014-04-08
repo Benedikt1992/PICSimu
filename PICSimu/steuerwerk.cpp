@@ -47,12 +47,8 @@ bool Steuerwerk::executeStep(void)
 {
     if(pc != maschinencode.end())
     {
-        cout << pc->command << " execute" << endl;
         execute(pc->command);
-        cout << pc->command << endl;
-        cout << "PC erneut erhöht" << endl;
         pc++;
-        cout << pc->command << endl;
     }
     else
         return false;
