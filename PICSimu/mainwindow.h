@@ -30,6 +30,7 @@ private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);
     void slotRefreshSpeicher(void);
+    void slotExecuteStep(void);
 
 	//Benedikt:
 	void on_lw_lstFile_doubleClicked(const QModelIndex &index);

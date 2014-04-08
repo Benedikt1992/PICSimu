@@ -37,6 +37,12 @@ bool Steuerwerk::toggleBreakpoint(int textzeile)
 	return false;
 }
 
+/*
+ *  Gibt false zurück, wenn PC nicht mehr auf Codezeile zeigt,
+ *  d.h. wenn das Programm am Ende angelangt ist.
+ *
+ *  Zeigt der PC auf einen gültigen Befehl, wird true zurückgegeben.
+ */
 bool Steuerwerk::executeStep(void)
 {
     if(pc != maschinencode.end())
@@ -46,8 +52,9 @@ bool Steuerwerk::executeStep(void)
         pc++;
     }
     else
-        return true;
-    return false;
+        return false;
+
+    return true;
 }
 
 void Steuerwerk::run(void)
@@ -77,7 +84,7 @@ void Steuerwerk::execute(int command)
     // ...
     // NOP
     if( command == 0 )
-        cout << " NOP";
+        cout << " NOP" << endl;
     // ...
     // SWAPF
     // XORWF
@@ -103,7 +110,7 @@ void Steuerwerk::execute(int command)
     // CLRWDT
     // GOTO
     if( (command & 0x3800) == 0x2800 )
-        cout << " GOTO";
+        cout << " GOTO" << endl;
     // ...
     // SUBLW
     // XORLW
@@ -122,3 +129,10 @@ int* Steuerwerk::getBank(int bank){
 }
 // Mario ende
 
+bool Steuerwerk::programmEndeErreicht()
+{
+    if(pc == maschinencode.end())
+        return true;
+
+    return false;
+}

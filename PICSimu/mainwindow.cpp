@@ -3,6 +3,7 @@
 #include "ui_selectfiledialog.h"
 #include "selectfiledialog.h"
 #include "parser.h"
+#include "codeline.h"
 #include <iostream>
 #include <QDialog>
 #include <sstream>
@@ -24,7 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // SLOT-SIGNAL-Verbindungen
     connect(ui->pb_load, SIGNAL(clicked()), SLOT(slotLoadLstFile()));
     connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(slotLoad_FileDialog()));
-    connect(ui->refresh_speicher, SIGNAL(clicked()), SLOT(slotRefreshSpeicher())); // Mario
+    connect(ui->refresh_speicher, SIGNAL(clicked()), SLOT(slotRefreshSpeicher()));
+    connect(ui->pb_executeStep, SIGNAL(clicked()), SLOT(slotExecuteStep()));
 
     // Mario
     // Tabelle für Speicherausgabe definieren
@@ -110,6 +112,30 @@ void MainWindow::slotRefreshSpeicher()
 }
 // Mario ende
 
+void MainWindow::slotExecuteStep()
+{
+    slotRefreshSpeicher();  // nicht notwendig es als Slot zu definieren
+
+    if(steuerwerk->programmEndeErreicht())
+        return;
+
+    int zeile = steuerwerk->pc->textzeile - 1;  // Zeilennummer entspricht nicht der item-Nummer des ListWidgets!
+    QColor white(255,255,255);
+    ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
+
+    steuerwerk->executeStep();  // nächsten Befehl auf den der PC zeigt ausführen
+
+    if(steuerwerk->programmEndeErreicht())
+        return;
+
+    // nächsten Befehl in der GUI einfärben
+    zeile = steuerwerk->pc->textzeile - 1;
+    QColor green(0,255,0);
+    ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
+
+    ui->lw_lstFile->setCurrentRow(zeile);   // springt zur aktuellen Stelle in der Dateiansicht
+    ui->lw_lstFile->clearSelection();
+}
 
 //Benedikt:
 void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)

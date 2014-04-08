@@ -27,6 +27,7 @@ public:
     void run(void);
     void execute(int);
 	bool toggleBreakpoint(int);
+    bool programmEndeErreicht(void);
 
     int* getBank(int);
 };
