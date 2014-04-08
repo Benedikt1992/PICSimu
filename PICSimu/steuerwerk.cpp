@@ -49,7 +49,10 @@ bool Steuerwerk::executeStep(void)
     {
         cout << pc->command << " execute" << endl;
         execute(pc->command);
+        cout << pc->command << endl;
+        cout << "PC erneut erhöht" << endl;
         pc++;
+        cout << pc->command << endl;
     }
     else
         return false;
@@ -110,7 +113,8 @@ void Steuerwerk::execute(int command)
     // CLRWDT
     // GOTO
     if( (command & 0x3800) == 0x2800 )
-        cout << " GOTO" << endl;
+        alu->goto_alu(command, &pc, maschinencode);
+//        cout << "GOTO" << endl;
     // ...
     // SUBLW
     // XORLW

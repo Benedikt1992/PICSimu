@@ -2,6 +2,8 @@
 #define PROZESSOR_H
 
 #include "speicher.h"
+#include <vector>
+#include "codeline.h"
 
 class Prozessor
 {
@@ -14,6 +16,8 @@ public:
     void execute(int);
 
     void bsf(int);
+    void goto_alu(int, std::vector<Codeline>::iterator*, std::vector<Codeline>);
+
 };
 
 #endif // PROZESSOR_H

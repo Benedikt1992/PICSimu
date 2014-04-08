@@ -85,6 +85,7 @@ void MainWindow::slotLoad_FileDialog()
 // Mario
 void MainWindow::slotRefreshSpeicher()
 {
+    cout << "refresh()" << endl;
     int* bank0;
     int* bank1;
 
@@ -94,20 +95,29 @@ void MainWindow::slotRefreshSpeicher()
     if(bank0 == 0 || bank1 == 0)
         return;
 
+    cout << "Command: " << steuerwerk->pc->command << endl;
+
     for(int i=0; i < n_register; i++)
     {
+        //cout << "1Command: " << steuerwerk->pc->command << endl;
+
         ui->tw_speicher->setItem(i, 0, new QTableWidgetItem(QString::number(i,16)));
         ui->tw_speicher->setItem(i+n_register, 0, new QTableWidgetItem(QString::number(i+128,16)));
 
+        //cout << "2Command: " << steuerwerk->pc->command << endl;
         ui->tw_speicher->setItem(i, 1, new QTableWidgetItem(QString::number(bank0[i], 16)));
         ui->tw_speicher->setItem(i+n_register, 1, new QTableWidgetItem(QString::number(bank1[i], 16)));
 
+        //cout << "3Command: " << steuerwerk->pc->command << endl;
         ui->tw_speicher->setItem(i, 2, new QTableWidgetItem(QString::number(bank0[i], 2)));
         ui->tw_speicher->setItem(i+n_register, 2, new QTableWidgetItem(QString::number(bank1[i], 2)));
 
+        //cout << "4Command: " << steuerwerk->pc->command << endl;
         ui->tw_speicher->item(i,2)->setTextAlignment(Qt::AlignRight);
         ui->tw_speicher->item(i+n_register,2)->setTextAlignment(Qt::AlignRight);
     }
+
+    cout << "Command: " << steuerwerk->pc->command << endl;
 }
 // Mario ende
 
@@ -121,18 +131,28 @@ void MainWindow::slotExecuteStep()
     ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
 
     steuerwerk->executeStep();  // nächsten Befehl auf den der PC zeigt ausführen
+    cout << "Command: " << steuerwerk->pc->command << endl;
     slotRefreshSpeicher();  // nicht notwendig es als Slot zu definieren
-
+    cout << "speicherrefresh()" << endl;
+    cout << "Command: " << steuerwerk->pc->command << endl;
     if(steuerwerk->programmEndeErreicht())
         return;
 
     // nächsten Befehl in der GUI einfärben
     zeile = steuerwerk->pc->textzeile - 1;
+
+    cout << "Command: " << steuerwerk->pc->command << endl;
+    cout << "Cozeile: " << zeile << endl;
+
     QColor green(0,255,0);
     ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
 
+    cout << "nächsten Befehl einfärben" << endl;
+
     ui->lw_lstFile->setCurrentRow(zeile);   // springt zur aktuellen Stelle in der Dateiansicht
     ui->lw_lstFile->clearSelection();
+
+    cout << "Focus entfernt" << endl;
 }
 
 //Benedikt:
