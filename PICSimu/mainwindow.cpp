@@ -78,18 +78,18 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
 void MainWindow::slotLoad_FileDialog()
 {
 	//Variante 1
-   /*if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
-   {
-       ui->le_filename->clear();
-       ui->le_filename->setText(FileDialog.lastClickedPath);
-   }*/
+//   if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
+//   {
+//       ui->le_filename->clear();
+//       ui->le_filename->setText(FileDialog.lastClickedPath);
+//   }
 
 	//Variante 2
-	/*QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
 													 "",
 													 tr("Files (*.*)"));
 	ui->le_filename->clear();
-	ui->le_filename->setText(fileName);*/
+    ui->le_filename->setText(fileName);
 }
 
 // Mario
@@ -123,8 +123,6 @@ void MainWindow::slotRefreshSpeicher()
 
 void MainWindow::slotExecuteStep()
 {
-    slotRefreshSpeicher();  // nicht notwendig es als Slot zu definieren
-
     if(steuerwerk->programmEndeErreicht())
         return;
 
@@ -133,6 +131,7 @@ void MainWindow::slotExecuteStep()
     ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
 
     steuerwerk->executeStep();  // nächsten Befehl auf den der PC zeigt ausführen
+    slotRefreshSpeicher();  // nicht notwendig es als Slot zu definieren
 
     if(steuerwerk->programmEndeErreicht())
         return;
