@@ -29,6 +29,7 @@ private:
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);
+    void slotRefreshSpeicher(void);
 };
 
 #endif // MAINWINDOW_H

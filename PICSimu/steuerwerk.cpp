@@ -91,3 +91,17 @@ void Steuerwerk::execute(int command)
     // SUBLW
     // XORLW
 }
+
+
+// Mario
+int* Steuerwerk::getBank(int bank){
+    if(bank == 0)
+        return alu->speicher.bank0;
+
+    if(bank == 1)
+        return alu->speicher.bank1;
+
+    return 0;
+}
+// Mario ende
+

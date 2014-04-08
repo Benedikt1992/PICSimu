@@ -25,6 +25,8 @@ public:
     bool executeStep(void);
     void run(void);
     void execute(int);
+
+    int* getBank(int);
 };
 
 

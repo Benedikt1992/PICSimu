@@ -8,16 +8,16 @@ using namespace std;
 Speicher::Speicher(void)
 {
     // Registerinhalte mit 0 initialisieren
-    for(int i=0; i<47; i++)
-        bank0[i] = bank1[i] = 0;
+    for(int i = 0; i < n_register; i++)
+        bank0[i] = bank1[i] = i;
 
     // Mapping
     // ungemappte Register (z.B. 00h oder 07h) noch nicht berücksichtigt!!! - mit null-Zeiger abfangen?)
     // aktuell 2x47 Register als Speicherzellen verfügbar... Bank1 nutzt nur 5
-    for(int i=0; i<47; i++)             // mapping Bank 0
+    for(int i=0; i < n_register; i++)             // mapping Bank 0
         refBank[0][i] = &(bank0[i]);
 
-    for(int i=0; i<47; i++)             // mapping Bank 1
+    for(int i=0; i < n_register; i++)             // mapping Bank 1
         refBank[1][i] = &(bank0[i]);
 
     // undefinierte Register erhalten Null-Zeiger
@@ -42,7 +42,7 @@ void Speicher::ausgeben(int bank)
 {
     cout << "Bank" << bank << endl;
     cout << "Zelle\t" << "Wert" << endl;
-    for(int i=0; i<47; i++)
+    for(int i=0; i < n_register; i++)
         if(refBank[bank][i] != 0)
             cout << i << "\t" << *(refBank[bank][i]) << endl;
         else
