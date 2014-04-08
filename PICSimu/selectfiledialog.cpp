@@ -10,14 +10,11 @@ selectFileDialog::selectFileDialog(QWidget *parent) :
     ui->setupUi(this);
     QString sPath = "C:/";
     dirmodel = new QFileSystemModel(this);
-    dirmodel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
+	dirmodel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
     dirmodel->setRootPath(sPath);
     ui->FolderTree->setModel(dirmodel);
 
-    filemodel = new QFileSystemModel(this);
-    filemodel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
-    filemodel->setRootPath(sPath);
-    ui->FileList->setModel(filemodel);
+
 }
 
 selectFileDialog::~selectFileDialog()
@@ -28,14 +25,12 @@ selectFileDialog::~selectFileDialog()
 void selectFileDialog::on_FolderTree_clicked(const QModelIndex &index)
 {
     QString sPath = dirmodel->fileInfo(index).absoluteFilePath();
-    ui->FileList->setRootIndex(filemodel->setRootPath(sPath));
+	lastClickedPath = sPath;
 }
 
 
 
 
 
-void selectFileDialog::on_FileList_clicked(const QModelIndex &index)
-{
-    lastClickedPath = filemodel->fileInfo(index).absoluteFilePath();
-}
+
+

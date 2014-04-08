@@ -34,17 +34,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>321</width>
-     <height>391</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QListView" name="FileList">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>10</y>
-     <width>191</width>
+     <width>521</width>
      <height>391</height>
     </rect>
    </property>
