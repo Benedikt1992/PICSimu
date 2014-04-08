@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // SLOT-SIGNAL-Verbindungen
     connect(ui->pb_load, SIGNAL(clicked()), SLOT(slotLoadLstFile()));
     connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(slotLoad_FileDialog()));
-<<<<<<< HEAD
     connect(ui->refresh_speicher, SIGNAL(clicked()), SLOT(slotRefreshSpeicher())); // Mario
 
     // Mario
@@ -38,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tw_speicher->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
     ui->tw_speicher->setHorizontalHeaderItem(2,new QTableWidgetItem("Bin"));
     // Mario ende
-=======
 
 }
 
@@ -61,7 +59,7 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
         ui->lw_lstFile->clear();    // LineWidget leeren
 
         // cout << "Ausgabe gestartet" << endl;
-		int i =0;
+
 		for(list<QString>::iterator it=steuerwerk->lstFile.begin(); it!=steuerwerk->lstFile.end(); it++)
 		{
 			ui->lw_lstFile->addItem(*it);   // Code zeilenweise in ListWidget einfügen
