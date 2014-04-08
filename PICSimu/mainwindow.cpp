@@ -8,6 +8,8 @@
 #include <string>
 #include <QFileDialog>
 
+#define n_register 48
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)

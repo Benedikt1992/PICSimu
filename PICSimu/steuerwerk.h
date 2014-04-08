@@ -1,10 +1,12 @@
 #ifndef STEUERWERK_H
 #define STEUERWERK_H
 
-#include "prozessor.h"
+
 #include "codeline.h"
 #include <vector>
 #include "mainwindow.h"
+#include "steuerwerk.h"
+#include "prozessor.h"
 
 using namespace std;
 

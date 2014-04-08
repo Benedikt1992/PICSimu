@@ -113,7 +113,7 @@ void Steuerwerk::execute(int command)
     // CLRWDT
     // GOTO
     if( (command & 0x3800) == 0x2800 )
-        cout << "GOTO" << endl;
+        alu->go_to(command, this);
     // ...
     // SUBLW
     // XORLW

@@ -1,5 +1,7 @@
 #include "prozessor.h"
+#include "steuerwerk.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -42,4 +44,11 @@ void Prozessor::bsf(int command)
         return;
 
     *ref |= (1 << bit);
+}
+
+void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
+{
+    int sprungAdresse = command & 0x7FF;
+
+    steuerwerk->pc = steuerwerk->maschinencode.begin() + sprungAdresse - 1;
 }

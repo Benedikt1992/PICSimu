@@ -2,8 +2,8 @@
 #define PROZESSOR_H
 
 #include "speicher.h"
-#include <vector>
-#include "codeline.h"
+
+class Steuerwerk;
 
 class Prozessor
 {
@@ -16,6 +16,7 @@ public:
     void execute(int);
 
     void bsf(int);
+    void go_to(int, Steuerwerk*);
 
 };
 
