@@ -16,7 +16,6 @@ public:
     void execute(int);
 
     void bsf(int);
-    void goto_alu(int, std::vector<Codeline>::iterator*, std::vector<Codeline>);
 
 };
 

@@ -136,28 +136,19 @@ void MainWindow::slotExecuteStep()
     ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
 
     steuerwerk->executeStep();  // nächsten Befehl auf den der PC zeigt ausführen
-    cout << "Command: " << steuerwerk->pc->command << endl;
     slotRefreshSpeicher();  // nicht notwendig es als Slot zu definieren
-    cout << "speicherrefresh()" << endl;
-    cout << "Command: " << steuerwerk->pc->command << endl;
+
     if(steuerwerk->programmEndeErreicht())
         return;
 
     // nächsten Befehl in der GUI einfärben
     zeile = steuerwerk->pc->textzeile - 1;
 
-    cout << "Command: " << steuerwerk->pc->command << endl;
-    cout << "Cozeile: " << zeile << endl;
-
     QColor green(0,255,0);
     ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
 
-    cout << "nächsten Befehl einfärben" << endl;
-
     ui->lw_lstFile->setCurrentRow(zeile);   // springt zur aktuellen Stelle in der Dateiansicht
     ui->lw_lstFile->clearSelection();
-
-    cout << "Focus entfernt" << endl;
 }
 
 //Benedikt:

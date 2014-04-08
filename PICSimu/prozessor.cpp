@@ -43,26 +43,3 @@ void Prozessor::bsf(int command)
 
     *ref |= (1 << bit);
 }
-
-
-void Prozessor::goto_alu(int command, std::vector<Codeline>::iterator* pc, std::vector<Codeline> maschinencode)
-{
-    cout << " GOTO" << endl;
-
-    int sprungmarke;
-
-    //      10 1kkk kkkk kkkk
-    //  &   00 0111 1111 1111 = 0x7FF
-
-    sprungmarke = command & 0x7FF;
-
-    cout << " pc wird geändert: Adresse: " << sprungmarke << endl;
-
-    cout << "cmd vor GOTO: " << (*pc)->command << endl;
-
-    *pc = maschinencode.begin() + sprungmarke - 1;
-
-    cout << "cmd nach GOTO: " << (*pc)->command << endl;
-
-    cout << "geändert" << endl;
-}
