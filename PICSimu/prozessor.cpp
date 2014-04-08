@@ -60,7 +60,7 @@ void Prozessor::goto_alu(int command, std::vector<Codeline>::iterator* pc, std::
 
     cout << "cmd vor GOTO: " << (*pc)->command << endl;
 
-    *pc = maschinencode.begin() + sprungmarke;
+    *pc = maschinencode.begin() + sprungmarke - 1;
 
     cout << "cmd nach GOTO: " << (*pc)->command << endl;
 
