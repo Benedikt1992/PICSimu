@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tw_speicher->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
     ui->tw_speicher->setHorizontalHeaderItem(2,new QTableWidgetItem("Bin"));
 	ui->tw_speicher->setFont(font);
+
+    initializeSpeicherWidget();
     // Mario ende
 
 }
@@ -83,9 +85,26 @@ void MainWindow::slotLoad_FileDialog()
 }
 
 // Mario
+void MainWindow::initializeSpeicherWidget()
+{
+    for(int i=0; i < n_register; i++)
+    {
+        ui->tw_speicher->setItem(i, 0, new QTableWidgetItem(QString::number(i,16)));
+        ui->tw_speicher->setItem(i+n_register, 0, new QTableWidgetItem(QString::number(i+128,16)));
+
+        ui->tw_speicher->setItem(i, 1, new QTableWidgetItem("0"));
+        ui->tw_speicher->setItem(i+n_register, 1, new QTableWidgetItem("0"));
+
+        ui->tw_speicher->setItem(i, 2, new QTableWidgetItem("0"));
+        ui->tw_speicher->setItem(i+n_register, 2, new QTableWidgetItem("0"));
+
+        ui->tw_speicher->item(i,2)->setTextAlignment(Qt::AlignRight);
+        ui->tw_speicher->item(i+n_register,2)->setTextAlignment(Qt::AlignRight);
+    }
+}
+
 void MainWindow::slotRefreshSpeicher()
 {
-    cout << "refresh()" << endl;
     int* bank0;
     int* bank1;
 
@@ -95,30 +114,16 @@ void MainWindow::slotRefreshSpeicher()
     if(bank0 == 0 || bank1 == 0)
         return;
 
-    cout << "Command: " << steuerwerk->pc->command << endl;
-
     for(int i=0; i < n_register; i++)
     {
-        //cout << "1Command: " << steuerwerk->pc->command << endl;
+        ui->tw_speicher->item(i,1)->setText(QString::number(bank0[i], 16));
+        ui->tw_speicher->item(i+n_register,1)->setText(QString::number(bank1[i], 16));
 
-        ui->tw_speicher->setItem(i, 0, new QTableWidgetItem(QString::number(i,16)));
-        ui->tw_speicher->setItem(i+n_register, 0, new QTableWidgetItem(QString::number(i+128,16)));
-
-        //cout << "2Command: " << steuerwerk->pc->command << endl;
-        ui->tw_speicher->setItem(i, 1, new QTableWidgetItem(QString::number(bank0[i], 16)));
-        ui->tw_speicher->setItem(i+n_register, 1, new QTableWidgetItem(QString::number(bank1[i], 16)));
-
-        //cout << "3Command: " << steuerwerk->pc->command << endl;
-        ui->tw_speicher->setItem(i, 2, new QTableWidgetItem(QString::number(bank0[i], 2)));
-        ui->tw_speicher->setItem(i+n_register, 2, new QTableWidgetItem(QString::number(bank1[i], 2)));
-
-        //cout << "4Command: " << steuerwerk->pc->command << endl;
-        ui->tw_speicher->item(i,2)->setTextAlignment(Qt::AlignRight);
-        ui->tw_speicher->item(i+n_register,2)->setTextAlignment(Qt::AlignRight);
+        ui->tw_speicher->item(i,2)->setText(QString::number(bank0[i], 2));
+        ui->tw_speicher->item(i+n_register,2)->setText(QString::number(bank1[i], 2));
     }
-
-    cout << "Command: " << steuerwerk->pc->command << endl;
 }
+
 // Mario ende
 
 void MainWindow::slotExecuteStep()

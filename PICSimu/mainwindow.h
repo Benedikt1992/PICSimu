@@ -24,6 +24,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void initializeSpeicherWidget(void);
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);
