@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1014</width>
-    <height>569</height>
+    <height>493</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>490</y>
+      <x>910</x>
+      <y>410</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -63,10 +63,10 @@
    <widget class="QPushButton" name="pb_load">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>210</x>
       <y>0</y>
-      <width>93</width>
-      <height>29</height>
+      <width>81</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -76,57 +76,73 @@
    <widget class="QListWidget" name="lw_lstFile">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>60</y>
-      <width>611</width>
-      <height>311</height>
+      <x>280</x>
+      <y>50</y>
+      <width>721</width>
+      <height>321</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="selectFile_Button">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>140</x>
       <y>0</y>
-      <width>75</width>
-      <height>23</height>
+      <width>71</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>select File</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tw_lstFile">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>551</width>
-      <height>331</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="tw_speicher">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>380</y>
-      <width>256</width>
-      <height>192</height>
+      <y>50</y>
+      <width>211</width>
+      <height>321</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="refresh_speicher">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>20</x>
       <y>380</y>
       <width>93</width>
       <height>29</height>
      </rect>
     </property>
     <property name="text">
-     <string>Refresh</string>
+     <string>Refresh Speicher</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Speicher</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>30</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Programm</string>
     </property>
    </widget>
   </widget>
@@ -136,7 +152,7 @@
      <x>0</x>
      <y>0</y>
      <width>1014</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

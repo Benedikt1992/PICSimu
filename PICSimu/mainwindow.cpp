@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tw_speicher->setHorizontalHeaderItem(0,new QTableWidgetItem("#"));
     ui->tw_speicher->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
     ui->tw_speicher->setHorizontalHeaderItem(2,new QTableWidgetItem("Bin"));
+	ui->tw_speicher->setFont(font);
     // Mario ende
 
 }
@@ -113,7 +114,17 @@ void MainWindow::slotRefreshSpeicher()
 //Benedikt:
 void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 {
-	QColor myColor(255,0,0);
-	ui->lw_lstFile->item(index.row())->setBackgroundColor(myColor);
+
+	if(steuerwerk->toggleBreakpoint(index.row()+1))
+	{
+		QColor myColor(255,0,0);
+		ui->lw_lstFile->item(index.row())->setBackgroundColor(myColor);
+	}
+	else
+	{
+		QColor myColor(255,255,255);
+		ui->lw_lstFile->item(index.row())->setBackgroundColor(myColor);
+	}
+
 	//index.row()+1 entspeichter Textzeile aus der lst Datei
 }

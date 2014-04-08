@@ -2,6 +2,7 @@
 #include "parser.h"
 #include <iostream>
 #include <stdio.h>
+#include "codeline.h"
 
 Steuerwerk::Steuerwerk(MainWindow* mainWindow)
 {
@@ -18,6 +19,22 @@ Steuerwerk::~Steuerwerk(void)
 bool Steuerwerk::loadFile(string filename)
 {
     return Parser::auslesen(&lstFile, filename, this);
+}
+
+
+/*
+ * Rückgabewert ist der neue Breakpointwert
+ * true -> breakpoint wurde gesetzt
+ * false -> breakpoint wurde entfernt
+ */
+bool Steuerwerk::toggleBreakpoint(int textzeile)
+{
+	for(vector<Codeline>::iterator it = maschinencode.begin(); it!=maschinencode.end(); it++)
+	{
+		if(it->textzeile==textzeile)
+			return it->breakpoint = !it->breakpoint;
+	}
+	return false;
 }
 
 bool Steuerwerk::executeStep(void)

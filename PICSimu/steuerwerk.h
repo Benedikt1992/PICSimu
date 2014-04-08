@@ -26,6 +26,7 @@ public:
     bool executeStep(void);
     void run(void);
     void execute(int);
+	bool toggleBreakpoint(int);
 
     int* getBank(int);
 };

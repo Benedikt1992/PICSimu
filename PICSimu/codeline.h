@@ -6,6 +6,7 @@ class Codeline
 public:
     int textzeile;
     int command;
+	bool breakpoint;
 
     Codeline(void);
     Codeline(int, int);
