@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <sstream>
 #include <string>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -74,11 +75,19 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
 
 void MainWindow::slotLoad_FileDialog()
 {
-   if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
+	//Variante 1
+   /*if (FileDialog.exec()== QDialog::Accepted) //Blocking call!!! wird erst beendet, wenn das fenster geschlossen wird
    {
        ui->le_filename->clear();
        ui->le_filename->setText(FileDialog.lastClickedPath);
-   }
+   }*/
+
+	//Variante 2
+	/*QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+													 "",
+													 tr("Files (*.*)"));
+	ui->le_filename->clear();
+	ui->le_filename->setText(fileName);*/
 }
 
 // Mario
