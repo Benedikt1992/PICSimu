@@ -9,7 +9,7 @@ Parser::Parser()
 {
 }
 
-bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* steuerwerk)
+bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steuerwerk)
 // lstDatei nicht notwendig... Zugriff über steuerwerk
 {
     // cout << "auslesen() gestartet" << endl;
@@ -26,7 +26,10 @@ bool Parser::auslesen(list<string>* lstDatei, string filename, Steuerwerk* steue
         getline(lesestream, line, '\n');
         //cout << line << endl;
         // cout << "Zeile an lst-Liste anfügen" << endl;
-        lstDatei->push_back(line);
+
+
+		//Benedikt: gändert
+		lstDatei->push_back((QString::fromStdString(line)));
 
         // cout << "push_back() erfolgreich" << endl;
 

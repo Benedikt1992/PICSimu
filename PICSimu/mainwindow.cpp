@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // SLOT-SIGNAL-Verbindungen
     connect(ui->pb_load, SIGNAL(clicked()), SLOT(slotLoadLstFile()));
     connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(slotLoad_FileDialog()));
+<<<<<<< HEAD
     connect(ui->refresh_speicher, SIGNAL(clicked()), SLOT(slotRefreshSpeicher())); // Mario
 
     // Mario
@@ -37,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tw_speicher->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
     ui->tw_speicher->setHorizontalHeaderItem(2,new QTableWidgetItem("Bin"));
     // Mario ende
+=======
+
 }
 
 MainWindow::~MainWindow()
@@ -49,7 +52,7 @@ void MainWindow::connectSteuerwerk(Steuerwerk* steuerwerk)
     this->steuerwerk = steuerwerk;
 }
 
-void MainWindow::slotLoadLstFile()
+void MainWindow::slotLoadLstFile() // Benedikt: geändert
 {
     // cout << "slotLoadLstFile() gestartet" << endl;
 
@@ -58,14 +61,15 @@ void MainWindow::slotLoadLstFile()
         ui->lw_lstFile->clear();    // LineWidget leeren
 
         // cout << "Ausgabe gestartet" << endl;
-
-        for(list<string>::iterator it=steuerwerk->lstFile.begin(); it!=steuerwerk->lstFile.end(); it++)
-            ui->lw_lstFile->addItem(QString::fromStdString(*it));   // Code zeilenweise in ListWidget einfügen
+		int i =0;
+		for(list<QString>::iterator it=steuerwerk->lstFile.begin(); it!=steuerwerk->lstFile.end(); it++)
+		{
+			ui->lw_lstFile->addItem(*it);   // Code zeilenweise in ListWidget einfügen
+		}
 
     }
     else
         ui->lw_lstFile->addItem("File does not exist!");
-
     // cout << "slotLoadLstFile() beendet" << endl;
 }
 
@@ -108,3 +112,10 @@ void MainWindow::slotRefreshSpeicher()
 // Mario ende
 
 
+//Benedikt:
+void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
+{
+	QColor myColor(255,0,0);
+	ui->lw_lstFile->item(index.row())->setBackgroundColor(myColor);
+	//index.row()+1 entspeichter Textzeile aus der lst Datei
+}

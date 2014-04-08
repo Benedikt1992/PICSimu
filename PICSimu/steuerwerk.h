@@ -13,7 +13,8 @@ class Steuerwerk
 public:
     MainWindow* mainWindow;
     Prozessor* alu;
-    list<string> lstFile;
+	//Benedikt: geändert
+	list<QString> lstFile;
     vector<Codeline> maschinencode;
     vector<Codeline>::iterator pc;
 
