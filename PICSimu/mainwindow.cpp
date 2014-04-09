@@ -76,6 +76,12 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
 			ui->lw_lstFile->addItem(*it);   // Code zeilenweise in ListWidget einfügen
 		}
 
+		//ersten Befehl einfärben
+
+		int zeile = steuerwerk->pc->textzeile - 1;
+		QColor green(0,255,0);
+		ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
+
     }
     else
         ui->lw_lstFile->addItem("File does not exist!");
