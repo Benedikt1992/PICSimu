@@ -119,22 +119,16 @@ void MainWindow::initializeSpeicherWidget()
 
 void MainWindow::slotRefreshSpeicher()
 { //BB äußerst unschön gelöst. Verletzt sämtliche Konzeptgrenzen. Stelle dir vor der Speicher ist private. besser eine Methode speicherwer->getNumberOn(bank, adresse) und von dort methode von speicher aufrufen.
-    int* bank0;
-    int* bank1;
 
-    bank0 = steuerwerk->getBank(0);
-    bank1 = steuerwerk->getBank(1);
-
-    if(bank0 == 0 || bank1 == 0)
-        return;
 
     for(int i=0; i < n_register; i++)
     {
-        ui->tw_speicher->item(i,1)->setText(QString::number(bank0[i], 16));
-        ui->tw_speicher->item(i+n_register,1)->setText(QString::number(bank1[i], 16));
+       // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
+        ui->tw_speicher->item(i,1)->setText(QString::number(steuerwerk->readForGUI(0,i), 16));
+        ui->tw_speicher->item(i+n_register,1)->setText(QString::number(steuerwerk->readForGUI(1,i), 16));
 
-        ui->tw_speicher->item(i,2)->setText(QString::number(bank0[i], 2));
-        ui->tw_speicher->item(i+n_register,2)->setText(QString::number(bank1[i], 2));
+        ui->tw_speicher->item(i,2)->setText(QString::number(steuerwerk->readForGUI(0,i), 2));
+        ui->tw_speicher->item(i+n_register,2)->setText(QString::number(steuerwerk->readForGUI(1,i), 2));
     }
 }
 

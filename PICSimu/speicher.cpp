@@ -8,8 +8,7 @@ using namespace std;
 Speicher::Speicher(void)
 {
     // Registerinhalte mit 0 initialisieren
-    for(int i = 0; i < n_register; i++)
-        bank0[i] = bank1[i] = 0;
+    clearSpeicher();
 
     // Mapping
     // ungemappte Register (z.B. 00h oder 07h) noch nicht berücksichtigt!!! - mit null-Zeiger abfangen?)
@@ -38,7 +37,7 @@ Speicher::~Speicher(void)
 
 bool Speicher::clearSpeicher()
 {
-	//TODO muss noch angepasst werden (welche Ur-Zustände haben die SFRs?)
+    //TODO muss noch angepasst werden (welche Ur-Zustände haben die SFRs?) -> am ENDE!!
 	for(int i = 0; i < n_register; i++)
 		bank0[i] = bank1[i] = 0;
 	return true;
@@ -67,5 +66,27 @@ int* Speicher::getFileReference(int file)
         bank = 0;
 
     return refBank[bank][file];
+}
+
+//TODO Hier wird in den Speicher geschrieben und fehler abgefangen; z.B. nicht Schreibbare Bits
+bool Speicher::write(int file, int wert)
+{
+    //TODO Hier muss noch geprüft werden ob Schreibvorgang gültig!!
+    *getFileReference(file)=wert;
+    return true;
+}
+
+int Speicher::read( int file)
+{ //TODO Fehler abfangen. Bisher zeigt Adresse 0 z.B. auf NULL
+    return *getFileReference(file);
+}
+
+int Speicher::readForGUI (int bank, int file)
+{
+   // cout << "Speicher read" << endl;
+    if (bank < 1)
+        return bank0[file];
+    else
+        return bank1[file];
 }
 

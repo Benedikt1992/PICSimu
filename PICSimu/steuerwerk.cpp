@@ -134,14 +134,9 @@ void Steuerwerk::execute(int command)
 
 
 // Mario
-int* Steuerwerk::getBank(int bank){
-    if(bank == 0)
-        return alu->speicher.bank0;
-
-    if(bank == 1)
-        return alu->speicher.bank1;
-
-    return 0;
+int Steuerwerk::readForGUI(int bank,int file){
+    //cout << "steuerwerk read" << endl;
+    return alu->speicher.readForGUI(bank,file);
 }
 // Mario ende
 

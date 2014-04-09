@@ -33,7 +33,7 @@ public:
 	bool clearSteuerwerk(void);
 	bool clearProgrammspeicher(void);
 
-    int* getBank(int);
+    int readForGUI(int,int);
 };
 
 

@@ -6,12 +6,8 @@
 class Speicher
 {
 public:
-    int bank0[n_register];
-    int bank1[n_register];
 
-    int workingregister;
 
-    int* refBank[2][n_register];
 
     Speicher(void);
     ~Speicher(void);
@@ -19,6 +15,15 @@ public:
     int* getFileReference(int);
     void ausgeben(int);
 	bool clearSpeicher(void);
+    bool write(int,int);
+    int read(int);
+    int readForGUI(int,int);
+
+private:
+    int* refBank[2][n_register];
+    int workingregister;
+    int bank0[n_register];
+    int bank1[n_register];
 };
 
 #endif // SPEICHER_H
