@@ -14,6 +14,11 @@ Prozessor::~Prozessor(void)
 {
 }
 
+bool Prozessor::clearProzessor()
+{
+	return speicher.clearSpeicher();
+}
+
 void Prozessor::bsf(int command)
 {
     cout << " BSF ";

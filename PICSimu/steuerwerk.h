@@ -30,6 +30,8 @@ public:
     void execute(int);
 	bool toggleBreakpoint(int);
     bool programmEndeErreicht(void);
+	bool clearSteuerwerk(void);
+	bool clearProgrammspeicher(void);
 
     int* getBank(int);
 };

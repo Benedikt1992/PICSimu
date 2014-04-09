@@ -62,6 +62,7 @@ bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steu
         }
 
         // cout << "Programmcounter gesetzt" << endl;
+		//TODO funktion in steuerwerk packen
         steuerwerk->pc = steuerwerk->maschinencode.begin();
     }
 

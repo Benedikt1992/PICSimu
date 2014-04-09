@@ -14,6 +14,7 @@ public:
     ~Prozessor(void);
 
     void execute(int);
+	bool clearProzessor(void);
 
     void bsf(int);
     void go_to(int, Steuerwerk*);

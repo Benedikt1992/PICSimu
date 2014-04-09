@@ -18,6 +18,7 @@ public:
 
     int* getFileReference(int);
     void ausgeben(int);
+	bool clearSpeicher(void);
 };
 
 #endif // SPEICHER_H

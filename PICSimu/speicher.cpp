@@ -37,6 +37,14 @@ Speicher::~Speicher(void)
 {
 }
 
+bool Speicher::clearSpeicher()
+{
+	//TODO muss noch angepasst werden (welche Ur-Zustände haben die SFRs?)
+	for(int i = 0; i < n_register; i++)
+		bank0[i] = bank1[i] = 0;
+	return true;
+}
+
 // nur zum Testen
 void Speicher::ausgeben(int bank)
 {

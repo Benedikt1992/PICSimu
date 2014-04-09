@@ -16,6 +16,23 @@ Steuerwerk::~Steuerwerk(void)
 {
 }
 
+bool Steuerwerk::clearSteuerwerk()
+{
+	if(!alu->clearProzessor()) // Prozessor resetten
+		return false;
+	if(0!=maschinencode.size())
+		pc = maschinencode.begin(); // PC auf beginn setzen TODO Fehler wenn noch kein Code geladen ist?
+	return true;
+
+}
+
+bool Steuerwerk::clearProgrammspeicher()
+{
+	lstFile.clear();
+	maschinencode.clear();
+	return true;
+}
+
 bool Steuerwerk::loadFile(string filename)
 {
     return Parser::auslesen(&lstFile, filename, this);

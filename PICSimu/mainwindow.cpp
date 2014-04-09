@@ -59,6 +59,11 @@ void MainWindow::connectSteuerwerk(Steuerwerk* steuerwerk)
 void MainWindow::slotLoadLstFile() // Benedikt: geändert
 {
     // cout << "slotLoadLstFile() gestartet" << endl;
+	// evtl. vorhandene Inhalte löschen
+	steuerwerk->clearProgrammspeicher();
+	steuerwerk->clearSteuerwerk();
+	ui->lw_lstFile->clear();    // LineWidget leeren
+	slotRefreshSpeicher();
 
     if(steuerwerk->loadFile(ui->le_filename->text().toStdString()))  // auslesen erfolgreich?
     {
