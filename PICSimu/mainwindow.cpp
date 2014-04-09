@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->selectFile_Button, SIGNAL(clicked()),SLOT(slotLoad_FileDialog()));
     connect(ui->refresh_speicher, SIGNAL(clicked()), SLOT(slotRefreshSpeicher()));
     connect(ui->pb_executeStep, SIGNAL(clicked()), SLOT(slotExecuteStep()));
+	connect(ui->resetButton,SIGNAL(clicked()),SLOT(slotResetClicked()));
 
     // Mario
     // Tabelle für Speicherausgabe definieren
@@ -179,4 +180,21 @@ void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 	}
 
 	//index.row()+1 entspeichter Textzeile aus der lst Datei
+}
+
+void MainWindow::slotResetClicked()
+{
+	//aktuellen Befehl weiß färben
+	int zeile = steuerwerk->pc->textzeile - 1;
+	QColor white(255,255,255);
+	ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
+
+	//Steuerwerk resetten
+	steuerwerk->clearSteuerwerk();
+	slotRefreshSpeicher();
+
+	//ersten Befehl einfärben
+	zeile = steuerwerk->pc->textzeile - 1;
+	QColor green(0,255,0);
+	ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
 }

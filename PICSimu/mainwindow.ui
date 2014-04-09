@@ -88,8 +88,6 @@
       </item>
      </layout>
     </widget>
-    <zorder>verticalLayoutWidget</zorder>
-    <zorder>horizontalLayoutWidget_3</zorder>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
@@ -150,6 +148,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="resetButton">
+         <property name="text">
+          <string>Reset</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -166,12 +171,6 @@
      </item>
     </layout>
    </widget>
-   <zorder>label_2</zorder>
-   <zorder>frame</zorder>
-   <zorder>horizontalLayoutWidget_2</zorder>
-   <zorder>horizontalLayoutWidget_3</zorder>
-   <zorder>lw_lstFile</zorder>
-   <zorder>lw_lstFile</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -179,7 +178,7 @@
      <x>0</x>
      <y>0</y>
      <width>1210</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
