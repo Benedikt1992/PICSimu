@@ -32,7 +32,6 @@ Speicher::Speicher(void)
     refBank[1][8] = &(bank1[8]);    // EECON1-Register
     refBank[1][9] = &(bank1[9]);    // EECON2-Register
 }
-
 Speicher::~Speicher(void)
 {
 }

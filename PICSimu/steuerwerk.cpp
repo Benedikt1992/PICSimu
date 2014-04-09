@@ -21,7 +21,7 @@ bool Steuerwerk::clearSteuerwerk()
 	if(!alu->clearProzessor()) // Prozessor resetten
 		return false;
 	if(0!=maschinencode.size())
-		pc = maschinencode.begin(); // PC auf beginn setzen TODO Fehler wenn noch kein Code geladen ist?
+		pc = maschinencode.begin(); // PC auf beginn setzen
 	return true;
 
 }
