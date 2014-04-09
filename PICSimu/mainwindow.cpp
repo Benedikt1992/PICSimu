@@ -106,7 +106,7 @@ void MainWindow::initializeSpeicherWidget()
 }
 
 void MainWindow::slotRefreshSpeicher()
-{
+{ //BB äußerst unschön gelöst. Verletzt sämtliche Konzeptgrenzen. Stelle dir vor der Speicher ist private. besser eine Methode getNumberOn(bank, adresse)
     int* bank0;
     int* bank1;
 
@@ -128,11 +128,11 @@ void MainWindow::slotRefreshSpeicher()
 
 // Mario ende
 
-void MainWindow::slotExecuteStep()
+void MainWindow::slotExecuteStep() //BB generell Besser gesamte Funktionalität in Steuerwerk legen und von dort Mehtoden der GUI aufrufen (dafür haben wir ja das mainwindow attribut in steuerwerk). Spätestens bei run() ist das wahrscheinlich zwingend nötig, da die Methode in einer Schleife läuft.
 {
     if(steuerwerk->programmEndeErreicht())
         return;
-
+	//BB besser steuerwerk->getCurrentLine(). siehe auch weitere Vorkommen in Methode
     int zeile = steuerwerk->pc->textzeile - 1;  // Zeilennummer entspricht nicht der item-Nummer des ListWidgets!
     QColor white(255,255,255);
     ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
