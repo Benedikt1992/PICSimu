@@ -106,7 +106,7 @@ void MainWindow::initializeSpeicherWidget()
 }
 
 void MainWindow::slotRefreshSpeicher()
-{ //BB äußerst unschön gelöst. Verletzt sämtliche Konzeptgrenzen. Stelle dir vor der Speicher ist private. besser eine Methode getNumberOn(bank, adresse)
+{ //BB äußerst unschön gelöst. Verletzt sämtliche Konzeptgrenzen. Stelle dir vor der Speicher ist private. besser eine Methode speicherwer->getNumberOn(bank, adresse) und von dort methode von speicher aufrufen.
     int* bank0;
     int* bank1;
 
