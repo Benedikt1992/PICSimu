@@ -118,9 +118,7 @@ void MainWindow::initializeSpeicherWidget()
 }
 
 void MainWindow::slotRefreshSpeicher()
-{ //BB äußerst unschön gelöst. Verletzt sämtliche Konzeptgrenzen. Stelle dir vor der Speicher ist private. besser eine Methode speicherwer->getNumberOn(bank, adresse) und von dort methode von speicher aufrufen.
-
-
+{
     for(int i=0; i < n_register; i++)
     {
        // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;

@@ -54,7 +54,7 @@ void Speicher::ausgeben(int bank)
         else
             cout << i << "\t" << "N/A" << endl;
 
-    cout << "Bank COntent Ende!" << endl;
+    cout << "Bank Content Ende!" << endl;
 }
 
 int* Speicher::getFileReference(int file)
