@@ -79,9 +79,7 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
 
 		//ersten Befehl einfärben
 
-		int zeile = steuerwerk->pc->textzeile - 1;
-		QColor green(0,255,0);
-		ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
+        setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
 
     }
     else
@@ -132,28 +130,29 @@ void MainWindow::slotRefreshSpeicher()
 
 // Mario ende
 
-void MainWindow::slotExecuteStep() //BB generell Besser gesamte Funktionalität in Steuerwerk legen und von dort Mehtoden der GUI aufrufen (dafür haben wir ja das mainwindow attribut in steuerwerk). Spätestens bei run() ist das wahrscheinlich zwingend nötig, da die Methode in einer Schleife läuft.
+void MainWindow::setLineColorWhite(int linenumber)
 {
-    if(steuerwerk->programmEndeErreicht())
-        return;
-	//BB besser steuerwerk->getCurrentLine(). siehe auch weitere Vorkommen in Methode
-    int zeile = steuerwerk->pc->textzeile - 1;  // Zeilennummer entspricht nicht der item-Nummer des ListWidgets!
     QColor white(255,255,255);
-    ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
+    ui->lw_lstFile->item(linenumber)->setBackgroundColor(white);
+}
+
+void MainWindow::setLineColorGreen(int linenumber)
+{
+    QColor green(0,255,0);
+    ui->lw_lstFile->item(linenumber)->setBackgroundColor(green);
+}
+
+void MainWindow::slotExecuteStep()
+{
+
+
 
     steuerwerk->executeStep();  // nächsten Befehl auf den der PC zeigt ausführen
-    slotRefreshSpeicher();  // nicht notwendig es als Slot zu definieren
 
-    if(steuerwerk->programmEndeErreicht())
-        return;
-
-    // nächsten Befehl in der GUI einfärben
-    zeile = steuerwerk->pc->textzeile - 1;
-    QColor green(0,255,0);
-    ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
-
-    // zur aktuellen Stelle in der Dateiansicht springen
-    ui->lw_lstFile->setCurrentRow(zeile);
+}
+void MainWindow::gotoLineNumber(int linenumber)
+{
+    ui->lw_lstFile->setCurrentRow(linenumber);
     ui->lw_lstFile->clearSelection();
 }
 
@@ -167,26 +166,23 @@ void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 	}
 	else
 	{
-		QColor myColor(255,255,255);
-		ui->lw_lstFile->item(index.row())->setBackgroundColor(myColor);
-	}
+        setLineColorWhite(index.row());
 
+	}
+    ui->lw_lstFile->clearSelection();
 	//index.row()+1 entspeichter Textzeile aus der lst Datei
 }
 
 void MainWindow::slotResetClicked()
 {
 	//aktuellen Befehl weiß färben
-	int zeile = steuerwerk->pc->textzeile - 1;
-	QColor white(255,255,255);
-	ui->lw_lstFile->item(zeile)->setBackgroundColor(white);
+    setLineColorWhite(steuerwerk->getCurrentLineNumber()-1);
+
 
 	//Steuerwerk resetten
 	steuerwerk->clearSteuerwerk();
 	slotRefreshSpeicher();
 
 	//ersten Befehl einfärben
-	zeile = steuerwerk->pc->textzeile - 1;
-	QColor green(0,255,0);
-	ui->lw_lstFile->item(zeile)->setBackgroundColor(green);
+    setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
 }

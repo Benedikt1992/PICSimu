@@ -35,7 +35,13 @@ bool Steuerwerk::clearProgrammspeicher()
 
 bool Steuerwerk::loadFile(string filename)
 {
-    return Parser::auslesen(&lstFile, filename, this);
+    if(Parser::auslesen(&lstFile, filename, this))
+    {
+        pc = maschinencode.begin();
+        return true;
+    }
+    return false;
+
 }
 
 
@@ -62,6 +68,11 @@ bool Steuerwerk::toggleBreakpoint(int textzeile)
  */
 bool Steuerwerk::executeStep(void)
 {
+    if(programmEndeErreicht())
+        return true;
+
+    mainWindow->setLineColorWhite(getCurrentLineNumber()-1);
+
     if(pc != maschinencode.end())
     {
         execute(pc->command);
@@ -69,7 +80,13 @@ bool Steuerwerk::executeStep(void)
     }
     else
         return false;
+    mainWindow->slotRefreshSpeicher();
 
+    if(programmEndeErreicht())
+        return true;
+
+     mainWindow->setLineColorGreen(getCurrentLineNumber()-1);
+     mainWindow->gotoLineNumber(getCurrentLineNumber()-1);
     return true;
 }
 
@@ -146,4 +163,9 @@ bool Steuerwerk::programmEndeErreicht()
         return true;
 
     return false;
+}
+
+int Steuerwerk::getCurrentLineNumber()
+{
+    return pc->textzeile;
 }

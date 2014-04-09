@@ -21,6 +21,9 @@ public:
     ~MainWindow();
 
     void connectSteuerwerk(Steuerwerk*);
+    void setLineColorWhite(int linenumber);
+    void setLineColorGreen(int linenumber);
+    void gotoLineNumber(int linenumber);
 
 private:
     Ui::MainWindow *ui;
@@ -28,12 +31,13 @@ private:
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);
-    void slotRefreshSpeicher(void);
     void slotExecuteStep(void);
 	void slotResetClicked(void);
 
 	//Benedikt:
 	void on_lw_lstFile_doubleClicked(const QModelIndex &index);
+public slots:
+    void slotRefreshSpeicher(void);
 
 };
 

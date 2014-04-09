@@ -32,8 +32,9 @@ public:
     bool programmEndeErreicht(void);
 	bool clearSteuerwerk(void);
 	bool clearProgrammspeicher(void);
-
+    int getCurrentLineNumber(void);
     int readForGUI(int,int);
+
 };
 
 
