@@ -221,6 +221,7 @@ pip-log.txt
 
 PICSimu/*.pro.user
 /build*/
+PICSimu/*.pro.user.*
 
 # Compiled Object files
 *.slo
@@ -234,3 +235,4 @@ PICSimu/*.pro.user
 *.out
 *.app
 PICSimu/PICSimu.pro.user.cdff004
+PICSimu/PICSimu.pro.user.155df25
