@@ -28,6 +28,8 @@ public:
 private:
     Ui::MainWindow *ui;
     void initializeSpeicherWidget(void);
+    QString convertIntToBinString(int bank,int file);
+    QString convertIntToHexString(int bank,int file);
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);

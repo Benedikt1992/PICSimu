@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->tw_speicher->setFont(font);
 
     initializeSpeicherWidget();
+
     // Mario ende
 
 }
@@ -117,15 +118,103 @@ void MainWindow::initializeSpeicherWidget()
 
 void MainWindow::slotRefreshSpeicher()
 {
+
     for(int i=0; i < n_register; i++)
     {
        // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
-        ui->tw_speicher->item(i,1)->setText(QString::number(steuerwerk->readForGUI(0,i), 16));
-        ui->tw_speicher->item(i+n_register,1)->setText(QString::number(steuerwerk->readForGUI(1,i), 16));
+        ui->tw_speicher->item(i,1)->setText(convertIntToHexString(0,i));
+        ui->tw_speicher->item(i+n_register,1)->setText(convertIntToHexString(1,i));
 
-        ui->tw_speicher->item(i,2)->setText(QString::number(steuerwerk->readForGUI(0,i), 2));
-        ui->tw_speicher->item(i+n_register,2)->setText(QString::number(steuerwerk->readForGUI(1,i), 2));
+        ui->tw_speicher->item(i,2)->setText(convertIntToBinString(0,i));
+        ui->tw_speicher->item(i+n_register,2)->setText(convertIntToBinString(1,i));
     }
+}
+QString MainWindow::convertIntToBinString(int bank,int file)
+{
+   int value = steuerwerk->readForGUI(bank,file);
+   int mask = 0x0080; // entspricht 0b10000000
+   QString sresult;
+
+   for(int schleife = 0; schleife < 8;schleife++)
+   {
+
+       if(value & mask)
+           sresult.append('1');
+       else
+           sresult.append('0');
+
+       mask=mask>>1;
+   }
+
+   return sresult;
+}
+QString MainWindow::convertIntToHexString(int bank,int file)
+{
+   int value = steuerwerk->readForGUI(bank,file);
+   int mask = 0x00f0; // entspricht 0b11110000
+   QString sresult;
+
+   for(int schleife = 0; schleife < 2;schleife++)
+   {
+
+       int nibble=value & mask;
+       if(0==schleife) nibble >>= 4;
+       switch (nibble) {
+       case 0:
+           sresult.append('0');
+           break;
+       case 1:
+           sresult.append('1');
+           break;
+       case 2:
+           sresult.append('2');
+           break;
+       case 3:
+           sresult.append('3');
+           break;
+       case 4:
+           sresult.append('4');
+           break;
+       case 5:
+           sresult.append('5');
+           break;
+       case 6:
+           sresult.append('6');
+           break;
+       case 7:
+           sresult.append('7');
+           break;
+       case 8:
+           sresult.append('8');
+           break;
+       case 9:
+           sresult.append('9');
+           break;
+       case 10:
+           sresult.append('A');
+           break;
+       case 11:
+           sresult.append('B');
+           break;
+       case 12:
+           sresult.append('C');
+           break;
+       case 13:
+           sresult.append('D');
+           break;
+       case 14:
+           sresult.append('E');
+           break;
+       case 15:
+           sresult.append('F');
+           break;
+       default:
+           break;
+       }
+       mask=mask>>4;
+   }
+
+   return sresult;
 }
 
 // Mario ende
