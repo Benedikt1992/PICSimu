@@ -28,7 +28,7 @@ void Prozessor::nop()
 }
 
 void Prozessor::bsf(int command)
-{//TODO speicher.write() benutzen!!
+{
     cout << " BSF ";
 
     int bit;
@@ -52,6 +52,8 @@ void Prozessor::bsf(int command)
     file = command & 0x7F;
 
     actualValue = speicher.read(file);
+    if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
 
     int newValue = actualValue | (1 << bit);
     speicher.write(file,newValue);

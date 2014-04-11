@@ -21,10 +21,10 @@ Speicher::Speicher(void)
         refBank[1][i] = &(bank0[i]);
 
     // undefinierte Register erhalten Null-Zeiger
-    refBank[0][0] = 0;
-    refBank[1][0] = 0;
-    refBank[0][7] = 0;
-    refBank[1][7] = 0;
+    refBank[0][0] = NULL;
+    refBank[1][0] = NULL;
+    refBank[0][7] = NULL;
+    refBank[1][7] = NULL;
 
     refBank[1][1] = &(bank1[1]);    // OPTION-Register
     refBank[1][5] = &(bank1[5]);    // TRISA-Register
@@ -80,6 +80,14 @@ bool Speicher::write(int file, int wert)
 
 int Speicher::read( int file)
 { //TODO Fehler abfangen. Bisher zeigt Adresse 0 z.B. auf NULL
+    /*
+     * Fehlerwerte:
+     * 0x0100 == Speicher existiert nicht
+     *
+     */
+
+    if(getFileReference(file)==NULL)
+            return 0x0100;
     return *getFileReference(file);
 }
 
