@@ -9,6 +9,7 @@ class Prozessor
 {
 public:
     Speicher speicher;
+    int cycles;
 
     Prozessor(void);
     ~Prozessor(void);
@@ -18,6 +19,8 @@ public:
 
     void bsf(int);
     void go_to(int, Steuerwerk*);
+    void nop (void);
+    void clrf(int);
 
 };
 

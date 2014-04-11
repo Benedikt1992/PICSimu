@@ -19,8 +19,9 @@ public:
     int read(int);
     int readForGUI(int,int);
 
-private:
+//private:
     int* refBank[2][n_register];
+private:
     int workingregister;
     int bank0[n_register];
     int bank1[n_register];

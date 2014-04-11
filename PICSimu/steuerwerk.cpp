@@ -114,10 +114,14 @@ void Steuerwerk::execute(int command)
 
     // ADDWF
     // ANDWF
-    // ...
+    // CLRF
+    //  00 0001 1fff ffff == 0c0180
+    //& 11 1111 1000 0000 == 0x3f80
+    if( (command&0x3f80) == 0x0180)
+            alu->clrf(command);
     // NOP
-    if( command == 0 )
-        cout << " NOP" << endl;
+    if( (command & 0x0f9f) == 0 )
+        alu->nop();
     // ...
     // SWAPF
     // XORWF

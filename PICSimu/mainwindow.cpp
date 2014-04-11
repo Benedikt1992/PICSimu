@@ -123,7 +123,7 @@ void MainWindow::slotRefreshSpeicher()
     {
        // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
         ui->tw_speicher->item(i,1)->setText(convertIntToHexString(0,i));
-        ui->tw_speicher->item(i+n_register,1)->setText(convertIntToHexString(1,i));
+        ui->tw_speicher->item(i+n_register,1)->setText(convertIntToHexString(1 ,i));
 
         ui->tw_speicher->item(i,2)->setText(convertIntToBinString(0,i));
         ui->tw_speicher->item(i+n_register,2)->setText(convertIntToBinString(1,i));

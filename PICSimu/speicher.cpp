@@ -9,6 +9,7 @@ Speicher::Speicher(void)
 {
     // Registerinhalte mit 0 initialisieren
     clearSpeicher();
+    workingregister =0;
 
     // Mapping
     // ungemappte Register (z.B. 00h oder 07h) noch nicht berücksichtigt!!! - mit null-Zeiger abfangen?)
@@ -37,6 +38,7 @@ Speicher::~Speicher(void)
 
 bool Speicher::clearSpeicher()
 {
+    workingregister =0;
     //TODO muss noch angepasst werden (welche Ur-Zustände haben die SFRs?) -> am ENDE!!
 	for(int i = 0; i < n_register; i++)
 		bank0[i] = bank1[i] = 0;

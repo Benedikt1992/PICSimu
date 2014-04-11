@@ -7,6 +7,7 @@ using namespace std;
 
 Prozessor::Prozessor(void)
 {
+    cycles =0;
 }
 
 
@@ -16,11 +17,18 @@ Prozessor::~Prozessor(void)
 
 bool Prozessor::clearProzessor()
 {
+    cycles =0;
 	return speicher.clearSpeicher();
+
+}
+
+void Prozessor::nop()
+{
+    cycles++;
 }
 
 void Prozessor::bsf(int command)
-{
+{//TODO speicher.write() benutzen!!
     cout << " BSF ";
 
     int bit;
@@ -49,6 +57,7 @@ void Prozessor::bsf(int command)
         return;
 
     *ref |= (1 << bit);
+    cycles++;
 }
 
 void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
@@ -65,4 +74,19 @@ void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
      */
 
     steuerwerk->pc = steuerwerk->maschinencode.begin() + sprungAdresse - 1;
+    cycles +=2;
+}
+
+void Prozessor::clrf(int command)
+{
+
+    // 00 0001 1fff ffff
+    int file = command & 0x007f;
+    speicher.write(file,0);
+    // Zero Bit setzen: file =0x03
+    // Bite = 0b010
+    // befehl ist 01 01bb bfff ffff
+    // => 00 0001 0000 0011 == 0x0103
+    bsf(0x0103);
+    //cycle wird in bsf() erhöht
 }
