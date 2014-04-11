@@ -34,7 +34,7 @@ void Prozessor::bsf(int command)
     int bit;
     int file;
 
-    int* ref;
+    int actualValue;
 
     //      01 01bb bfff ffff
     //  &   00 0011 1000 0000  = 0x380
@@ -51,12 +51,10 @@ void Prozessor::bsf(int command)
 
     file = command & 0x7F;
 
-    ref = speicher.getFileReference(file);
+    actualValue = speicher.read(file);
 
-    if(ref == 0)
-        return;
-
-    *ref |= (1 << bit);
+    int newValue = actualValue | (1 << bit);
+    speicher.write(file,newValue);
     cycles++;
 }
 
