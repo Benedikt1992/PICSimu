@@ -22,6 +22,30 @@ bool Prozessor::clearProzessor()
 
 }
 
+/*
+ *
+ * Befehlsimplementierungen
+ *
+ */
+
+void Prozessor::clrf(int command)
+{
+
+    // 00 0001 1fff ffff
+    int file = command & 0x007f;
+    speicher.write(file,0);
+
+    speicher.setZBit();
+    cycles++;
+
+}
+void Prozessor::clrw()
+{
+    speicher.writeW(0);
+    speicher.setZBit();
+    cycles++;
+}
+
 void Prozessor::nop()
 {
     cycles++;
@@ -109,20 +133,4 @@ void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
     cycles +=2;
 }
 
-void Prozessor::clrf(int command)
-{
 
-    // 00 0001 1fff ffff
-    int file = command & 0x007f;
-    speicher.write(file,0);
-
-    speicher.setZBit();
-    cycles++;
-
-}
-void Prozessor::clrw()
-{
-    speicher.writeW(0);
-    speicher.setZBit();
-    cycles++;
-}
