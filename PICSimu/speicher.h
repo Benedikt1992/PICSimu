@@ -20,6 +20,13 @@ public:
     int readForGUI(int,int);
     int readW(void);
     void writeW(int value);
+    void setZBit(void);
+    void clearZBit(void);
+    void setDCBit(void);
+    void clearDCBit(void);
+    void setCBit(void);
+    void clearCBit(void);
+
 
 private:
     int* refBank[2][n_register];

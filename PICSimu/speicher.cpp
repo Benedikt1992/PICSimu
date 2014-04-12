@@ -109,3 +109,33 @@ void Speicher::writeW(int value)
 {
     workingregister=value;
 }
+
+void Speicher::setZBit()
+{
+    bank0[3]= bank0[3] | (1<<2);
+}
+
+void Speicher::clearZBit()
+{
+    bank0[3]= bank0[3] & (~(1<<2));
+}
+
+void Speicher::setDCBit()
+{
+    bank0[3]= bank0[3] | (1<<1);
+}
+
+void Speicher::clearDCBit()
+{
+    bank0[3]= bank0[3] & (~(1<<1));
+}
+
+void Speicher::setCBit()
+{
+    bank0[3]= bank0[3] | (1);
+}
+void Speicher::clearCBit()
+{
+    bank0[3]= bank0[3] & (~1);
+}
+
