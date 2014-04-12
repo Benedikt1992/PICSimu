@@ -26,6 +26,38 @@ void Prozessor::nop()
 {
     cycles++;
 }
+void Prozessor::bcf(int command)
+{
+    cout << " BCF ";
+
+    int bit;
+    int file;
+
+    int actualValue;
+
+    //      01 00bb bfff ffff
+    //  &   00 0011 1000 0000  = 0x380
+    //      00 00bb b000 0000
+    //  >>  00 0000 0000 0bbb
+
+    bit = command & 0x380;
+    bit = bit >> 7;
+
+
+    //      01 01bb bfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+
+    file = command & 0x7F;
+
+    actualValue = speicher.read(file);
+    if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    int newValue = actualValue & (~(1 << bit));
+    speicher.write(file,newValue);
+    cycles++;
+}
 
 void Prozessor::bsf(int command)
 {

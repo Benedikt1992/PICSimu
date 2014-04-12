@@ -17,6 +17,7 @@ public:
     void execute(int);
 	bool clearProzessor(void);
 
+    void bcf(int command);
     void bsf(int);
     void go_to(int, Steuerwerk*);
     void nop (void);

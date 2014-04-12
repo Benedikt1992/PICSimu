@@ -130,7 +130,11 @@ void Steuerwerk::execute(int command)
     // BIT-ORIENTED FILE REGISTER OPERATIONS
 
     // BCF
-    // BSF
+    //  01 00bb bfff ffff = 0x1000
+    //& 11 1100 0000 0000 = 0x3C00
+    if ((command&0x3C00)==0x1000)
+        alu->bcf(command);
+    //BSF
     //      01 01bb bfff ffff = 0x1400
     //  &   11 1100 0000 0000 = 0x3C00
     if( (command & 0x3C00) == 0x1400 )
