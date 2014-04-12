@@ -100,3 +100,12 @@ int Speicher::readForGUI (int bank, int file)
         return bank1[file];
 }
 
+int Speicher::readW()
+{
+    return workingregister;
+}
+
+void Speicher::writeW(int value)
+{
+    workingregister=value;
+}

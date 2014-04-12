@@ -122,3 +122,13 @@ void Prozessor::clrf(int command)
     bsf(0x0103);
     //cycle wird in bsf() erhöht
 }
+void Prozessor::clrw()
+{
+    speicher.writeW(0);
+    // Zero Bit setzen: file =0x03
+    // Bite = 0b010
+    // befehl ist 01 01bb bfff ffff
+    // => 00 0001 0000 0011 == 0x0103
+    bsf(0x0103);
+    //cycle wird in bsf() erhöht
+}

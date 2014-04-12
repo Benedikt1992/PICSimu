@@ -22,6 +22,7 @@ public:
     void go_to(int, Steuerwerk*);
     void nop (void);
     void clrf(int);
+    void clrw();
 
 };
 
