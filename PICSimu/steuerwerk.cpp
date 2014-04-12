@@ -145,6 +145,10 @@ void Steuerwerk::execute(int command)
     if( (command & 0x3C00) == 0x1400 )
         alu->bsf(command);
     // BTFSC
+    //  01 10bb bfff ffff = 0x1800
+    //  11 1100 0000 0000 = 0x3C00
+    if((command & 0x3c00)==0x1800)
+            alu->btfsc(command, this);
     // BTFSS
 
 

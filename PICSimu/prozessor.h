@@ -22,6 +22,7 @@ public:
     void nop (void);
     void bcf(int command);
     void bsf(int);
+    void btfsc(int command, Steuerwerk* steuerwerk);
     void go_to(int, Steuerwerk*);
 
 };
