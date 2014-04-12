@@ -70,8 +70,10 @@ bool Steuerwerk::executeStep(void)
 {
     if(programmEndeErreicht())
         return true;
-
-    mainWindow->setLineColorWhite(getCurrentLineNumber()-1);
+    if(pc->breakpoint)
+        mainWindow->setLineColorRed(getCurrentLineNumber()-1);
+    else
+        mainWindow->setLineColorWhite(getCurrentLineNumber()-1);
 
     if(pc != maschinencode.end())
     {

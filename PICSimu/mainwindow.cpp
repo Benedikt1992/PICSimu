@@ -231,6 +231,12 @@ void MainWindow::setLineColorGreen(int linenumber)
     ui->lw_lstFile->item(linenumber)->setBackgroundColor(green);
 }
 
+void MainWindow::setLineColorRed(int linenumber)
+{
+    QColor red(255,0,0);
+    ui->lw_lstFile->item(linenumber)->setBackgroundColor(red);
+}
+
 void MainWindow::slotExecuteStep()
 {
 
@@ -250,8 +256,7 @@ void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 {
 	if(steuerwerk->toggleBreakpoint(index.row()+1))
 	{
-		QColor myColor(255,0,0);
-		ui->lw_lstFile->item(index.row())->setBackgroundColor(myColor);
+        setLineColorRed(index.row());
 	}
 	else
 	{

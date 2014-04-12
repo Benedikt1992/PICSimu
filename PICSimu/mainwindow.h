@@ -23,6 +23,7 @@ public:
     void connectSteuerwerk(Steuerwerk*);
     void setLineColorWhite(int linenumber);
     void setLineColorGreen(int linenumber);
+    void setLineColorRed(int linenumber);
     void gotoLineNumber(int linenumber);
 
 private:
