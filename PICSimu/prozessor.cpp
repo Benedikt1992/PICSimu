@@ -150,6 +150,40 @@ void Prozessor::btfsc(int command, Steuerwerk* steuerwerk)
     }
 }
 
+void Prozessor::btfss(int command, Steuerwerk* steuerwerk)
+{
+    int bit, file, actualValue;
+    //      01 11bb bfff ffff
+    //  &   00 0011 1000 0000  = 0x380
+    //      00 00bb b000 0000
+    //  >>  00 0000 0000 0bbb
+
+    bit = command & 0x380;
+    bit = bit >> 7;
+
+    //      01 11bb bfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+
+    file = command & 0x7F;
+
+    actualValue = speicher.read(file);
+    if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    if(actualValue & (1<<bit))
+    {
+        //Bit ist 1 -> nächster Befehl wird übersprungen
+        steuerwerk->pc++;
+        cycles+=2;
+    }
+    else
+    {
+        //Bit ist 0
+        cycles++;
+    }
+}
+
 void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
 {
     //      10 1fff ffff ffff
