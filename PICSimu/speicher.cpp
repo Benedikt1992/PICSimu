@@ -74,6 +74,7 @@ int* Speicher::getFileReference(int file)
 bool Speicher::write(int file, int wert)
 {
     //TODO Hier muss noch geprüft werden ob Schreibvorgang gültig!!
+    //Was passiert wenn auf einen Port geschrieben wird?
     *getFileReference(file)=wert;
     return true;
 }
