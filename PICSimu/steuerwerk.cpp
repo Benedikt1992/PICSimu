@@ -168,6 +168,10 @@ void Steuerwerk::execute(int command)
     // ...
     // SUBLW
     // XORLW
+    //  11 1010 kkkk kkkk = 0x3A00
+    //& 11 1111 0000 0000 = 0x3F00
+    if((command&0x3f00)==0x3a00)
+        alu->xorlw(command);
 }
 
 

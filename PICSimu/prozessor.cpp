@@ -52,7 +52,7 @@ void Prozessor::nop()
 }
 void Prozessor::bcf(int command)
 {
-    cout << " BCF ";
+    //cout << " BCF ";
 
     int bit;
     int file;
@@ -85,7 +85,7 @@ void Prozessor::bcf(int command)
 
 void Prozessor::bsf(int command)
 {
-    cout << " BSF ";
+    //cout << " BSF ";
 
     int bit;
     int file;
@@ -199,6 +199,22 @@ void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
 
     steuerwerk->pc = steuerwerk->maschinencode.begin() + sprungAdresse - 1;
     cycles +=2;
+}
+
+void Prozessor::xorlw(int command)
+{
+
+    //  11 1010 kkkk kkkk
+    //& 00 0000 1111 1111 = 0x00ff
+    //= 00 0000 kkkk kkkk
+    int newValue= speicher.readW() ^ (command & 0x00ff);
+    newValue &= 0x00ff; // der Speicher ist nur 8 Bit breit
+    speicher.writeW(newValue);
+    if(!newValue)
+        speicher.setZBit();
+    else
+        speicher.clearZBit();
+    cycles++;
 }
 
 

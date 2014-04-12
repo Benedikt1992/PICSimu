@@ -25,6 +25,7 @@ public:
     void btfsc(int command, Steuerwerk* steuerwerk);
     void btfss(int command, Steuerwerk* steuerwerk);
     void go_to(int, Steuerwerk*);
+    void xorlw(int command);
 
 };
 
