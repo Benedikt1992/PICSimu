@@ -7,9 +7,6 @@ using namespace std;
 
 Speicher::Speicher(void)
 {
-    // Registerinhalte mit 0 initialisieren
-    clearSpeicher();
-    workingregister =0;
 
     // Mapping
     // ungemappte Register (z.B. 00h oder 07h) noch nicht berücksichtigt!!! - mit null-Zeiger abfangen?)
@@ -31,6 +28,10 @@ Speicher::Speicher(void)
     refBank[1][6] = &(bank1[6]);    // TRISB-Register
     refBank[1][8] = &(bank1[8]);    // EECON1-Register
     refBank[1][9] = &(bank1[9]);    // EECON2-Register
+
+	// Registerinhalte mit 0 initialisieren
+	clearSpeicher();
+	workingregister =0;
 }
 Speicher::~Speicher(void)
 {
@@ -39,9 +40,15 @@ Speicher::~Speicher(void)
 bool Speicher::clearSpeicher()
 {
     workingregister =0;
-    //TODO muss noch angepasst werden (welche Ur-Zustände haben die SFRs?) -> am ENDE!!
 	for(int i = 0; i < n_register; i++)
 		bank0[i] = bank1[i] = 0;
+
+	//Register mit vorwerten belegen
+	*refBank[0][3] = 0x0018; //STATUS Register TO und PD sind 1 (S.14)
+	*refBank[1][1] = 0x00ff; //OPTION Register alles ist 1 (S.15)
+	*refBank[0][11] = 0x0000; //INCON Register alles 0 (S.16)
+	*refBank[1][5] = 0x00ff; //TRISA untere 5 Bit sind 1 (es existieren nur 5) S.13
+	*refBank[1][6] = 0x00ff; //TRISB alle bit sind 1 S.13
 	return true;
 }
 
