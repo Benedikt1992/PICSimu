@@ -4,6 +4,8 @@
 #include <vector>
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+#define WRITE_TO_FILE_REGISTER 1
+#define WRITE_TO_WORKING_REGISTER 0
 
 using namespace std;
 
@@ -39,22 +41,22 @@ void Prozessor::addwf(int command)
     //      00 0000 0kkk kkkk
     int file = command & 0x7F;
 
+    // Register laden
     int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
     int workingRegisterValue = speicher.readW();
 
+    // Rechenoperation
     int newValue = currentValue + workingRegisterValue;
 
     // betroffene Flags setzen/löschen
     checkCarryFlag(newValue);
     checkZeroFlag(newValue);
-    checkDecimalCarryFlag(currentValue, workingRegisterValue);
+    checkDecimalCarryFlagAddition(currentValue, workingRegisterValue);
 
-    newValue &= 0xFF; // eventuellen Überlauf maskieren
-
-    if(storeInFileRegister)
-        speicher.write(file, newValue);
-    else
-        speicher.writeW(newValue);
+    writeBack(newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -68,34 +70,33 @@ void Prozessor::andwf(int command)
     //      00 0000 0kkk kkkk
     int file = command & 0x7F;
 
+    // Register laden
     int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
     int workingRegisterValue = speicher.readW();
 
+    // Rechenoperation
     int newValue = currentValue & workingRegisterValue;
 
     // betroffene Flags setzen/löschen
     checkZeroFlag(newValue);
 
-    newValue &= 0xFF; // eventuellen Überlauf maskieren
-
-    if(storeInFileRegister)
-        speicher.write(file, newValue);
-    else
-        speicher.writeW(newValue);
+    writeBack(newValue, storeInFileRegister);
 
     cycles++;
 }
 
 void Prozessor::clrf(int command)
 {
-
     // 00 0001 1fff ffff
     int file = command & 0x007f;
     speicher.write(file,0);
 
     speicher.setZBit();
-    cycles++;
 
+    cycles++;
 }
 
 void Prozessor::clrw()
@@ -114,18 +115,44 @@ void Prozessor::comf(int command)
     //      00 0000 0fff ffff
     int file = (command & 0x7F);
 
+    // Register laden
     int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
 
+    // Rechenoperation
     int newValue = ~currentValue;
 
+    // betroffene Flags setzen/löschen
     checkZeroFlag(newValue);
 
-    newValue &= 0xFF;
+    writeBack(newValue, storeInFileRegister);
 
-    if(storeInFileRegister)
-        speicher.write(file, newValue);
-    else
-        speicher.writeW(newValue);
+    cycles++;
+}
+
+void Prozessor::decf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      01 0011 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = (command & 0x7F);
+
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Rechenoperation
+    int newValue = currentValue - 1;
+
+    // betroffene Flags prüfen
+    checkZeroFlag(newValue);
+
+
+
+    writeBack(newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -144,11 +171,12 @@ void Prozessor::swapf(int command)
     //      00 0000 0fff ffff
     int file = command & 0x7F;
 
+    // Register laden
     int currentValue = speicher.read(file);
-
-    if(currentValue == 0x0100)
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
         return;
 
+    // Rechenoperation
     int upperNibble = currentValue & 0xF0;
     int lowerNibble = currentValue & 0x0F;
 
@@ -156,11 +184,9 @@ void Prozessor::swapf(int command)
     lowerNibble = lowerNibble << 4;
 
     int newValue = upperNibble + lowerNibble;
+    // Rechenoperation - ENDE
 
-    if(storeInFileRegister)
-        speicher.write(file, newValue);
-    else
-        speicher.writeW(newValue);
+    writeBack(newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -179,6 +205,7 @@ void Prozessor::bcf(int command)
     //      00 00bb b000 0000
     //  >>  00 0000 0000 0bbb
 
+    // Befehl laden
     bit = command & 0x380;
     bit = bit >> 7;
 
@@ -187,14 +214,18 @@ void Prozessor::bcf(int command)
     //  &   00 0000 0111 1111  = 0x7F
     //      00 0000 0fff ffff
 
+    // Register laden
     file = command & 0x7F;
 
     currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
         return;
 
+    // Rechenoperation
     int newValue = currentValue & (~(1 << bit));
-    speicher.write(file,newValue);
+
+    writeBack(newValue, WRITE_TO_FILE_REGISTER);
+
     cycles++;
 }
 
@@ -339,7 +370,7 @@ void Prozessor::checkCarryFlag(int result)
         speicher.clearCBit();
 }
 
-void Prozessor::checkDecimalCarryFlag(int x, int y)
+void Prozessor::checkDecimalCarryFlagAddition(int x, int y)
 {
     int lowerNibbleResult = (x & 0x0F) + (y & 0x0F);
     if(lowerNibbleResult > 0x0F)
@@ -348,10 +379,29 @@ void Prozessor::checkDecimalCarryFlag(int x, int y)
         speicher.clearDCBit();
 }
 
+void Prozessor::checkDecimalCarryFlagSubtraktion(int x, int y)
+{
+    int lowerNibbleResult = (x & 0x0F) - (y & 0x0F);
+    if(lowerNibbleResult > 0x0F)
+        speicher.clearDCBit();
+    else
+        speicher.setDCBit();
+}
+
 void Prozessor::checkZeroFlag(int result)
 {
     if((result & 0xFF) == 0)
         speicher.setZBit();
     else
         speicher.clearZBit();
+}
+
+void Prozessor::writeBack(int result, bool storeInFileRegister)
+{
+    result &= 0xFF;
+
+    if(storeInFileRegister)
+        speicher.write(file, result);
+    else
+        speicher.writeW(result);
 }

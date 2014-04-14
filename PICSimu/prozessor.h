@@ -21,8 +21,8 @@ public:
     void andwf(int);
     void clrf(int);
     void clrw();
-    void comf(int);     // unimplemented
-    void decf(int);     // unimplemented
+    void comf(int);
+    void decf(int);
     void decfsz(int);   // unimplemented
     void incf(int);     // unimplemented
     void incfsz(int);   // unimplemented
@@ -45,8 +45,11 @@ public:
     void xorlw(int command);
 
     void checkCarryFlag(int);
-    void checkDecimalCarryFlag(int, int);
+    void checkDecimalCarryFlagAddition(int, int);
+    void checkDecimalCarryFlagSubtraktion(int, int);
     void checkZeroFlag(int);
+
+    void writeBack(int, bool);
 };
 
 #endif // PROZESSOR_H
