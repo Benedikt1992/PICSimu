@@ -97,11 +97,17 @@ void Prozessor::clrf(int command)
     cycles++;
 
 }
+
 void Prozessor::clrw()
 {
     speicher.writeW(0);
     speicher.setZBit();
     cycles++;
+}
+
+void Prozessor::comf(int command)
+{
+
 }
 
 void Prozessor::nop()
@@ -287,7 +293,7 @@ void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
      */
 
     steuerwerk->pc = steuerwerk->maschinencode.begin() + sprungAdresse - 1;
-    cycles +=2;
+    cycles += 2;
 }
 
 void Prozessor::xorlw(int command)
@@ -299,10 +305,9 @@ void Prozessor::xorlw(int command)
     int newValue= speicher.readW() ^ (command & 0x00ff);
     newValue &= 0x00ff; // der Speicher ist nur 8 Bit breit
     speicher.writeW(newValue);
-    if(!newValue)
-        speicher.setZBit();
-    else
-        speicher.clearZBit();
+
+    checkZeroFlag(newValue);
+
     cycles++;
 }
 
