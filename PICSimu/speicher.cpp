@@ -143,10 +143,11 @@ int Speicher::read( int file)
 int Speicher::readForGUI (int bank, int file)
 {
    // cout << "Speicher read" << endl;
-    if (bank < 1)
-        return bank0[file];
-    else
-        return bank1[file];
+
+	if(refBank[bank][file] == NULL)
+			return 0;
+	return *(refBank[bank][file]);
+
 }
 
 int Speicher::readW()
