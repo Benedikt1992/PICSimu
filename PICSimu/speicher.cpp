@@ -73,9 +73,57 @@ int* Speicher::getFileReference(int file)
 //TODO Hier wird in den Speicher geschrieben und fehler abgefangen; z.B. nicht Schreibbare Bits
 bool Speicher::write(int file, int wert)
 {
-    //TODO Hier muss noch geprüft werden ob Schreibvorgang gültig!!
-    //Was passiert wenn auf einen Port geschrieben wird?
-    *getFileReference(file)=wert;
+	int* FileReference;
+	if((FileReference=getFileReference(file))==NULL)
+		return false; // kein gültiges file...
+
+	if(CHECK_BIT(bank1[3],5))
+	{//Bank 1
+		//Option Register ist voll schreibbar
+		//PCL ist voll schreibbar
+		//Status Register: nur die oberen 3 Bit sind schreibbar
+		if(file == 3)
+		{
+			*FileReference= (wert & 0x00E0) + (*FileReference & 0x001F); //Speicher die oberen 3 Bit aus wert und die unteren 5 Bit aus dem Vorherigen wert
+			return true;
+		}
+		//FSR ist voll schreibbar
+		//TRISA ist voll schreibbar
+		//TRISB ist voll schreibbar
+		//EECON1 ist voll schreibbar
+		//EECON2 ist voll schreibbar
+		//PCLATH ist voll schreibbar
+		//INTCON ist voll schreibbar
+	}
+	else
+	{//Bank 0
+		//TMR0 ist voll schreibbar
+		//PCL ist voll schreibbar
+		//Status Register: nur die oberen 3 Bit sind schreibbar
+		if(file == 3)
+		{
+			*FileReference= (wert & 0x00E0) + (*FileReference & 0x001F); //Speicher die oberen 3 Bit aus wert und die unteren 5 Bit aus dem Vorherigen wert
+			return true;
+		}
+		//FSR ist voll schreibbar
+		//PortA nur die Bit bei denen TRISA = 0 können geschrieben werden
+		if(file==5)
+		{
+			*FileReference = (wert & (~bank1[5])) + (*FileReference & bank1[5]);
+			return true;
+		}
+		//PortB nur die Bit bei denen TRISA = 0 können geschrieben werden
+		if(file==6)
+		{
+			*FileReference = (wert & (~bank1[6])) + (*FileReference & bank1[6]);
+			return true;
+		}
+		//EEDATA ist voll schreibbar
+		//EEADR ist voll schreibbar
+		//PCLATH ist voll schreibbar
+		//INTCON ist voll schreibbar
+	}
+	*FileReference=wert;
     return true;
 }
 
