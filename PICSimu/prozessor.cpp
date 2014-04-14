@@ -50,6 +50,14 @@ void Prozessor::nop()
 {
     cycles++;
 }
+
+void Prozessor::swapf(int command)
+{
+
+
+    cycles++;
+}
+
 void Prozessor::bcf(int command)
 {
     //cout << " BCF ";

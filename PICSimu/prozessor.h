@@ -20,6 +20,7 @@ public:
     void clrf(int);
     void clrw();
     void nop (void);
+    void swapf(int);
     void bcf(int command);
     void bsf(int);
     void btfsc(int command, Steuerwerk* steuerwerk);

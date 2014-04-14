@@ -131,6 +131,10 @@ void Steuerwerk::execute(int command)
         alu->nop();
     // ...
     // SWAPF
+    //  00 1110 dfff ffff = 0xE00
+    //  11 1111 0000 0000 = 0x3F00
+    if((command & 0x3F00) == 0xE00)
+        alu->swapf(command);
     // XORWF
 
 

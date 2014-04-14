@@ -239,11 +239,7 @@ void MainWindow::setLineColorRed(int linenumber)
 
 void MainWindow::slotExecuteStep()
 {
-
-
-
     steuerwerk->executeStep();  // nächsten Befehl auf den der PC zeigt ausführen
-
 }
 void MainWindow::gotoLineNumber(int linenumber)
 {
@@ -279,4 +275,5 @@ void MainWindow::slotResetClicked()
 
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
+    gotoLineNumber(steuerwerk->getCurrentLineNumber()-1);
 }

@@ -178,7 +178,7 @@
      <x>0</x>
      <y>0</y>
      <width>1210</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>
@@ -191,6 +191,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionAsdfasdf">
+   <property name="text">
+    <string>asdfasdf</string>
+   </property>
+  </action>
+  <action name="actionAsdfasdfadf">
+   <property name="text">
+    <string>asdfasdfadf</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
