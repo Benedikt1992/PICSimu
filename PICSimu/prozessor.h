@@ -49,7 +49,7 @@ public:
     void checkDecimalCarryFlagSubtraktion(int, int);
     void checkZeroFlag(int);
 
-    void writeBack(int, bool);
+    void writeBack(int, int, bool);
 };
 
 #endif // PROZESSOR_H

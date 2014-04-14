@@ -56,7 +56,7 @@ void Prozessor::addwf(int command)
     checkZeroFlag(newValue);
     checkDecimalCarryFlagAddition(currentValue, workingRegisterValue);
 
-    writeBack(newValue, storeInFileRegister);
+    writeBack(file, newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -83,7 +83,7 @@ void Prozessor::andwf(int command)
     // betroffene Flags setzen/löschen
     checkZeroFlag(newValue);
 
-    writeBack(newValue, storeInFileRegister);
+    writeBack(file, newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -126,7 +126,7 @@ void Prozessor::comf(int command)
     // betroffene Flags setzen/löschen
     checkZeroFlag(newValue);
 
-    writeBack(newValue, storeInFileRegister);
+    writeBack(file, newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -150,9 +150,7 @@ void Prozessor::decf(int command)
     // betroffene Flags prüfen
     checkZeroFlag(newValue);
 
-
-
-    writeBack(newValue, storeInFileRegister);
+    writeBack(file, newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -186,7 +184,7 @@ void Prozessor::swapf(int command)
     int newValue = upperNibble + lowerNibble;
     // Rechenoperation - ENDE
 
-    writeBack(newValue, storeInFileRegister);
+    writeBack(file, newValue, storeInFileRegister);
 
     cycles++;
 }
@@ -224,7 +222,7 @@ void Prozessor::bcf(int command)
     // Rechenoperation
     int newValue = currentValue & (~(1 << bit));
 
-    writeBack(newValue, WRITE_TO_FILE_REGISTER);
+    writeBack(file, newValue, WRITE_TO_FILE_REGISTER);
 
     cycles++;
 }
@@ -396,7 +394,7 @@ void Prozessor::checkZeroFlag(int result)
         speicher.clearZBit();
 }
 
-void Prozessor::writeBack(int result, bool storeInFileRegister)
+void Prozessor::writeBack(int file, int result, bool storeInFileRegister)
 {
     result &= 0xFF;
 
