@@ -107,7 +107,27 @@ void Prozessor::clrw()
 
 void Prozessor::comf(int command)
 {
+    bool storeInFileRegister = (CHECK_BIT(command,7));
 
+    //      01 1001 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = (command & 0x7F);
+
+    int currentValue = speicher.read(file);
+
+    int newValue = ~currentValue;
+
+    checkZeroFlag(newValue);
+
+    newValue &= 0xFF;
+
+    if(storeInFileRegister)
+        speicher.write(file, newValue);
+    else
+        speicher.writeW(newValue);
+
+    cycles++;
 }
 
 void Prozessor::nop()
