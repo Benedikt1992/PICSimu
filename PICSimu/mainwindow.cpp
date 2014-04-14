@@ -43,9 +43,21 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->tw_speicher->setFont(font);
 
     initializeSpeicherWidget();
-
     // Mario ende
 
+    ui->tw_specialFunctionRegister->setRowCount(10);
+    ui->tw_specialFunctionRegister->setColumnCount(3);
+    ui->tw_specialFunctionRegister->verticalHeader()->setVisible(false);
+
+    ui->tw_specialFunctionRegister->setColumnWidth(0,60);
+    ui->tw_specialFunctionRegister->setColumnWidth(1,35);
+
+    ui->tw_specialFunctionRegister->setHorizontalHeaderItem(0,new QTableWidgetItem("Name"));
+    ui->tw_specialFunctionRegister->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
+    ui->tw_specialFunctionRegister->setHorizontalHeaderItem(2,new QTableWidgetItem("Bin"));
+    ui->tw_speicher->setFont(font);
+
+    initializeSFRWidget();
 }
 
 MainWindow::~MainWindow()
@@ -66,6 +78,8 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
 	steuerwerk->clearSteuerwerk();
 	ui->lw_lstFile->clear();    // LineWidget leeren
 	slotRefreshSpeicher();
+
+    // refreshSFRWidget();
 
     if(steuerwerk->loadFile(ui->le_filename->text().toStdString()))  // auslesen erfolgreich?
     {
@@ -116,20 +130,44 @@ void MainWindow::initializeSpeicherWidget()
     }
 }
 
+void MainWindow::initializeSFRWidget()
+{
+    ui->tw_specialFunctionRegister->setItem(0, 0, new QTableWidgetItem("W-Reg"));
+    ui->tw_specialFunctionRegister->setItem(1, 0, new QTableWidgetItem("FSR"));
+    ui->tw_specialFunctionRegister->setItem(2, 0, new QTableWidgetItem("PCL"));
+    ui->tw_specialFunctionRegister->setItem(3, 0, new QTableWidgetItem("PCLATH"));
+    ui->tw_specialFunctionRegister->setItem(4, 0, new QTableWidgetItem("PCL"));
+    ui->tw_specialFunctionRegister->setItem(5, 0, new QTableWidgetItem("PC"));
+    ui->tw_specialFunctionRegister->setItem(6, 0, new QTableWidgetItem("PCL"));
+    ui->tw_specialFunctionRegister->setItem(7, 0, new QTableWidgetItem("Status"));
+    ui->tw_specialFunctionRegister->setItem(8, 0, new QTableWidgetItem("Option"));
+    ui->tw_specialFunctionRegister->setItem(9, 0, new QTableWidgetItem("INTCON"));
+}
+
 void MainWindow::slotRefreshSpeicher()
 {
 
     for(int i=0; i < n_register; i++)
     {
        // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
-        ui->tw_speicher->item(i,1)->setText(convertIntToHexString(0,i));
-        ui->tw_speicher->item(i+n_register,1)->setText(convertIntToHexString(1 ,i));
+        ui->tw_speicher->item(i,1)->setText(convertFileToHexString(0,i));
+        ui->tw_speicher->item(i+n_register,1)->setText(convertFileToHexString(1 ,i));
 
-        ui->tw_speicher->item(i,2)->setText(convertIntToBinString(0,i));
-        ui->tw_speicher->item(i+n_register,2)->setText(convertIntToBinString(1,i));
+        ui->tw_speicher->item(i,2)->setText(convertFileToBinString(0,i));
+        ui->tw_speicher->item(i+n_register,2)->setText(convertFileToBinString(1,i));
     }
 }
-QString MainWindow::convertIntToBinString(int bank,int file)
+
+void MainWindow::refreshSFRWidget()
+{
+    //ui->tw_specialFunctionRegister->item(0, 1)->setText(convertFileToHexString()); getter für W-Reg implementieren
+    ui->tw_specialFunctionRegister->item(1, 1)->setText(convertFileToHexString(0, 0x04));
+    ui->tw_specialFunctionRegister->item(2, 1)->setText(convertFileToHexString(0, 0x02));
+    ui->tw_specialFunctionRegister->item(3, 1)->setText(convertFileToHexString(0, 0x0A));
+    ui->tw_specialFunctionRegister->item(4, 1)->setText(convertFileToHexString(0, 0x02));
+}
+
+QString MainWindow::convertFileToBinString(int bank,int file)
 {
    int value = steuerwerk->readForGUI(bank,file);
    int mask = 0x0080; // entspricht 0b10000000
@@ -148,7 +186,7 @@ QString MainWindow::convertIntToBinString(int bank,int file)
 
    return sresult;
 }
-QString MainWindow::convertIntToHexString(int bank,int file)
+QString MainWindow::convertFileToHexString(int bank,int file)
 {
    int value = steuerwerk->readForGUI(bank,file);
    int mask = 0x00f0; // entspricht 0b11110000
@@ -241,6 +279,7 @@ void MainWindow::slotExecuteStep()
 {
     steuerwerk->executeStep();  // nächsten Befehl auf den der PC zeigt ausführen
 }
+
 void MainWindow::gotoLineNumber(int linenumber)
 {
     ui->lw_lstFile->setCurrentRow(linenumber);
@@ -271,7 +310,8 @@ void MainWindow::slotResetClicked()
 
 	//Steuerwerk resetten
 	steuerwerk->clearSteuerwerk();
-	slotRefreshSpeicher();
+    slotRefreshSpeicher();
+    // refreshSFRWidget();
 
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);

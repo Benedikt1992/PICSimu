@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include "steuerwerk.h"
 
 namespace Ui {
 class MainWindow;
@@ -25,10 +24,12 @@ public:
     void setLineColorGreen(int linenumber);
     void setLineColorRed(int linenumber);
     void gotoLineNumber(int linenumber);
+    void refreshSFRWidget(void);
 
 private:
     Ui::MainWindow *ui;
     void initializeSpeicherWidget(void);
+    void initializeSFRWidget(void);
     QString convertIntToBinString(int bank,int file);
     QString convertIntToHexString(int bank,int file);
 private slots:

@@ -83,6 +83,7 @@ bool Steuerwerk::executeStep(void)
     else
         return false;
     mainWindow->slotRefreshSpeicher();
+    // mainWindow->refreshSFRWidget();
 
     if(programmEndeErreicht())
         return true;
