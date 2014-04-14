@@ -45,8 +45,8 @@ public:
     void xorlw(int command);
 
     void checkCarryFlag(int);
-    void checkDecimalCarryFlagAddition(int, int);
-    void checkDecimalCarryFlagSubtraktion(int, int);
+	void checkDigitCarryFlagAddition(int, int);
+    void checkDigitCarryFlagSubtraktion(int, int);
     void checkZeroFlag(int);
 
     void writeBack(int, int, bool);
