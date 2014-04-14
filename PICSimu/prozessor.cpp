@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+
 using namespace std;
 
 Prozessor::Prozessor(void)
@@ -27,6 +29,47 @@ bool Prozessor::clearProzessor()
  * Befehlsimplementierungen
  *
  */
+
+void Prozessor::addwf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 0111 dkkk kkkk
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0kkk kkkk
+    int file = command & 0x7F;
+
+    int currentValue = speicher.read(file);
+    int workingRegisterValue = speicher.readW();
+
+    int newValue = currentValue + workingRegisterValue;
+
+    // Überlauf prüfen und entsprechend Carry setzen/löschen
+    if(CHECK_BIT(newValue, 8))
+        speicher.setCBit();
+    else
+        speicher.clearCBit();
+
+    // Ergebnis auf 0 prüfen und entsprechend ZERO setzen/löschen
+    if((newValue & 0xFF) == 0)
+        speicher.setZBit();
+    else
+        speicher.clearZBit();
+
+    // Überlauf durch unteres Nibble prüfen, entpsrechend DC setzen/löschen
+    int lowerNibbleResult = (currentValue & 0x0F) + (workingRegisterValue & 0x0F);
+    if(lowerNibbleResult > 0x0F)
+        speicher.setDCBit();
+    else
+        speicher.clearDCBit();
+
+    if(storeInFileRegister)
+        speicher.write(file, newValue);
+    else
+        speicher.writeW(newValue);
+
+    cycles++;
+}
 
 void Prozessor::clrf(int command)
 {
@@ -53,7 +96,30 @@ void Prozessor::nop()
 
 void Prozessor::swapf(int command)
 {
+    bool storeInFileRegister = (CHECK_BIT(command,7));
 
+    //      01 01bb bfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    int currentValue = speicher.read(file);
+
+    if(currentValue == 0x0100)
+        return;
+
+    int upperNibble = currentValue & 0xF0;
+    int lowerNibble = currentValue & 0x0F;
+
+    upperNibble >> 4;
+    lowerNibble << 4;
+
+    int newValue = upperNibble + lowerNibble;
+
+    if(storeInFileRegister)
+        speicher.write(file, newValue);
+    else
+        speicher.writeW(newValue);
 
     cycles++;
 }
@@ -65,7 +131,7 @@ void Prozessor::bcf(int command)
     int bit;
     int file;
 
-    int actualValue;
+    int currentValue;
 
     //      01 00bb bfff ffff
     //  &   00 0011 1000 0000  = 0x380
@@ -82,11 +148,11 @@ void Prozessor::bcf(int command)
 
     file = command & 0x7F;
 
-    actualValue = speicher.read(file);
-    if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
         return;
 
-    int newValue = actualValue & (~(1 << bit));
+    int newValue = currentValue & (~(1 << bit));
     speicher.write(file,newValue);
     cycles++;
 }
