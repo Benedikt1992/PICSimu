@@ -44,24 +44,39 @@ void Prozessor::addwf(int command)
 
     int newValue = currentValue + workingRegisterValue;
 
-    // Überlauf prüfen und entsprechend Carry setzen/löschen
-    if(CHECK_BIT(newValue, 8))
-        speicher.setCBit();
-    else
-        speicher.clearCBit();
+    // betroffene Flags setzen/löschen
+    checkCarryFlag(newValue);
+    checkZeroFlag(newValue);
+    checkDecimalCarryFlag(currentValue, workingRegisterValue);
 
-    // Ergebnis auf 0 prüfen und entsprechend ZERO setzen/löschen
-    if((newValue & 0xFF) == 0)
-        speicher.setZBit();
-    else
-        speicher.clearZBit();
+    newValue &= 0xFF; // eventuellen Überlauf maskieren
 
-    // Überlauf durch unteres Nibble prüfen, entpsrechend DC setzen/löschen
-    int lowerNibbleResult = (currentValue & 0x0F) + (workingRegisterValue & 0x0F);
-    if(lowerNibbleResult > 0x0F)
-        speicher.setDCBit();
+    if(storeInFileRegister)
+        speicher.write(file, newValue);
     else
-        speicher.clearDCBit();
+        speicher.writeW(newValue);
+
+    cycles++;
+}
+
+void Prozessor::andwf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 0101 dkkk kkkk
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0kkk kkkk
+    int file = command & 0x7F;
+
+    int currentValue = speicher.read(file);
+    int workingRegisterValue = speicher.readW();
+
+    int newValue = currentValue & workingRegisterValue;
+
+    // betroffene Flags setzen/löschen
+    checkZeroFlag(newValue);
+
+    newValue &= 0xFF; // eventuellen Überlauf maskieren
 
     if(storeInFileRegister)
         speicher.write(file, newValue);
@@ -111,8 +126,8 @@ void Prozessor::swapf(int command)
     int upperNibble = currentValue & 0xF0;
     int lowerNibble = currentValue & 0x0F;
 
-    upperNibble >> 4;
-    lowerNibble << 4;
+    upperNibble = upperNibble >> 4;
+    lowerNibble = lowerNibble << 4;
 
     int newValue = upperNibble + lowerNibble;
 
@@ -291,4 +306,27 @@ void Prozessor::xorlw(int command)
     cycles++;
 }
 
+void Prozessor::checkCarryFlag(int result)
+{
+    if(CHECK_BIT(result, 8))
+        speicher.setCBit();
+    else
+        speicher.clearCBit();
+}
 
+void Prozessor::checkDecimalCarryFlag(int x, int y)
+{
+    int lowerNibbleResult = (x & 0x0F) + (y & 0x0F);
+    if(lowerNibbleResult > 0x0F)
+        speicher.setDCBit();
+    else
+        speicher.clearDCBit();
+}
+
+void Prozessor::checkZeroFlag(int result)
+{
+    if((result & 0xFF) == 0)
+        speicher.setZBit();
+    else
+        speicher.clearZBit();
+}

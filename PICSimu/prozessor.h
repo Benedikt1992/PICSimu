@@ -17,8 +17,8 @@ public:
     void execute(int);
 	bool clearProzessor(void);
 
-    void addwf(int);    // unimplemented
-    void andwf(int);    // unimplemented
+    void addwf(int);
+    void andwf(int);
     void clrf(int);
     void clrw();
     void comf(int);     // unimplemented
@@ -44,6 +44,9 @@ public:
     void go_to(int, Steuerwerk*);
     void xorlw(int command);
 
+    void checkCarryFlag(int);
+    void checkDecimalCarryFlag(int, int);
+    void checkZeroFlag(int);
 };
 
 #endif // PROZESSOR_H
