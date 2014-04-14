@@ -145,10 +145,45 @@ void Steuerwerk::execute(int command)
 	//&	11 1111 0000 0000 = 0x3f00
 	if((command&0x3f00)==0x0300)
 		alu->decf(command);
+	//DECFSZ
+	//	00 1011 dfff ffff
+	//& 11 1111 0000 0000
+
+	//INCF
+	//	00 1010 dfff ffff
+	//	11 1111 0000 0000
+
+	//INCFSZ
+	//	00 1111 dfff ffff
+	//	11 1111 0000 0000
+
+	//IORWF
+	//	00 0100 dfff ffff
+	//	11 1111 0000 0000
+
+	//MOVF
+	//	00 1000 dfff ffff
+	//	11 1111 0000 0000
+
+	//MOVWF
+	//	00 0000 1fff ffff
+	//	11 1111 1000 0000
+
     // NOP
     if( (command & 0x0f9f) == 0 )
         alu->nop();
-    // ...
+	//RLF
+	//	00 1101 dfff ffff
+	//	11 1111 0000 0000
+
+	//RRF
+	//	00 1100 dfff ffff
+	//	11 1111 0000 0000
+
+	//SUBWF
+	//	00 0010 dfff ffff
+	//	11 1111 0000 0000
+
     // SWAPF
     //  00 1110 dfff ffff = 0xE00
     //  11 1111 0000 0000 = 0x3F00
@@ -184,8 +219,17 @@ void Steuerwerk::execute(int command)
     // LITERAL AND CONTROL OPERATIONS
 
     // ADDLW
+	//	11 111x kkkk kkkk
+	//	11 1110 0000 0000
+
     // ANDLW
+	//	11 1001 kkkk kkkk
+	//	11 1111 0000 0000
+
     // CALL
+	//	10 0kkk kkkk kkkk
+	//	11 1000 0000 0000
+
     // CLRWDT
     // GOTO
     if( (command & 0x3800) == 0x2800 )

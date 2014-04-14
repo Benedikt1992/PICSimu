@@ -22,7 +22,7 @@ public:
     void clrf(int);
     void clrw();
     void comf(int);
-    void decf(int);
+	void decf(int);
     void decfsz(int);   // unimplemented
     void incf(int);     // unimplemented
     void incfsz(int);   // unimplemented
