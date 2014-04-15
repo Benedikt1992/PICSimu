@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initializeSpeicherWidget();
     // Mario ende
 
-    ui->tw_specialFunctionRegister->setRowCount(10);
+    ui->tw_specialFunctionRegister->setRowCount(8);
     ui->tw_specialFunctionRegister->setColumnCount(3);
     ui->tw_specialFunctionRegister->verticalHeader()->setVisible(false);
 
@@ -136,12 +136,28 @@ void MainWindow::initializeSFRWidget()
     ui->tw_specialFunctionRegister->setItem(1, 0, new QTableWidgetItem("FSR"));
     ui->tw_specialFunctionRegister->setItem(2, 0, new QTableWidgetItem("PCL"));
     ui->tw_specialFunctionRegister->setItem(3, 0, new QTableWidgetItem("PCLATH"));
-    ui->tw_specialFunctionRegister->setItem(4, 0, new QTableWidgetItem("PCL"));
-    ui->tw_specialFunctionRegister->setItem(5, 0, new QTableWidgetItem("PC"));
-    ui->tw_specialFunctionRegister->setItem(6, 0, new QTableWidgetItem("PCL"));
-    ui->tw_specialFunctionRegister->setItem(7, 0, new QTableWidgetItem("Status"));
-    ui->tw_specialFunctionRegister->setItem(8, 0, new QTableWidgetItem("Option"));
-    ui->tw_specialFunctionRegister->setItem(9, 0, new QTableWidgetItem("INTCON"));
+    ui->tw_specialFunctionRegister->setItem(4, 0, new QTableWidgetItem("PC"));
+    ui->tw_specialFunctionRegister->setItem(5, 0, new QTableWidgetItem("Status"));
+    ui->tw_specialFunctionRegister->setItem(6, 0, new QTableWidgetItem("Option"));
+    ui->tw_specialFunctionRegister->setItem(7, 0, new QTableWidgetItem("INTCON"));
+
+    ui->tw_specialFunctionRegister->setItem(0, 1, new QTableWidgetItem("00"));
+    ui->tw_specialFunctionRegister->setItem(1, 1, new QTableWidgetItem("00"));
+    ui->tw_specialFunctionRegister->setItem(2, 1, new QTableWidgetItem("00"));
+    ui->tw_specialFunctionRegister->setItem(3, 1, new QTableWidgetItem("00"));
+    ui->tw_specialFunctionRegister->setItem(4, 1, new QTableWidgetItem("00"));
+    ui->tw_specialFunctionRegister->setItem(5, 1, new QTableWidgetItem("00"));
+    ui->tw_specialFunctionRegister->setItem(6, 1, new QTableWidgetItem("00"));
+    ui->tw_specialFunctionRegister->setItem(7, 1, new QTableWidgetItem("00"));
+
+    ui->tw_specialFunctionRegister->setItem(0, 2, new QTableWidgetItem("00000000"));
+    ui->tw_specialFunctionRegister->setItem(1, 2, new QTableWidgetItem("00000000"));
+    ui->tw_specialFunctionRegister->setItem(2, 2, new QTableWidgetItem("00000000"));
+    ui->tw_specialFunctionRegister->setItem(3, 2, new QTableWidgetItem("00000000"));
+    ui->tw_specialFunctionRegister->setItem(4, 2, new QTableWidgetItem("00000000"));
+    ui->tw_specialFunctionRegister->setItem(5, 2, new QTableWidgetItem("00000000"));
+    ui->tw_specialFunctionRegister->setItem(6, 2, new QTableWidgetItem("00000000"));
+    ui->tw_specialFunctionRegister->setItem(7, 2, new QTableWidgetItem("00000000"));
 }
 
 void MainWindow::slotRefreshSpeicher()
@@ -156,15 +172,21 @@ void MainWindow::slotRefreshSpeicher()
         ui->tw_speicher->item(i,2)->setText(convertFileToBinString(0,i));
         ui->tw_speicher->item(i+n_register,2)->setText(convertFileToBinString(1,i));
     }
+
+    refreshSFRWidget();
 }
 
 void MainWindow::refreshSFRWidget()
 {
+    cout << "SFR refresh()" << endl;
     //ui->tw_specialFunctionRegister->item(0, 1)->setText(convertFileToHexString()); getter für W-Reg implementieren
     ui->tw_specialFunctionRegister->item(1, 1)->setText(convertFileToHexString(0, 0x04));
     ui->tw_specialFunctionRegister->item(2, 1)->setText(convertFileToHexString(0, 0x02));
     ui->tw_specialFunctionRegister->item(3, 1)->setText(convertFileToHexString(0, 0x0A));
     ui->tw_specialFunctionRegister->item(4, 1)->setText(convertFileToHexString(0, 0x02));
+    ui->tw_specialFunctionRegister->item(4, 1)->setText("0000");
+    ui->tw_specialFunctionRegister->item(6, 1)->setText(convertFileToHexString(1, 0x01));
+    ui->tw_specialFunctionRegister->item(7, 1)->setText(convertFileToHexString(0, 0x1B));
 }
 
 QString MainWindow::convertFileToBinString(int bank,int file)
@@ -304,6 +326,9 @@ void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 
 void MainWindow::slotResetClicked()
 {
+    if(steuerwerk->lstFile.empty())
+        return;
+
 	//aktuellen Befehl weiß färben
     setLineColorWhite(steuerwerk->getCurrentLineNumber()-1);
 
@@ -311,7 +336,7 @@ void MainWindow::slotResetClicked()
 	//Steuerwerk resetten
 	steuerwerk->clearSteuerwerk();
     slotRefreshSpeicher();
-    // refreshSFRWidget();
+    refreshSFRWidget();
 
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
