@@ -116,7 +116,15 @@ void Steuerwerk::execute(int command)
     // BYTE-ORIENTED FILE REGISTER OPERATIONS
 
     // ADDWF
+	//	00 0111 dfff ffff == 0x0700
+	//&	11 1111 0000 0000 == 0x3f00
+	if((command&0x3f00)==0x0700)
+		alu->addwf(command);
     // ANDWF
+	//	00 0101 dfff ffff = 0x0500
+	//&	11 1111 0000 0000 = 0x3f00
+	if((command&0x3f00)==0x0500)
+		alu->andwf(command);
     // CLRF
     //  00 0001 1fff ffff == 0c0180
     //& 11 1111 1000 0000 == 0x3f80
@@ -124,13 +132,58 @@ void Steuerwerk::execute(int command)
             alu->clrf(command);
     //CLRW
     //  00 0001 0xxx xxxx = 0x0100
-    //& 11 1111 1000 0000 = 0x3F80
+	//& 11 1111 1000 0000 = 0x3F80
     if((command & 0x3f80)== 0x0100)
         alu->clrw();
+	//COMF
+	//	00 1001 dfff ffff = 0x0900
+	//&	11 1111 0000 0000 = 0x3f00
+	if((command&0x3f00)==0x0900)
+			alu->comf(command);
+	//DECF
+	//	00 0011 dfff ffff = 0x0300
+	//&	11 1111 0000 0000 = 0x3f00
+	if((command&0x3f00)==0x0300)
+		alu->decf(command);
+	//DECFSZ
+	//	00 1011 dfff ffff
+	//& 11 1111 0000 0000
+
+	//INCF
+	//	00 1010 dfff ffff
+	//	11 1111 0000 0000
+
+	//INCFSZ
+	//	00 1111 dfff ffff
+	//	11 1111 0000 0000
+
+	//IORWF
+	//	00 0100 dfff ffff
+	//	11 1111 0000 0000
+
+	//MOVF
+	//	00 1000 dfff ffff
+	//	11 1111 0000 0000
+
+	//MOVWF
+	//	00 0000 1fff ffff
+	//	11 1111 1000 0000
+
     // NOP
     if( (command & 0x0f9f) == 0 )
         alu->nop();
-    // ...
+	//RLF
+	//	00 1101 dfff ffff
+	//	11 1111 0000 0000
+
+	//RRF
+	//	00 1100 dfff ffff
+	//	11 1111 0000 0000
+
+	//SUBWF
+	//	00 0010 dfff ffff
+	//	11 1111 0000 0000
+
     // SWAPF
     //  00 1110 dfff ffff = 0xE00
     //  11 1111 0000 0000 = 0x3F00
@@ -166,8 +219,17 @@ void Steuerwerk::execute(int command)
     // LITERAL AND CONTROL OPERATIONS
 
     // ADDLW
+	//	11 111x kkkk kkkk
+	//	11 1110 0000 0000
+
     // ANDLW
+	//	11 1001 kkkk kkkk
+	//	11 1111 0000 0000
+
     // CALL
+	//	10 0kkk kkkk kkkk
+	//	11 1000 0000 0000
+
     // CLRWDT
     // GOTO
     if( (command & 0x3800) == 0x2800 )

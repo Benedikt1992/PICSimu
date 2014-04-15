@@ -36,7 +36,7 @@ void Prozessor::addwf(int command)
 {
     bool storeInFileRegister = (CHECK_BIT(command,7));
 
-    //      00 0111 dkkk kkkk
+	//      00 0111 dfff ffff
     //  &   00 0000 0111 1111  = 0x7F
     //      00 0000 0kkk kkkk
     int file = command & 0x7F;
@@ -54,7 +54,7 @@ void Prozessor::addwf(int command)
     // betroffene Flags setzen/löschen
     checkCarryFlag(newValue);
     checkZeroFlag(newValue);
-    checkDecimalCarryFlagAddition(currentValue, workingRegisterValue);
+	checkDigitCarryFlagAddition(currentValue, workingRegisterValue);
 
     writeBack(file, newValue, storeInFileRegister);
 
@@ -135,7 +135,7 @@ void Prozessor::decf(int command)
 {
     bool storeInFileRegister = (CHECK_BIT(command,7));
 
-    //      01 0011 dfff ffff
+	//      00 0011 dfff ffff
     //  &   00 0000 0111 1111  = 0x7F
     //      00 0000 0fff ffff
     int file = (command & 0x7F);
@@ -368,7 +368,7 @@ void Prozessor::checkCarryFlag(int result)
         speicher.clearCBit();
 }
 
-void Prozessor::checkDecimalCarryFlagAddition(int x, int y)
+void Prozessor::checkDigitCarryFlagAddition(int x, int y)
 {
     int lowerNibbleResult = (x & 0x0F) + (y & 0x0F);
     if(lowerNibbleResult > 0x0F)
@@ -377,7 +377,7 @@ void Prozessor::checkDecimalCarryFlagAddition(int x, int y)
         speicher.clearDCBit();
 }
 
-void Prozessor::checkDecimalCarryFlagSubtraktion(int x, int y)
+void Prozessor::checkDigitCarryFlagSubtraktion(int x, int y)
 {
     int lowerNibbleResult = (x & 0x0F) - (y & 0x0F);
     if(lowerNibbleResult > 0x0F)

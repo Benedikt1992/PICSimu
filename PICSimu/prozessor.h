@@ -22,7 +22,7 @@ public:
     void clrf(int);
     void clrw();
     void comf(int);
-    void decf(int);
+	void decf(int);
     void decfsz(int);   // unimplemented
     void incf(int);     // unimplemented
     void incfsz(int);   // unimplemented
@@ -45,8 +45,8 @@ public:
     void xorlw(int command);
 
     void checkCarryFlag(int);
-    void checkDecimalCarryFlagAddition(int, int);
-    void checkDecimalCarryFlagSubtraktion(int, int);
+	void checkDigitCarryFlagAddition(int, int);
+    void checkDigitCarryFlagSubtraktion(int, int);
     void checkZeroFlag(int);
 
     void writeBack(int, int, bool);
