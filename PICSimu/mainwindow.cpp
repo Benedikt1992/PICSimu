@@ -162,7 +162,6 @@ void MainWindow::initializeSFRWidget()
 
 void MainWindow::slotRefreshSpeicher()
 {
-
     for(int i=0; i < n_register; i++)
     {
        // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
@@ -176,6 +175,9 @@ void MainWindow::slotRefreshSpeicher()
     refreshSFRWidget();
 }
 
+/*
+ *  Adressen noch fehlerhaft!
+ */
 void MainWindow::refreshSFRWidget()
 {
     cout << "SFR refresh()" << endl;
@@ -187,6 +189,15 @@ void MainWindow::refreshSFRWidget()
     ui->tw_specialFunctionRegister->item(4, 1)->setText("0000");
     ui->tw_specialFunctionRegister->item(6, 1)->setText(convertFileToHexString(1, 0x01));
     ui->tw_specialFunctionRegister->item(7, 1)->setText(convertFileToHexString(0, 0x1B));
+
+    //ui->tw_specialFunctionRegister->item(0, 2)->setText(convertFileToHexString()); getter für W-Reg implementieren
+    ui->tw_specialFunctionRegister->item(1, 2)->setText(convertFileToBinString(0, 0x04));
+    ui->tw_specialFunctionRegister->item(2, 2)->setText(convertFileToBinString(0, 0x02));
+    ui->tw_specialFunctionRegister->item(3, 2)->setText(convertFileToBinString(0, 0x0A));
+    ui->tw_specialFunctionRegister->item(4, 2)->setText(convertFileToBinString(0, 0x02));
+    ui->tw_specialFunctionRegister->item(4, 2)->setText("0000");
+    ui->tw_specialFunctionRegister->item(6, 2)->setText(convertFileToBinString(1, 0x01));
+    ui->tw_specialFunctionRegister->item(7, 2)->setText(convertFileToBinString(0, 0x1B));
 }
 
 QString MainWindow::convertFileToBinString(int bank,int file)

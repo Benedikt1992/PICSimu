@@ -83,13 +83,13 @@ bool Steuerwerk::executeStep(void)
     else
         return false;
     mainWindow->slotRefreshSpeicher();
-    // mainWindow->refreshSFRWidget();
+    mainWindow->refreshSFRWidget();
 
     if(programmEndeErreicht())
         return true;
 
-     mainWindow->setLineColorGreen(getCurrentLineNumber()-1);
-     mainWindow->gotoLineNumber(getCurrentLineNumber()-1);
+    mainWindow->setLineColorGreen(getCurrentLineNumber()-1);
+    mainWindow->gotoLineNumber(getCurrentLineNumber()-1);
     return true;
 }
 
