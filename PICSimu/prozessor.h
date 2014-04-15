@@ -27,8 +27,8 @@ public:
     void incf(int);     // unimplemented
     void incfsz(int);   // unimplemented
     void iorwf(int);    // unimplemented
-    void movf(int);     // unimplemented
-    void movwf(int);    // unimplemented
+    void movf(int);
+    void movwf(int);
     void nop (void);
     void rlf(int);      // unimplemented
     void rrf(int);      // unimplemented
@@ -41,8 +41,8 @@ public:
     void btfsc(int command, Steuerwerk* steuerwerk);
     void btfss(int command, Steuerwerk* steuerwerk);
 
-    void addlw(int command);    // unimplemented
-    void andlw(int command);    // unimplemented
+    void addlw(int command);
+    void andlw(int command);
     void call(int command, Steuerwerk*);    // unimplemented
     void clrwdt(void);          // unimplemented
     void go_to(int, Steuerwerk*);
@@ -60,7 +60,7 @@ public:
     void checkDigitCarryFlagSubtraktion(int, int);
     void checkZeroFlag(int);
 
-    void writeBack(int, int, bool);
+    void writeBack(int file, int result, bool storeInFileRegister);
     void writeBackToW(int result);
 };
 

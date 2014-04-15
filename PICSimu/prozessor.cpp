@@ -155,6 +155,47 @@ void Prozessor::decf(int command)
     cycles++;
 }
 
+void Prozessor::movf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 1000 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Operation
+    int newValue = currentValue;
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    cycles++;
+}
+
+void Prozessor::movwf(int command)
+{
+    //      00 0000 1fff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Operation
+    int newValue = currentValue;
+
+    writeBack(file, newValue, WRITE_TO_FILE_REGISTER);
+
+    cycles++;
+}
+
 void Prozessor::nop()
 {
     cycles++;
@@ -344,6 +385,27 @@ void Prozessor::addlw(int command)
     // Betroffene Flags setzen/löschen
     checkCarryFlag(newValue);
     checkDigitCarryFlagAddition(literal, valueW);
+    checkZeroFlag(newValue);
+
+    writeBackToW(newValue);
+
+    cycles++;
+}
+
+void Prozessor::andlw(int command)
+{
+    //      11 1001 kkkk kkkk
+    //  &   00 0000 1111 1111  = 0x00FF
+    //      00 0000 kkkk kkkk
+    int literal = command & 0xFF;
+
+    // Register laden
+    int valueW = speicher.readW();
+
+    // Rechenoperation
+    int newValue = valueW & literal;
+
+    // Betroffene Flags setzen/löschen
     checkZeroFlag(newValue);
 
     writeBackToW(newValue);
