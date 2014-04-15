@@ -165,11 +165,11 @@ void MainWindow::slotRefreshSpeicher()
     for(int i=0; i < n_register; i++)
     {
        // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
-        ui->tw_speicher->item(i,1)->setText(convertFileToHexString(0,i));
-        ui->tw_speicher->item(i+n_register,1)->setText(convertFileToHexString(1 ,i));
+        ui->tw_speicher->item(i,1)->setText(convertIntToHexString(getIntFromFile(0,i)));
+        ui->tw_speicher->item(i+n_register,1)->setText(convertIntToHexString(getIntFromFile(1 ,i)));
 
-        ui->tw_speicher->item(i,2)->setText(convertFileToBinString(0,i));
-        ui->tw_speicher->item(i+n_register,2)->setText(convertFileToBinString(1,i));
+        ui->tw_speicher->item(i,2)->setText(convertIntToBinString(getIntFromFile(0,i)));
+        ui->tw_speicher->item(i+n_register,2)->setText(convertIntToBinString(getIntFromFile(1,i)));
     }
 
     refreshSFRWidget();
@@ -182,32 +182,31 @@ void MainWindow::refreshSFRWidget()
 {
     cout << "SFR refresh()" << endl;
     //ui->tw_specialFunctionRegister->item(0, 1)->setText(convertFileToHexString()); getter für W-Reg implementieren
-    ui->tw_specialFunctionRegister->item(1, 1)->setText(convertFileToHexString(0, 0x04));
-    ui->tw_specialFunctionRegister->item(2, 1)->setText(convertFileToHexString(0, 0x02));
-    ui->tw_specialFunctionRegister->item(3, 1)->setText(convertFileToHexString(0, 0x0A));
+    ui->tw_specialFunctionRegister->item(1, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x04)));
+    ui->tw_specialFunctionRegister->item(2, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x02)));
+    ui->tw_specialFunctionRegister->item(3, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x0A)));
     ui->tw_specialFunctionRegister->item(4, 1)->setText("0000");
-    ui->tw_specialFunctionRegister->item(5, 1)->setText(convertFileToHexString(0, 0x03));
-    ui->tw_specialFunctionRegister->item(6, 1)->setText(convertFileToHexString(1, 0x01));
-    ui->tw_specialFunctionRegister->item(7, 1)->setText(convertFileToHexString(0, 0x1B));
+    ui->tw_specialFunctionRegister->item(5, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x03)));
+    ui->tw_specialFunctionRegister->item(6, 1)->setText(convertIntToHexString(getIntFromFile(1, 0x01)));
+    ui->tw_specialFunctionRegister->item(7, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x1B)));
 
     //ui->tw_specialFunctionRegister->item(0, 2)->setText(convertFileToHexString()); getter für W-Reg implementieren
-    ui->tw_specialFunctionRegister->item(1, 2)->setText(convertFileToBinString(0, 0x04));
-    ui->tw_specialFunctionRegister->item(2, 2)->setText(convertFileToBinString(0, 0x02));
-    ui->tw_specialFunctionRegister->item(3, 2)->setText(convertFileToBinString(0, 0x0A));
+    ui->tw_specialFunctionRegister->item(1, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x04)));
+    ui->tw_specialFunctionRegister->item(2, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x02)));
+    ui->tw_specialFunctionRegister->item(3, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x0A)));
     ui->tw_specialFunctionRegister->item(4, 2)->setText("00000000");
-    ui->tw_specialFunctionRegister->item(5, 2)->setText(convertFileToBinString(0, 0x03));
-    ui->tw_specialFunctionRegister->item(6, 2)->setText(convertFileToBinString(1, 0x01));
-    ui->tw_specialFunctionRegister->item(7, 2)->setText(convertFileToBinString(0, 0x1B));
+    ui->tw_specialFunctionRegister->item(5, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x03)));
+    ui->tw_specialFunctionRegister->item(6, 2)->setText(convertIntToBinString(getIntFromFile(1, 0x01)));
+    ui->tw_specialFunctionRegister->item(7, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x1B)));
 }
 
-QString MainWindow::getQStringFromFile(int bank, int file)
+int MainWindow::getIntFromFile(int bank, int file)
 {
-
+    return steuerwerk->readForGUI(bank,file);
 }
 
-QString MainWindow::convertFileToBinString(int bank,int file)
+QString MainWindow::convertIntToBinString(int value)
 {
-   int value = steuerwerk->readForGUI(bank,file);
    int mask = 0x0080; // entspricht 0b10000000
    QString sresult;
 
@@ -224,9 +223,8 @@ QString MainWindow::convertFileToBinString(int bank,int file)
 
    return sresult;
 }
-QString MainWindow::convertFileToHexString(int bank,int file)
+QString MainWindow::convertIntToHexString(int value)
 {
-   int value = steuerwerk->readForGUI(bank,file);
    int mask = 0x00f0; // entspricht 0b11110000
    QString sresult;
 
