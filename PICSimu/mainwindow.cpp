@@ -176,7 +176,7 @@ void MainWindow::slotRefreshSpeicher()
 }
 
 /*
- *  Adressen noch fehlerhaft!
+ *  W-Reg fehlt noch
  */
 void MainWindow::refreshSFRWidget()
 {
@@ -185,8 +185,8 @@ void MainWindow::refreshSFRWidget()
     ui->tw_specialFunctionRegister->item(1, 1)->setText(convertFileToHexString(0, 0x04));
     ui->tw_specialFunctionRegister->item(2, 1)->setText(convertFileToHexString(0, 0x02));
     ui->tw_specialFunctionRegister->item(3, 1)->setText(convertFileToHexString(0, 0x0A));
-    ui->tw_specialFunctionRegister->item(4, 1)->setText(convertFileToHexString(0, 0x02));
     ui->tw_specialFunctionRegister->item(4, 1)->setText("0000");
+    ui->tw_specialFunctionRegister->item(5, 1)->setText(convertFileToHexString(0, 0x03));
     ui->tw_specialFunctionRegister->item(6, 1)->setText(convertFileToHexString(1, 0x01));
     ui->tw_specialFunctionRegister->item(7, 1)->setText(convertFileToHexString(0, 0x1B));
 
@@ -194,10 +194,15 @@ void MainWindow::refreshSFRWidget()
     ui->tw_specialFunctionRegister->item(1, 2)->setText(convertFileToBinString(0, 0x04));
     ui->tw_specialFunctionRegister->item(2, 2)->setText(convertFileToBinString(0, 0x02));
     ui->tw_specialFunctionRegister->item(3, 2)->setText(convertFileToBinString(0, 0x0A));
-    ui->tw_specialFunctionRegister->item(4, 2)->setText(convertFileToBinString(0, 0x02));
-    ui->tw_specialFunctionRegister->item(4, 2)->setText("0000");
+    ui->tw_specialFunctionRegister->item(4, 2)->setText("00000000");
+    ui->tw_specialFunctionRegister->item(5, 2)->setText(convertFileToBinString(0, 0x03));
     ui->tw_specialFunctionRegister->item(6, 2)->setText(convertFileToBinString(1, 0x01));
     ui->tw_specialFunctionRegister->item(7, 2)->setText(convertFileToBinString(0, 0x1B));
+}
+
+QString MainWindow::getQStringFromFile(int bank, int file)
+{
+
 }
 
 QString MainWindow::convertFileToBinString(int bank,int file)
