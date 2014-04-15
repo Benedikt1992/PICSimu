@@ -34,7 +34,8 @@ public:
 	bool clearProgrammspeicher(void);
     int getCurrentLineNumber(void);
     int readForGUI(int,int);
-
+    int readWForGUI(void);
+    int getPCInt(void);
 };
 
 

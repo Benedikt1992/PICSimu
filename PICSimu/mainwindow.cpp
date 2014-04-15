@@ -180,21 +180,20 @@ void MainWindow::slotRefreshSpeicher()
  */
 void MainWindow::refreshSFRWidget()
 {
-    cout << "SFR refresh()" << endl;
-    //ui->tw_specialFunctionRegister->item(0, 1)->setText(convertFileToHexString()); getter für W-Reg implementieren
+    ui->tw_specialFunctionRegister->item(0, 1)->setText(convertIntToHexString(getIntFromW()));
     ui->tw_specialFunctionRegister->item(1, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x04)));
     ui->tw_specialFunctionRegister->item(2, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x02)));
     ui->tw_specialFunctionRegister->item(3, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x0A)));
-    ui->tw_specialFunctionRegister->item(4, 1)->setText("0000");
+    ui->tw_specialFunctionRegister->item(4, 1)->setText(convertIntToHexString(getIntFromPC()));
     ui->tw_specialFunctionRegister->item(5, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x03)));
     ui->tw_specialFunctionRegister->item(6, 1)->setText(convertIntToHexString(getIntFromFile(1, 0x01)));
     ui->tw_specialFunctionRegister->item(7, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x1B)));
 
-    //ui->tw_specialFunctionRegister->item(0, 2)->setText(convertFileToHexString()); getter für W-Reg implementieren
+    ui->tw_specialFunctionRegister->item(0, 2)->setText(convertIntToBinString(getIntFromW()));
     ui->tw_specialFunctionRegister->item(1, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x04)));
     ui->tw_specialFunctionRegister->item(2, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x02)));
     ui->tw_specialFunctionRegister->item(3, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x0A)));
-    ui->tw_specialFunctionRegister->item(4, 2)->setText("00000000");
+    ui->tw_specialFunctionRegister->item(4, 2)->setText(convertIntToBinString(getIntFromPC()));
     ui->tw_specialFunctionRegister->item(5, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x03)));
     ui->tw_specialFunctionRegister->item(6, 2)->setText(convertIntToBinString(getIntFromFile(1, 0x01)));
     ui->tw_specialFunctionRegister->item(7, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x1B)));
@@ -203,6 +202,16 @@ void MainWindow::refreshSFRWidget()
 int MainWindow::getIntFromFile(int bank, int file)
 {
     return steuerwerk->readForGUI(bank,file);
+}
+
+int MainWindow::getIntFromW()
+{
+    return steuerwerk->readWForGUI();
+}
+
+int MainWindow::getIntFromPC()
+{
+    return steuerwerk->getPCInt();
 }
 
 QString MainWindow::convertIntToBinString(int value)

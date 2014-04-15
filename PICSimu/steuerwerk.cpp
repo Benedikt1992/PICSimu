@@ -120,11 +120,13 @@ void Steuerwerk::execute(int command)
 	//&	11 1111 0000 0000 == 0x3f00
 	if((command&0x3f00)==0x0700)
 		alu->addwf(command);
+
     // ANDWF
 	//	00 0101 dfff ffff = 0x0500
 	//&	11 1111 0000 0000 = 0x3f00
 	if((command&0x3f00)==0x0500)
 		alu->andwf(command);
+
     // CLRF
     //  00 0001 1fff ffff == 0c0180
     //& 11 1111 1000 0000 == 0x3f80
@@ -140,11 +142,13 @@ void Steuerwerk::execute(int command)
 	//&	11 1111 0000 0000 = 0x3f00
 	if((command&0x3f00)==0x0900)
 			alu->comf(command);
+
 	//DECF
 	//	00 0011 dfff ffff = 0x0300
 	//&	11 1111 0000 0000 = 0x3f00
 	if((command&0x3f00)==0x0300)
 		alu->decf(command);
+
 	//DECFSZ
 	//	00 1011 dfff ffff
 	//& 11 1111 0000 0000
@@ -168,7 +172,8 @@ void Steuerwerk::execute(int command)
 	//MOVWF
 	//	00 0000 1fff ffff
 	//	11 1111 1000 0000
-
+    if( (command & 0x3F80) == 0x0080)
+        cout << "MOVWF" << endl;
     // NOP
     if( (command & 0x0f9f) == 0 )
         alu->nop();
@@ -189,6 +194,7 @@ void Steuerwerk::execute(int command)
     //  11 1111 0000 0000 = 0x3F00
     if((command & 0x3F00) == 0xE00)
         alu->swapf(command);
+
     // XORWF
 
 
@@ -199,16 +205,19 @@ void Steuerwerk::execute(int command)
     //& 11 1100 0000 0000 = 0x3C00
     if ((command&0x3C00)==0x1000)
         alu->bcf(command);
+
     //BSF
     //      01 01bb bfff ffff = 0x1400
     //  &   11 1100 0000 0000 = 0x3C00
     if( (command & 0x3C00) == 0x1400 )
         alu->bsf(command);
+
     // BTFSC
     //  01 10bb bfff ffff = 0x1800
     //  11 1100 0000 0000 = 0x3C00
     if((command & 0x3c00)==0x1800)
             alu->btfsc(command, this);
+
     // BTFSS
     //  01 11bb bfff ffff = 0x1C00
     //  11 1100 0000 0000 = 0x3C00
@@ -234,6 +243,7 @@ void Steuerwerk::execute(int command)
     // GOTO
     if( (command & 0x3800) == 0x2800 )
         alu->go_to(command, this);
+
     // ...
     // SUBLW
     // XORLW
@@ -251,6 +261,11 @@ int Steuerwerk::readForGUI(int bank,int file){
 }
 // Mario ende
 
+int Steuerwerk::readWForGUI()
+{
+    return alu->speicher.readW();
+}
+
 bool Steuerwerk::programmEndeErreicht()
 {
     if(pc == maschinencode.end())
@@ -262,4 +277,9 @@ bool Steuerwerk::programmEndeErreicht()
 int Steuerwerk::getCurrentLineNumber()
 {
     return pc->textzeile;
+}
+
+int Steuerwerk::getPCInt()
+{
+    return pc - maschinencode.begin();
 }

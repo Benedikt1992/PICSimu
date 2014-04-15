@@ -41,8 +41,19 @@ public:
     void btfsc(int command, Steuerwerk* steuerwerk);
     void btfss(int command, Steuerwerk* steuerwerk);
 
+    void addlw(int command);    // unimplemented
+    void andlw(int command);    // unimplemented
+    void call(int command, Steuerwerk*);    // unimplemented
+    void clrwdt(void);          // unimplemented
     void go_to(int, Steuerwerk*);
-    void xorlw(int command);
+    void iorlw(int command);    // unimplemented
+    void movlw(int command);    // unimplemented
+    void retfie(void);          // unimplemented
+    void retlw(int command);    // unimplemented
+    void preturn();             // unimplemented
+    void psleep();              // unimplemented
+    void sublw(int command);    // unimplemented
+    void xorlw(int command);    // unimplemented
 
     void checkCarryFlag(int);
 	void checkDigitCarryFlagAddition(int, int);
@@ -50,6 +61,7 @@ public:
     void checkZeroFlag(int);
 
     void writeBack(int, int, bool);
+    void writeBackToW(int result);
 };
 
 #endif // PROZESSOR_H

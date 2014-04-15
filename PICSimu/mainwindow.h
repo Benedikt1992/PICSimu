@@ -33,6 +33,8 @@ private:
     QString convertIntToBinString(int value);
     QString convertIntToHexString(int value);
     int getIntFromFile(int, int);
+    int getIntFromW();
+    int getIntFromPC();
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);

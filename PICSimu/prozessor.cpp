@@ -328,6 +328,29 @@ void Prozessor::btfss(int command, Steuerwerk* steuerwerk)
     }
 }
 
+void Prozessor::addlw(int command)
+{
+    //      11 111x kkkk kkkk
+    //  &   00 0000 1111 1111  = 0x00FF
+    //      00 0000 kkkk kkkk
+    int literal = command & 0xFF;
+
+    // Register laden
+    int valueW = speicher.readW();
+
+    // Rechenoperation
+    int newValue = valueW + literal;
+
+    // Betroffene Flags setzen/löschen
+    checkCarryFlag(newValue);
+    checkDigitCarryFlagAddition(literal, valueW);
+    checkZeroFlag(newValue);
+
+    writeBackToW(newValue);
+
+    cycles++;
+}
+
 void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
 {
     //      10 1fff ffff ffff
@@ -402,4 +425,10 @@ void Prozessor::writeBack(int file, int result, bool storeInFileRegister)
         speicher.write(file, result);
     else
         speicher.writeW(result);
+}
+
+void Prozessor::writeBackToW(int result)
+{
+    result &= 0xFF;
+    speicher.writeW(result);
 }
