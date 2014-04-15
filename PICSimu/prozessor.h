@@ -23,7 +23,7 @@ public:
     void clrw();
     void comf(int);
 	void decf(int);
-    void decfsz(int);   // unimplemented
+    void decfsz(int command, Steuerwerk* steuerwerk);
     void incf(int);     // unimplemented
     void incfsz(int);   // unimplemented
     void iorwf(int);    // unimplemented

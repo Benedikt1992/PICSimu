@@ -155,6 +155,40 @@ void Prozessor::decf(int command)
     cycles++;
 }
 
+void Prozessor::decfsz(int command, Steuerwerk *steuerwerk)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 1011 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = (command & 0x7F);
+
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Rechenoperation
+    int newValue = currentValue - 1;
+
+    // betroffene Flags prüfen
+    checkZeroFlag(newValue);
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    if((newValue & 0xFF) == 0)
+    {
+        //Bit ist 1
+        cycles++;
+    }
+    else
+    {
+        //Bit ist 0 -> nächster Befehl wird übersprungen
+        steuerwerk->pc++;
+        cycles+=2;
+    }
+}
+
 void Prozessor::movf(int command)
 {
     bool storeInFileRegister = (CHECK_BIT(command,7));
