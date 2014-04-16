@@ -24,8 +24,8 @@ public:
     void comf(int);
 	void decf(int);
     void decfsz(int command, Steuerwerk* steuerwerk);
-    void incf(int);     // unimplemented
-    void incfsz(int);   // unimplemented
+    void incf(int);
+    void incfsz(int command, Steuerwerk* steuerwerk);
     void iorwf(int);    // unimplemented
     void movf(int);
     void movwf(int);

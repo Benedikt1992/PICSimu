@@ -4,6 +4,7 @@
 
 #include "codeline.h"
 #include <vector>
+#include <stack>
 #include "mainwindow.h"
 #include "steuerwerk.h"
 #include "prozessor.h"
@@ -19,6 +20,8 @@ public:
 	list<QString> lstFile;
     vector<Codeline> maschinencode;
     vector<Codeline>::iterator pc;
+
+    stack<vector<Codeline>::iterator> stack;
 
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);

@@ -171,8 +171,64 @@ void Prozessor::decfsz(int command, Steuerwerk *steuerwerk)
     // Rechenoperation
     int newValue = currentValue - 1;
 
-    // betroffene Flags prüfen
+    // keine Flags im Status-Register betroffen
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    if((newValue & 0xFF) == 0)
+    {
+        //Bit ist 1
+        cycles++;
+    }
+    else
+    {
+        //Bit ist 0 -> nächster Befehl wird übersprungen
+        steuerwerk->pc++;
+        cycles+=2;
+    }
+}
+
+void Prozessor::incf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 1010 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Rechenoperation
+    int newValue = currentValue + 1;
+
+    // betroffene Flags prüfen und setzen/löschen
     checkZeroFlag(newValue);
+
+    writeBack(file, newValue, storeInFileRegister);
+    cycles++;
+}
+
+void Prozessor::incfsz(int command, Steuerwerk *steuerwerk)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 1011 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = (command & 0x7F);
+
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Rechenoperation
+    int newValue = currentValue + 1;
+
+    // keine Flags im Status-Register betroffen
 
     writeBack(file, newValue, storeInFileRegister);
 
