@@ -245,6 +245,32 @@ void Prozessor::incfsz(int command, Steuerwerk *steuerwerk)
     }
 }
 
+void Prozessor::iorwf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 0100 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    int workingRegisterValue = speicher.readW();
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Rechenoperation
+    int newValue = currentValue | workingRegisterValue;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkZeroFlag(newValue);    // prüfen warum !Z ??? s. Datenblatt
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    cycles++;
+}
+
 void Prozessor::movf(int command)
 {
     bool storeInFileRegister = (CHECK_BIT(command,7));
@@ -274,6 +300,7 @@ void Prozessor::movwf(int command)
     //      00 0000 0fff ffff
     int file = command & 0x7F;
 
+    // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
         return;
@@ -288,6 +315,56 @@ void Prozessor::movwf(int command)
 
 void Prozessor::nop()
 {
+    cycles++;
+}
+
+void Prozessor::rlf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      01 1101 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Operation
+    int newValue = currentValue <<  1;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkCarryFlag(newValue);
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    cycles++;
+}
+
+void Prozessor::rrf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      01 1100 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Operation
+    int newValue = currentValue >>  1;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkCarryFlagRRF(currentValue);
+
+    writeBack(file, newValue, storeInFileRegister);
+
     cycles++;
 }
 
@@ -616,6 +693,14 @@ void Prozessor::xorlw(int command)
 void Prozessor::checkCarryFlag(int result)
 {
     if(CHECK_BIT(result, 8))
+        speicher.setCBit();
+    else
+        speicher.clearCBit();
+}
+
+void Prozessor::checkCarryFlagRRF(int result)
+{
+    if(CHECK_BIT(result, 0))
         speicher.setCBit();
     else
         speicher.clearCBit();

@@ -26,12 +26,12 @@ public:
     void decfsz(int command, Steuerwerk* steuerwerk);
     void incf(int);
     void incfsz(int command, Steuerwerk* steuerwerk);
-    void iorwf(int);    // unimplemented
+    void iorwf(int);
     void movf(int);
     void movwf(int);
     void nop (void);
-    void rlf(int);      // unimplemented
-    void rrf(int);      // unimplemented
+    void rlf(int);
+    void rrf(int);
     void subwf(int);    // unimplemented
     void swapf(int);
     void xorwf(int);    // unimplemented
@@ -55,10 +55,11 @@ public:
     void sublw(int command);
     void xorlw(int command);
 
-    void checkCarryFlag(int);
-	void checkDigitCarryFlagAddition(int, int);
-    void checkDigitCarryFlagSubtraktion(int, int);
-    void checkZeroFlag(int);
+    void checkCarryFlag(int result);
+    void checkCarryFlagRRF(int result);
+    void checkDigitCarryFlagAddition(int x, int y);
+    void checkDigitCarryFlagSubtraktion(int x, int y);
+    void checkZeroFlag(int result);
 
     void writeBack(int file, int result, bool storeInFileRegister);
     void writeBackToW(int result);
