@@ -21,7 +21,7 @@ public:
     vector<Codeline> maschinencode;
     vector<Codeline>::iterator pc;
 
-    stack<vector<Codeline>::iterator> stack;
+    std::stack<vector<Codeline>::iterator> stack; // genius...
 
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);

@@ -32,7 +32,7 @@ public:
     void nop (void);
     void rlf(int);
     void rrf(int);
-    void subwf(int);    // unimplemented
+    void subwf(int);
     void swapf(int);
     void xorwf(int);    // unimplemented
 

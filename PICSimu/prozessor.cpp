@@ -368,6 +368,34 @@ void Prozessor::rrf(int command)
     cycles++;
 }
 
+void Prozessor::subwf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 0010 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    int workingRegisterValue = speicher.readW();
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Rechenoperation
+    int newValue = currentValue - workingRegisterValue;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkCarryFlag(newValue);
+    checkDigitCarryFlagSubtraktion(currentValue, workingRegisterValue);
+    checkZeroFlag(newValue);
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    cycles++;
+}
+
 void Prozessor::swapf(int command)
 {
     bool storeInFileRegister = (CHECK_BIT(command,7));
@@ -391,6 +419,32 @@ void Prozessor::swapf(int command)
 
     int newValue = upperNibble + lowerNibble;
     // Rechenoperation - ENDE
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    cycles++;
+}
+
+void Prozessor::xorwf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 0110 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    int workingRegisterValue = speicher.readW();
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+        return;
+
+    // Rechenoperation
+    int newValue = currentValue ^ workingRegisterValue;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkZeroFlag(newValue);
 
     writeBack(file, newValue, storeInFileRegister);
 
@@ -625,22 +679,6 @@ void Prozessor::movlw(int command)
 
     // Operation
     int newValue = literal;
-
-    writeBackToW(newValue);
-
-    cycles++;
-}
-
-void Prozessor::xorlw(int command)
-{
-
-    //  11 1010 kkkk kkkk
-    //& 00 0000 1111 1111 = 0x00ff
-    //= 00 0000 kkkk kkkk
-    int newValue= speicher.readW() ^ (command & 0x00ff);
-
-    // betroffene Flags prüfen und setzen/löschen
-    checkZeroFlag(newValue);
 
     writeBackToW(newValue);
 
