@@ -520,6 +520,40 @@ void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
     cycles += 2;
 }
 
+void Prozessor::iorlw(int command)
+{
+    //  11 1000 kkkk kkkk
+    //& 00 0000 1111 1111 = 0x00ff
+    //= 00 0000 kkkk kkkk
+    int literal = command & 0xFF;
+
+    int workingRegisterValue = speicher.readW();
+
+    // Operation
+    int newValue = workingRegisterValue | literal;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkZeroFlag(newValue);
+
+    writeBackToW(newValue);
+    cycles++;
+}
+
+void Prozessor::movlw(int command)
+{
+    //  11 00xx kkkk kkkk
+    //& 00 0000 1111 1111 = 0x00ff
+    //= 00 0000 kkkk kkkk
+    int literal = command & 0xFF;
+
+    // Operation
+    int newValue = literal;
+
+    writeBackToW(newValue);
+
+    cycles++;
+}
+
 void Prozessor::xorlw(int command)
 {
 
@@ -527,10 +561,54 @@ void Prozessor::xorlw(int command)
     //& 00 0000 1111 1111 = 0x00ff
     //= 00 0000 kkkk kkkk
     int newValue= speicher.readW() ^ (command & 0x00ff);
-    newValue &= 0x00ff; // der Speicher ist nur 8 Bit breit
-    speicher.writeW(newValue);
 
+    // betroffene Flags prüfen und setzen/löschen
     checkZeroFlag(newValue);
+
+    writeBackToW(newValue);
+
+    cycles++;
+}
+
+void Prozessor::sublw(int command)
+{
+    //  11 110x kkkk kkkk
+    //& 00 0000 1111 1111 = 0x00ff
+    //= 00 0000 kkkk kkkk
+    int literal = command & 0xFF;
+
+    // Register laden
+    int workingRegisterValue = speicher.readW();
+
+    int newValue = literal - workingRegisterValue;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkCarryFlag(newValue);
+    checkDigitCarryFlagSubtraktion(literal, workingRegisterValue);  // ?? prüfen!
+    checkZeroFlag(newValue);
+
+    writeBackToW(newValue);
+
+    cycles++;
+}
+
+void Prozessor::xorlw(int command)
+{
+    //  11 1010 kkkk kkkk
+    //& 00 0000 1111 1111 = 0x00ff
+    //= 00 0000 kkkk kkkk
+    int literal = command & 0xFF;
+
+    // Register laden
+    int workingRegisterValue = speicher.readW();
+
+    // Operation
+    int newValue = workingRegisterValue ^ literal;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkZeroFlag(newValue);
+
+    writeBackToW(newValue);
 
     cycles++;
 }

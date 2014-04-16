@@ -46,14 +46,14 @@ public:
     void call(int command, Steuerwerk*);    // unimplemented
     void clrwdt(void);          // unimplemented
     void go_to(int, Steuerwerk*);
-    void iorlw(int command);    // unimplemented
-    void movlw(int command);    // unimplemented
-    void retfie(void);          // unimplemented
-    void retlw(int command);    // unimplemented
-    void preturn();             // unimplemented
+    void iorlw(int command);
+    void movlw(int command);
+    void retfie(Steuerwerk* steuerwerk);          // unimplemented
+    void retlw(int command, Steuerwerk* steuerwerk);    // unimplemented
+    void preturn(Steuerwerk* steuerwerk);             // unimplemented
     void psleep();              // unimplemented
-    void sublw(int command);    // unimplemented
-    void xorlw(int command);    // unimplemented
+    void sublw(int command);
+    void xorlw(int command);
 
     void checkCarryFlag(int);
 	void checkDigitCarryFlagAddition(int, int);
