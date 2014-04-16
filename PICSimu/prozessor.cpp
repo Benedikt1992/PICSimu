@@ -634,6 +634,44 @@ void Prozessor::andlw(int command)
     cycles++;
 }
 
+// UNGETESTET!!!
+/*
+ *  PC + 1 push to Stack
+ *  PC       =  xxxp pkkk kkkk kkkk
+ *  k                 kkk kkkk kkkk
+ *  PCLATH         p p
+ *                        xxxp pxxx
+ */
+void Prozessor::call(int command, Steuerwerk* steuerwerk)
+{
+    //      10 0kkk kkkk kkkk
+    //  &   00 0111 1111 1111  = 0x07FF
+    //      00 0000 kkkk kkkk
+    int address = command & 0x7FF;
+    int pclath = speicher.read(0x0A);
+
+    // Push PC+1 to stack
+    vector<Codeline>::iterator stackAddress = pc + 1;
+    steuerwerk->stack.push(stackAddress);
+
+    // Sprungadresse berechen
+
+    // PCLATH maskieren
+    //      xxxp pxxx
+    //  &   0001 1000 = 0x18
+    //  =   000p p000
+    pclath = pclath & 0x18;
+
+    // PCLATH shiften um 8 Bit nach links
+    pclath = pclath << 8;
+
+    vector<Codeline>::iterator subroutineAddress = steuerwerk->maschinencode.begin() + address + pclath;
+
+    steuerwerk->pc = subroutineAddress;
+
+    cycles+=2;
+}
+
 void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
 {
     //      10 1fff ffff ffff
