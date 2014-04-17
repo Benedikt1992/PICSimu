@@ -237,9 +237,10 @@ void Steuerwerk::execute(int command)
 	//	11 1111 0000 0000
 
     // CALL
-	//	10 0kkk kkkk kkkk
-	//	11 1000 0000 0000
-
+	//	10 0kkk kkkk kkkk = 0x2000
+	//	11 1000 0000 0000 = 0x3800
+	if((command&0x3800)== 0x2000)
+		alu->call(command,this);
     // CLRWDT
     // GOTO
     if( (command & 0x3800) == 0x2800 )

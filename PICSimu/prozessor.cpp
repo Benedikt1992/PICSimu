@@ -656,7 +656,7 @@ void Prozessor::call(int command, Steuerwerk* steuerwerk)
 
 
 
-	vector<Codeline>::iterator subroutineAddress = steuerwerk->maschinencode.begin() + address;
+	vector<Codeline>::iterator subroutineAddress = steuerwerk->maschinencode.begin() + address - 1 ;//PC wird noch um inkrementiert
 
     steuerwerk->pc = subroutineAddress;
 
