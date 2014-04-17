@@ -651,7 +651,7 @@ void Prozessor::call(int command, Steuerwerk* steuerwerk)
     int pclath = speicher.read(0x0A);
 
     // Push PC+1 to stack
-    vector<Codeline>::iterator stackAddress = pc + 1;
+	vector<Codeline>::iterator stackAddress = steuerwerk->pc + 1;
     steuerwerk->stack.push(stackAddress);
 
     // Sprungadresse berechen

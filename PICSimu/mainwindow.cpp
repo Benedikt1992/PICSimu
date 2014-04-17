@@ -158,6 +158,7 @@ void MainWindow::initializeSFRWidget()
     ui->tw_specialFunctionRegister->setItem(5, 2, new QTableWidgetItem("00000000"));
     ui->tw_specialFunctionRegister->setItem(6, 2, new QTableWidgetItem("00000000"));
     ui->tw_specialFunctionRegister->setItem(7, 2, new QTableWidgetItem("00000000"));
+	//refreshSFRWidget();
 }
 
 void MainWindow::slotRefreshSpeicher()

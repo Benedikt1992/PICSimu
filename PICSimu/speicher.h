@@ -26,6 +26,7 @@ public:
     void clearDCBit(void);
     void setCBit(void);
     void clearCBit(void);
+	void writePC(int value);
 
 
 private:

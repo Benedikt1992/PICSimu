@@ -196,3 +196,12 @@ void Speicher::clearCBit()
     bank0[3]= bank0[3] & (~1);
 }
 
+void Speicher::writePC(int value)
+{
+	// PCL = value & 0x00FF
+	bank0[2]= value & 0x00FF;
+
+	//PCLATH = (value &1F00) >> 8
+	bank0[0xa]= (value&0x1f00)>>8;
+}
+

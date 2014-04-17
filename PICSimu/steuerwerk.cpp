@@ -79,6 +79,7 @@ bool Steuerwerk::executeStep(void)
     {
         execute(pc->command);
         pc++;
+		alu->speicher.writePC(pc - maschinencode.begin());
     }
     else
         return false;
