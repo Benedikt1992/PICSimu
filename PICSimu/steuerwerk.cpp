@@ -69,7 +69,7 @@ bool Steuerwerk::toggleBreakpoint(int textzeile)
 bool Steuerwerk::executeStep(void)
 {
     if(programmEndeErreicht())
-        return true;
+		return true;
     if(pc->breakpoint)
         mainWindow->setLineColorRed(getCurrentLineNumber()-1);
     else

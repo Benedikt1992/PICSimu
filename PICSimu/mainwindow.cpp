@@ -354,7 +354,8 @@ void MainWindow::slotResetClicked()
         return;
 
 	//aktuellen Befehl weiß färben
-    setLineColorWhite(steuerwerk->getCurrentLineNumber()-1);
+	if(steuerwerk->pc < steuerwerk->maschinencode.end())
+		setLineColorWhite(steuerwerk->getCurrentLineNumber()-1);
 
 
 	//Steuerwerk resetten
