@@ -647,25 +647,16 @@ void Prozessor::call(int command, Steuerwerk* steuerwerk)
     //      10 0kkk kkkk kkkk
     //  &   00 0111 1111 1111  = 0x07FF
     //      00 0000 kkkk kkkk
-    int address = command & 0x7FF;
-    int pclath = speicher.read(0x0A);
+	int address = (command & 0x7FF)+(  (int)(steuerwerk->pc -steuerwerk->maschinencode.begin())   &  0x1800) ; //Der Programmcounter hat 13 BIT die 2 fehlenden oberen Bits werden aus dem aktuellen PC extrahiert
+	//PCLATH ist jetz in Adresse integriert
 
     // Push PC+1 to stack
 	vector<Codeline>::iterator stackAddress = steuerwerk->pc + 1;
     steuerwerk->stack.push(stackAddress);
 
-    // Sprungadresse berechen
 
-    // PCLATH maskieren
-    //      xxxp pxxx
-    //  &   0001 1000 = 0x18
-    //  =   000p p000
-    pclath = pclath & 0x18;
 
-    // PCLATH shiften um 8 Bit nach links
-    pclath = pclath << 8;
-
-    vector<Codeline>::iterator subroutineAddress = steuerwerk->maschinencode.begin() + address + pclath;
+	vector<Codeline>::iterator subroutineAddress = steuerwerk->maschinencode.begin() + address;
 
     steuerwerk->pc = subroutineAddress;
 
