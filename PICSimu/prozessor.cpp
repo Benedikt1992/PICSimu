@@ -635,14 +635,7 @@ void Prozessor::andlw(int command)
     cycles++;
 }
 
-// UNGETESTET!!!
-/*
- *  PC + 1 push to Stack
- *  PC       =  xxxp pkkk kkkk kkkk
- *  k                 kkk kkkk kkkk
- *  PCLATH         p p
- *                        xxxp pxxx
- */
+
 void Prozessor::call(int command, Steuerwerk* steuerwerk)
 {
     //      10 0kkk kkkk kkkk

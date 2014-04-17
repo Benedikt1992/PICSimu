@@ -34,7 +34,7 @@ public:
     void rrf(int);
     void subwf(int);
     void swapf(int);
-    void xorwf(int);    // unimplemented
+	void xorwf(int);
 
     void bcf(int command);
     void bsf(int);
@@ -49,8 +49,8 @@ public:
     void iorlw(int command);
     void movlw(int command);
     void retfie(Steuerwerk* steuerwerk);          // unimplemented
-    void retlw(int command, Steuerwerk* steuerwerk);    // unimplemented
-    void preturn(Steuerwerk* steuerwerk);             // unimplemented
+	void retlw(int command, Steuerwerk* steuerwerk);
+	void preturn(Steuerwerk* steuerwerk);
     void psleep();              // unimplemented
     void sublw(int command);
     void xorlw(int command);
