@@ -309,7 +309,7 @@ void Prozessor::movwf(int command)
     // Operation
     int newValue = currentValue;
 
-    writeBack(file, newValue, WRITE_TO_FILE_REGISTER);
+    writeBackToW(newValue);
 
     cycles++;
 }
