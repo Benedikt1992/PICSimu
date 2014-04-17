@@ -295,6 +295,7 @@ void Prozessor::movf(int command)
 
 void Prozessor::movwf(int command)
 {
+	cout << "MOVWF" <<endl;
     //      00 0000 1fff ffff
     //  &   00 0000 0111 1111  = 0x7F
     //      00 0000 0fff ffff
