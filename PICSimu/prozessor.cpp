@@ -678,7 +678,7 @@ void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
     //  &   00 0111 1111 1111  = 0x7FF
     //      00 0fff ffff ffff
 
-    int sprungAdresse = command & 0x7FF;
+	int sprungAdresse = (command & 0x7FF)+(  (int)(steuerwerk->pc -steuerwerk->maschinencode.begin())   &  0x1800) ; //Der Programmcounter hat 13 BIT die 2 fehlenden oberen Bits werden aus dem aktuellen PC extrahiert
 
     /*
      *  Da in Steuerwerk::executeStep() der PC nach dem Ausführen inkrementiert wird,
