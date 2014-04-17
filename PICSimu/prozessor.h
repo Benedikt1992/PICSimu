@@ -43,7 +43,7 @@ public:
 
     void addlw(int command);
     void andlw(int command);
-    void call(int command, Steuerwerk*);    // unimplemented
+	void call(int command, Steuerwerk*);
     void clrwdt(void);          // unimplemented
     void go_to(int, Steuerwerk*);
     void iorlw(int command);

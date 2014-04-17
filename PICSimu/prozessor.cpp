@@ -714,6 +714,14 @@ void Prozessor::movlw(int command)
     cycles++;
 }
 
+void Prozessor::preturn(Steuerwerk* steuerwerk)
+{
+	if(steuerwerk->stack.empty())
+		return;
+	steuerwerk->pc = (steuerwerk->stack.top()) -1;
+	steuerwerk->stack.pop();
+}
+
 void Prozessor::sublw(int command)
 {
     //  11 110x kkkk kkkk
