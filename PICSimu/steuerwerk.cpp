@@ -246,7 +246,11 @@ void Steuerwerk::execute(int command)
     if( (command & 0x3800) == 0x2800 )
         alu->go_to(command, this);
 
-
+	//RETLW
+	//	11 01xx kkkk kkkk = 0x3400
+	//	11 1100 0000 0000 = 0x3C00
+	if((command & 0x3c00)==0x3400)
+		alu->retlw(command,this);
 	//RETURN
 	//	00 0000 0000 1000 = 0x0008
 	if(command == 0x0008)

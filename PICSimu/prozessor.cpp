@@ -714,6 +714,17 @@ void Prozessor::movlw(int command)
     cycles++;
 }
 
+void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
+{
+	if(steuerwerk->stack.empty())
+		return;
+	// 11 01xx kkkk kkkk
+	speicher.writeW(command & 0x00ff);
+
+	steuerwerk->pc = (steuerwerk->stack.top()) -1;
+	steuerwerk->stack.pop();
+}
+
 void Prozessor::preturn(Steuerwerk* steuerwerk)
 {
 	if(steuerwerk->stack.empty())
