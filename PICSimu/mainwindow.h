@@ -50,6 +50,7 @@ public slots:
     void setLineColorRed(int linenumber);
     void gotoLineNumber(int linenumber);
     void refreshSFRWidget(void);
+    void readVerzoegerung(int*);
 
 };
 

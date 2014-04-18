@@ -60,6 +60,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tw_speicher->setFont(font);
 
     initializeSFRWidget();
+
+    //Verzögerungs spinbox initialisieren
+    ui->verzoegerung->setMaximum(250);
+    ui->verzoegerung->setValue(100);
+    ui->verzoegerung->setMinimum(50);
+    ui->verzoegerung->setHidden(true);
+    ui->label_verzoegerung->setHidden(true);
+
 }
 
 MainWindow::~MainWindow()
@@ -381,6 +389,8 @@ void MainWindow::slotGoClicked()
         ui->refresh_speicher->setEnabled(true);
         ui->pb_load->setEnabled(true);
         ui->selectFile_Button->setEnabled(true);
+        ui->verzoegerung->setHidden(true);
+        ui->label_verzoegerung->setHidden(true);
 
     }
     else
@@ -392,6 +402,8 @@ void MainWindow::slotGoClicked()
         ui->refresh_speicher->setEnabled(false);
         ui->pb_load->setEnabled(false);
         ui->selectFile_Button->setEnabled(false);
+        ui->verzoegerung->setHidden(false);
+        ui->label_verzoegerung->setHidden(false);
         QThread* workerThread = new QThread(); // erzeuge Thread zur ausführung
         GoKlasse* worker = new GoKlasse(steuerwerk); // erzeuge Worker object
         connect(worker,SIGNAL(slotGoClicked()),SLOT(slotGoClicked()));
@@ -403,6 +415,7 @@ void MainWindow::slotGoClicked()
         connect(worker,SIGNAL(gotoLineNumber(int)),SLOT(gotoLineNumber(int)));
         connect(worker,SIGNAL(refreshSFRWidget()),SLOT(refreshSFRWidget()));
         connect(worker,SIGNAL(slotRefreshSpeicher()),SLOT(slotRefreshSpeicher()));
+        connect(worker,SIGNAL(getVerzoegerung(int*)),SLOT(readVerzoegerung(int*)));
 
         //worker object in Threadkontext verschieben
         worker->moveToThread(workerThread);
@@ -412,4 +425,9 @@ void MainWindow::slotGoClicked()
         QMetaObject::invokeMethod(worker, "run", Qt::QueuedConnection);
 
     }
+}
+
+void MainWindow::readVerzoegerung(int* value)
+{
+    *value = ui->verzoegerung->value();
 }

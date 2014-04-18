@@ -21,6 +21,7 @@ signals:
     void refreshSFRWidget(void);
     void slotGoClicked(void);
     void slotRefreshSpeicher(void);
+    void getVerzoegerung(int*);
 
 };
 
