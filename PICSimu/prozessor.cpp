@@ -92,7 +92,8 @@ void Prozessor::clrf(int command)
 {
     // 00 0001 1fff ffff
     int file = command & 0x007f;
-    speicher.write(file,0);
+    writeBack(file,0,WRITE_TO_FILE_REGISTER);
+    //speicher.write(file,0);
 
     speicher.setZBit();
 
@@ -519,7 +520,8 @@ void Prozessor::bsf(int command)
         return;
 
     int newValue = actualValue | (1 << bit);
-	speicher.write(file,newValue);
+    writeBack(file,newValue,WRITE_TO_FILE_REGISTER);
+    //speicher.write(file,newValue);
     cycles++;
 }
 
@@ -713,7 +715,8 @@ void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
 	if(steuerwerk->stack.empty())
 		return;
 	// 11 01xx kkkk kkkk
-	speicher.writeW(command & 0x00ff);
+    writeBackToW(command & 0x00ff);
+    //speicher.writeW(command & 0x00ff);
 
 	steuerwerk->pc = (steuerwerk->stack.top()) -1;
 	steuerwerk->stack.pop();
