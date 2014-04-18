@@ -155,6 +155,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="goButton">
+         <property name="text">
+          <string>Go</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -177,7 +184,7 @@
       <x>20</x>
       <y>470</y>
       <width>261</width>
-      <height>221</height>
+      <height>251</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -190,9 +197,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
+       <y>10</y>
        <width>241</width>
-       <height>191</height>
+       <height>231</height>
       </rect>
      </property>
     </widget>
@@ -204,7 +211,7 @@
      <x>0</x>
      <y>0</y>
      <width>1210</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

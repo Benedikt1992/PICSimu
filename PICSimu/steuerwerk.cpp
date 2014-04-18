@@ -9,6 +9,7 @@ Steuerwerk::Steuerwerk(MainWindow* mainWindow)
     this->mainWindow = mainWindow;
     mainWindow->connectSteuerwerk(this);
     alu = new Prozessor();
+    isRunning = false;
 }
 
 

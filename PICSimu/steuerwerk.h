@@ -22,6 +22,7 @@ public:
     vector<Codeline>::iterator pc;
 
     std::stack<vector<Codeline>::iterator> stack; // genius...
+    bool isRunning;
 
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <QFileDialog>
+#include "gothread.h"
 
 #define n_register 48
 
@@ -29,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->refresh_speicher, SIGNAL(clicked()), SLOT(slotRefreshSpeicher()));
     connect(ui->pb_executeStep, SIGNAL(clicked()), SLOT(slotExecuteStep()));
 	connect(ui->resetButton,SIGNAL(clicked()),SLOT(slotResetClicked()));
+    connect(ui->goButton,SIGNAL(clicked()),SLOT(slotGoClicked()));
 
     // Mario
     // Tabelle für Speicherausgabe definieren
@@ -366,4 +368,48 @@ void MainWindow::slotResetClicked()
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
     gotoLineNumber(steuerwerk->getCurrentLineNumber()-1);
+}
+
+void MainWindow::slotGoClicked()
+{
+    if(steuerwerk->isRunning)
+    {//Der Simulator wird gestoppt
+        steuerwerk->isRunning = false;
+        ui->goButton->setText("Go");
+        ui->resetButton->setEnabled(true);
+        ui->pb_executeStep->setEnabled(true);
+        ui->refresh_speicher->setEnabled(true);
+        ui->pb_load->setEnabled(true);
+        ui->selectFile_Button->setEnabled(true);
+
+    }
+    else
+    {//Der Simulator wird gestartet
+        steuerwerk->isRunning = true;
+        ui->goButton->setText("Stop");
+        ui->resetButton->setEnabled(false);
+        ui->pb_executeStep->setEnabled(false);
+        ui->refresh_speicher->setEnabled(false);
+        ui->pb_load->setEnabled(false);
+        ui->selectFile_Button->setEnabled(false);
+        QThread* workerThread = new QThread(); // erzeuge Thread zur ausführung
+        GoKlasse* worker = new GoKlasse(steuerwerk); // erzeuge Worker object
+        connect(worker,SIGNAL(slotGoClicked()),SLOT(slotGoClicked()));
+
+        //connect all signals from worker object
+        connect(worker,SIGNAL(setLineColorWhite(int)),SLOT(setLineColorWhite(int)));
+        connect(worker,SIGNAL(setLineColorGreen(int)),SLOT(setLineColorGreen(int)));
+        connect(worker,SIGNAL(setLineColorRed(int)),SLOT(setLineColorRed(int)));
+        connect(worker,SIGNAL(gotoLineNumber(int)),SLOT(gotoLineNumber(int)));
+        connect(worker,SIGNAL(refreshSFRWidget()),SLOT(refreshSFRWidget()));
+        connect(worker,SIGNAL(slotRefreshSpeicher()),SLOT(slotRefreshSpeicher()));
+
+        //worker object in Threadkontext verschieben
+        worker->moveToThread(workerThread);
+
+        //arbeit starten
+        workerThread->start();
+        QMetaObject::invokeMethod(worker, "run", Qt::QueuedConnection);
+
+    }
 }

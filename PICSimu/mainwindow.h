@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -20,11 +21,6 @@ public:
     ~MainWindow();
 
     void connectSteuerwerk(Steuerwerk*);
-    void setLineColorWhite(int linenumber);
-    void setLineColorGreen(int linenumber);
-    void setLineColorRed(int linenumber);
-    void gotoLineNumber(int linenumber);
-    void refreshSFRWidget(void);
 
 private:
     Ui::MainWindow *ui;
@@ -41,10 +37,19 @@ private slots:
     void slotExecuteStep(void);
 	void slotResetClicked(void);
 
+
 	//Benedikt:
 	void on_lw_lstFile_doubleClicked(const QModelIndex &index);
 public slots:
     void slotRefreshSpeicher(void);
+    void slotGoClicked(void);
+
+    //werden durch GoThread ausgelöst:
+    void setLineColorWhite(int linenumber);
+    void setLineColorGreen(int linenumber);
+    void setLineColorRed(int linenumber);
+    void gotoLineNumber(int linenumber);
+    void refreshSFRWidget(void);
 
 };
 

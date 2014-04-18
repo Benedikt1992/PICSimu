@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     parser.cpp \
     prozessor.cpp \
     speicher.cpp \
-    steuerwerk.cpp
+    steuerwerk.cpp \
+    gothread.cpp
 
 HEADERS  += mainwindow.h \
     codeline.h \
     parser.h \
     prozessor.h \
     speicher.h \
-    steuerwerk.h
+    steuerwerk.h \
+    gothread.h
 
 FORMS    += mainwindow.ui
