@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 #include <QFileDialog>
-#include "gothread.h"
+#include "goklasse.h"
 
 #define n_register 48
 
