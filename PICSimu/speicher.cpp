@@ -86,6 +86,8 @@ bool Speicher::write(int file, int wert)
 
 	if(CHECK_BIT(bank1[3],5))
 	{//Bank 1
+        //Indirect addr. adressiert die Adresse die im FSR Register hinterlegt ist
+        //-> siehe abschnitt FSR für implementierung
 		//Option Register ist voll schreibbar
 		//PCL ist voll schreibbar
 		//Status Register: nur die oberen 3 Bit sind schreibbar
@@ -94,7 +96,15 @@ bool Speicher::write(int file, int wert)
 			*FileReference= (wert & 0x00E0) + (*FileReference & 0x001F); //Speicher die oberen 3 Bit aus wert und die unteren 5 Bit aus dem Vorherigen wert
 			return true;
 		}
-		//FSR ist voll schreibbar
+        //FSR ist voll schreibbar; der Wert wird als adresse aufgefasst und durch Adrees 0x00 Adressiert
+        //-> refBank[0][0] und refBank[1][0] müssen auf diese Adresse zeigen
+        if(file==4)
+        {
+            int indFile = wert & 0x007f; //die durch 0x00 zu referenzierende Adresse
+            int indBank = (wert & 0x0080) >> 7; //die durch 0x00 zu referenzierende Bank
+            refBank[0][0]= refBank[indBank][indFile];
+            refBank[1][0]= refBank[indBank][indFile];
+        }
 		//TRISA ist voll schreibbar
 		//TRISB ist voll schreibbar
 		//EECON1 ist voll schreibbar
@@ -104,6 +114,8 @@ bool Speicher::write(int file, int wert)
 	}
 	else
 	{//Bank 0
+        //Indirect addr. adressiert die Adresse die im FSR Register hinterlegt ist
+        //-> siehe abschnitt FSR für implementierung
 		//TMR0 ist voll schreibbar
 		//PCL ist voll schreibbar
 		//Status Register: nur die oberen 3 Bit sind schreibbar
@@ -112,7 +124,15 @@ bool Speicher::write(int file, int wert)
 			*FileReference= (wert & 0x00E0) + (*FileReference & 0x001F); //Speicher die oberen 3 Bit aus wert und die unteren 5 Bit aus dem Vorherigen wert
 			return true;
 		}
-		//FSR ist voll schreibbar
+        //FSR ist voll schreibbar; der Wert wird als adresse aufgefasst und durch Adrees 0x00 Adressiert
+        //-> refBank[0][0] und refBank[1][0] müssen auf diese Adresse zeigen
+        if(file==4)
+        {
+            int indFile = wert & 0x007f; //die durch 0x00 zu referenzierende Adresse
+            int indBank = (wert & 0x0080) >> 7; //die durch 0x00 zu referenzierende Bank
+            refBank[0][0]= refBank[indBank][indFile];
+            refBank[1][0]= refBank[indBank][indFile];
+        }
 		//PortA nur die Bit bei denen TRISA = 0 können geschrieben werden
 		if(file==5)
 		{

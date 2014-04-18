@@ -302,14 +302,13 @@ void Prozessor::movwf(int command)
     int file = command & 0x7F;
 
     // Register laden
-    int currentValue = speicher.read(file);
+    int currentValue = speicher.readW();
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
         return;
 
-    // Operation
-    int newValue = currentValue;
 
-    writeBackToW(newValue);
+
+    writeBack(file, currentValue, WRITE_TO_FILE_REGISTER);
 
     cycles++;
 }
