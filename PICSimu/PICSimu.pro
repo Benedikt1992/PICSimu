@@ -19,7 +19,7 @@ SOURCES += main.cpp\
     prozessor.cpp \
     speicher.cpp \
     steuerwerk.cpp \
-    gothread.cpp
+    goklasse.cpp
 
 HEADERS  += mainwindow.h \
     codeline.h \
@@ -27,6 +27,6 @@ HEADERS  += mainwindow.h \
     prozessor.h \
     speicher.h \
     steuerwerk.h \
-    gothread.h
+    goklasse.h
 
 FORMS    += mainwindow.ui
