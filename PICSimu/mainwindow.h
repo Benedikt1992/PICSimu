@@ -40,6 +40,8 @@ private slots:
 
 	//Benedikt:
 	void on_lw_lstFile_doubleClicked(const QModelIndex &index);
+    void on_frequency_valueChanged(int arg1);
+
 public slots:
     void slotRefreshSpeicher(void);
     void slotGoClicked(void);
@@ -51,6 +53,7 @@ public slots:
     void gotoLineNumber(int linenumber);
     void refreshSFRWidget(void);
     void readVerzoegerung(int*);
+    void refreshRuntime(void);
 
 };
 

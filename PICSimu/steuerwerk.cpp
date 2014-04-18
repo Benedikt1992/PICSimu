@@ -86,6 +86,7 @@ bool Steuerwerk::executeStep(void)
         return false;
     mainWindow->slotRefreshSpeicher();
     mainWindow->refreshSFRWidget();
+    mainWindow->refreshRuntime();
 
     if(programmEndeErreicht())
         return true;
@@ -339,4 +340,13 @@ int Steuerwerk::getCurrentLineNumber()
 int Steuerwerk::getPCInt()
 {
     return pc - maschinencode.begin();
+}
+
+void Steuerwerk::setTimePerCycle(double value)
+{
+    alu->setTimePerCycle(value);
+}
+double Steuerwerk::computeRuntime(void)
+{
+    return alu->computeRuntime();
 }

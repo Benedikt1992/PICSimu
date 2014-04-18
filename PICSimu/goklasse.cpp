@@ -42,6 +42,7 @@ void GoKlasse::run()
         //anzeige erneuern
         emit slotRefreshSpeicher();
         emit refreshSFRWidget();
+        emit refreshRuntime();
 
         //Go beenden wenn programmende erreicht ist
         if(sW->programmEndeErreicht())

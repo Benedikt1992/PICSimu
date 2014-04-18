@@ -832,3 +832,14 @@ void Prozessor::writeBackToW(int result)
     result &= 0xFF;
     speicher.writeW(result);
 }
+
+void Prozessor::setTimePerCycle(double value)
+{
+    timePerCycle = value;
+}
+
+double Prozessor::computeRuntime(void)
+{
+    //cout << "cycles: " << cycles << " timePerCycle: "<<timePerCycle<<endl;
+    return cycles * timePerCycle;
+}

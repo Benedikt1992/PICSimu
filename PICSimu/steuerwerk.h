@@ -40,6 +40,8 @@ public:
     int readForGUI(int,int);
     int readWForGUI(void);
     int getPCInt(void);
+    void setTimePerCycle(double);
+    double computeRuntime(void);
 };
 
 

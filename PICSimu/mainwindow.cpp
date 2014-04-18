@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {    
     ui->setupUi(this);
+    steuerwerk = NULL;
 
     // Schriftart für ListWidget festlegen
     QFont font = QFont ("Courier");
@@ -68,6 +69,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->verzoegerung->setHidden(true);
     ui->label_verzoegerung->setHidden(true);
 
+    //Initialisieren Frequenz
+    ui->frequency->setValue(10);
+    ui->frequency->setMinimum(1);
+    ui->cycle->setText(QString::fromStdString("0.4"));
+    ui->runtime->setText(QString::fromStdString("0"));
+
+
 }
 
 MainWindow::~MainWindow()
@@ -110,6 +118,7 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
     else
         ui->lw_lstFile->addItem("File does not exist!");
     // cout << "slotLoadLstFile() beendet" << endl;
+    slotResetClicked();
 }
 
 void MainWindow::slotLoad_FileDialog()
@@ -372,6 +381,7 @@ void MainWindow::slotResetClicked()
 	steuerwerk->clearSteuerwerk();
     slotRefreshSpeicher();
     refreshSFRWidget();
+    refreshRuntime();
 
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
@@ -416,6 +426,7 @@ void MainWindow::slotGoClicked()
         connect(worker,SIGNAL(refreshSFRWidget()),SLOT(refreshSFRWidget()));
         connect(worker,SIGNAL(slotRefreshSpeicher()),SLOT(slotRefreshSpeicher()));
         connect(worker,SIGNAL(getVerzoegerung(int*)),SLOT(readVerzoegerung(int*)));
+        connect(worker,SIGNAL(refreshRuntime()),SLOT(refreshRuntime()));
 
         //worker object in Threadkontext verschieben
         worker->moveToThread(workerThread);
@@ -430,4 +441,20 @@ void MainWindow::slotGoClicked()
 void MainWindow::readVerzoegerung(int* value)
 {
     *value = ui->verzoegerung->value();
+}
+
+void MainWindow::on_frequency_valueChanged(int arg1)
+{
+    stringstream ss;
+    ss << (double)0.04*arg1;
+    ui->cycle->setText(QString::fromStdString(ss.str()));
+}
+
+void MainWindow::refreshRuntime(void)
+{
+    steuerwerk->setTimePerCycle(0.04*ui->frequency->value());
+    stringstream ss;
+    ss << steuerwerk->computeRuntime();
+    //cout << "Runtime: " << steuerwerk->computeRuntime() << endl;
+    ui->runtime->setText(QString::fromStdString(ss.str()));
 }

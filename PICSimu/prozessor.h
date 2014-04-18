@@ -10,6 +10,9 @@ class Prozessor
 public:
     Speicher speicher;
     int cycles;
+    double timePerCycle;
+    void setTimePerCycle(double);
+    double computeRuntime(void);
 
     Prozessor(void);
     ~Prozessor(void);

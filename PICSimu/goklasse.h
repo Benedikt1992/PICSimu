@@ -22,6 +22,7 @@ signals:
     void slotGoClicked(void);
     void slotRefreshSpeicher(void);
     void getVerzoegerung(int*);
+    void refreshRuntime(void);
 
 };
 
