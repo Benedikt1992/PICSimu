@@ -104,6 +104,11 @@ bool Speicher::write(int file, int wert)
             int indBank = (wert & 0x0080) >> 7; //die durch 0x00 zu referenzierende Bank
             refBank[0][0]= refBank[indBank][indFile];
             refBank[1][0]= refBank[indBank][indFile];
+            if(indFile==0) //wenn fsr wieder zurück auf 0 gesetzt wird, würde die vorherige adresse erhalten bleiben -> daher manuell NULL
+            {
+                refBank[0][0]= NULL;
+                refBank[1][0]= NULL;
+            }
         }
 		//TRISA ist voll schreibbar
 		//TRISB ist voll schreibbar
@@ -132,6 +137,11 @@ bool Speicher::write(int file, int wert)
             int indBank = (wert & 0x0080) >> 7; //die durch 0x00 zu referenzierende Bank
             refBank[0][0]= refBank[indBank][indFile];
             refBank[1][0]= refBank[indBank][indFile];
+            if(indFile==0) //wenn fsr wieder zurück auf 0 gesetzt wird, würde die vorherige adresse erhalten bleiben -> daher manuell NULL
+            {
+                refBank[0][0]= NULL;
+                refBank[1][0]= NULL;
+            }
         }
 		//PortA nur die Bit bei denen TRISA = 0 können geschrieben werden
 		if(file==5)
