@@ -446,13 +446,13 @@ void MainWindow::readVerzoegerung(int* value)
 void MainWindow::on_frequency_valueChanged(int arg1)
 {
     stringstream ss;
-    ss << (double)0.04*arg1;
+    ss << (double)4*(1/(double)arg1);
     ui->cycle->setText(QString::fromStdString(ss.str()));
 }
 
 void MainWindow::refreshRuntime(void)
 {
-    steuerwerk->setTimePerCycle(0.04*ui->frequency->value());
+    steuerwerk->setTimePerCycle(4*(1/(double)ui->frequency->value()));
     stringstream ss;
     ss << steuerwerk->computeRuntime();
     //cout << "Runtime: " << steuerwerk->computeRuntime() << endl;
