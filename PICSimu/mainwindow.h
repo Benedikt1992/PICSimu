@@ -20,7 +20,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void connectSteuerwerk(Steuerwerk*);
+
 
 private:
     Ui::MainWindow *ui;
@@ -43,6 +43,7 @@ private slots:
     void on_frequency_valueChanged(int arg1);
 
 public slots:
+    void connectSteuerwerk(Steuerwerk*);
     void slotRefreshSpeicher(void);
     void slotGoClicked(void);
 
@@ -54,6 +55,7 @@ public slots:
     void refreshSFRWidget(void);
     void readVerzoegerung(int*);
     void refreshRuntime(void);
+
 
 };
 

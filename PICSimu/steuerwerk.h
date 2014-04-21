@@ -11,10 +11,11 @@
 
 using namespace std;
 
-class Steuerwerk
+class Steuerwerk : public QObject
 {
+    Q_OBJECT
 public:
-    MainWindow* mainWindow;
+
     Prozessor* alu;
 	//Benedikt: geändert
 	list<QString> lstFile;
@@ -45,6 +46,16 @@ public:
 
     void testForInterrupt(void);
     void callInterrupt(void);
+
+signals:
+    void connectSteuerwerk(Steuerwerk*);
+    void setLineColorRed (int);
+    void setLineColorWhite (int);
+    void setLineColorGreen(int);
+    void slotRefreshSpeicher();
+    void refreshSFRWidget();
+    void refreshRuntime();
+    void gotoLineNumber(int);
 };
 
 

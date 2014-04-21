@@ -6,10 +6,18 @@
 
 Steuerwerk::Steuerwerk(MainWindow* mainWindow)
 {
-    this->mainWindow = mainWindow;
-    mainWindow->connectSteuerwerk(this);
+    connect(this,SIGNAL(connectSteuerwerk(Steuerwerk*)),mainWindow,SLOT(connectSteuerwerk(Steuerwerk*)));
+    connect(this,SIGNAL(gotoLineNumber(int)),mainWindow,SLOT(gotoLineNumber(int)));
+    connect(this,SIGNAL(setLineColorRed(int)),mainWindow,SLOT(setLineColorRed(int)));
+    connect(this,SIGNAL(setLineColorWhite(int)),mainWindow,SLOT(setLineColorWhite(int)));
+    connect(this,SIGNAL(setLineColorGreen(int)),mainWindow,SLOT(setLineColorGreen(int)));
+    connect(this,SIGNAL(slotRefreshSpeicher()),mainWindow,SLOT(slotRefreshSpeicher()));
+    connect(this,SIGNAL(refreshSFRWidget()),mainWindow,SLOT(refreshSFRWidget()));
+    connect(this,SIGNAL(refreshRuntime()),mainWindow,SLOT(refreshRuntime()));
+    emit connectSteuerwerk(this);
     alu = new Prozessor();
     isRunning = false;
+
 }
 
 
@@ -73,9 +81,9 @@ bool Steuerwerk::executeStep(void)
 		return true;
     testForInterrupt();
     if(pc->breakpoint)
-        mainWindow->setLineColorRed(getCurrentLineNumber()-1);
+        emit setLineColorRed(getCurrentLineNumber()-1);
     else
-        mainWindow->setLineColorWhite(getCurrentLineNumber()-1);
+        emit setLineColorWhite(getCurrentLineNumber()-1);
 
     if(pc != maschinencode.end())
     {
@@ -85,15 +93,15 @@ bool Steuerwerk::executeStep(void)
     }
     else
         return false;
-    mainWindow->slotRefreshSpeicher();
-    mainWindow->refreshSFRWidget();
-    mainWindow->refreshRuntime();
+    emit slotRefreshSpeicher();
+    emit refreshSFRWidget();
+    emit refreshRuntime();
 
     if(programmEndeErreicht())
         return true;
 
-    mainWindow->setLineColorGreen(getCurrentLineNumber()-1);
-    mainWindow->gotoLineNumber(getCurrentLineNumber()-1);
+    emit setLineColorGreen(getCurrentLineNumber()-1);
+    emit gotoLineNumber(getCurrentLineNumber()-1);
     return true;
 }
 
@@ -132,9 +140,9 @@ void Steuerwerk::callInterrupt()
     alu->speicher.writeOnBank(0,0xb,newValue);
     //aktuelle Zeile deaktivieren
     if(pc->breakpoint)
-        mainWindow->setLineColorRed(getCurrentLineNumber()-1);
+        emit setLineColorRed(getCurrentLineNumber()-1);
     else
-        mainWindow->setLineColorWhite(getCurrentLineNumber()-1);
+        emit setLineColorWhite(getCurrentLineNumber()-1);
     //PC--
     pc--;
     //Call 0x0004
@@ -142,8 +150,8 @@ void Steuerwerk::callInterrupt()
     //neuen PC in PCL schreiben
     alu->speicher.writePC(pc - maschinencode.begin());
     //Befehl 0x0004 aktivieren
-    mainWindow->setLineColorGreen(getCurrentLineNumber()-1);
-    mainWindow->gotoLineNumber(getCurrentLineNumber()-1);
+    emit setLineColorGreen(getCurrentLineNumber()-1);
+    emit gotoLineNumber(getCurrentLineNumber()-1);
 }
 
 void Steuerwerk::run(void)

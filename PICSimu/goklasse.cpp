@@ -18,6 +18,7 @@ void GoKlasse::run()
             emit slotGoClicked();
             return ;
         }
+        sW->testForInterrupt();
 
         //aktuelle Zeile in urpsungszustand färben
         if(sW->pc->breakpoint)
