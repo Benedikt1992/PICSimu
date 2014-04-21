@@ -44,7 +44,10 @@ void Prozessor::addwf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     int workingRegisterValue = speicher.readW();
 
@@ -73,7 +76,10 @@ void Prozessor::andwf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     int workingRegisterValue = speicher.readW();
 
@@ -119,7 +125,10 @@ void Prozessor::comf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = ~currentValue;
@@ -143,7 +152,10 @@ void Prozessor::decf(int command)
 
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue - 1;
@@ -167,7 +179,10 @@ void Prozessor::decfsz(int command, Steuerwerk *steuerwerk)
 
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue - 1;
@@ -201,7 +216,10 @@ void Prozessor::incf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue + 1;
@@ -224,7 +242,10 @@ void Prozessor::incfsz(int command, Steuerwerk *steuerwerk)
 
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue + 1;
@@ -259,7 +280,10 @@ void Prozessor::iorwf(int command)
     int currentValue = speicher.read(file);
     int workingRegisterValue = speicher.readW();
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue | workingRegisterValue;
@@ -284,7 +308,10 @@ void Prozessor::movf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Operation
     int newValue = currentValue;
@@ -305,7 +332,10 @@ void Prozessor::movwf(int command)
     // Register laden
     int currentValue = speicher.readW();
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
 
 
@@ -331,7 +361,10 @@ void Prozessor::rlf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Operation
     int newValue = currentValue <<  1;
@@ -356,7 +389,10 @@ void Prozessor::rrf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Operation
     int newValue = currentValue >>  1;
@@ -382,7 +418,10 @@ void Prozessor::subwf(int command)
     int currentValue = speicher.read(file);
     int workingRegisterValue = speicher.readW();
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue - workingRegisterValue;
@@ -409,7 +448,10 @@ void Prozessor::swapf(int command)
     // Register laden
     int currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int upperNibble = currentValue & 0xF0;
@@ -439,7 +481,10 @@ void Prozessor::xorwf(int command)
     int currentValue = speicher.read(file);
     int workingRegisterValue = speicher.readW();
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue ^ workingRegisterValue;
@@ -481,7 +526,10 @@ void Prozessor::bcf(int command)
 
     currentValue = speicher.read(file);
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     // Rechenoperation
     int newValue = currentValue & (~(1 << bit));
@@ -517,7 +565,10 @@ void Prozessor::bsf(int command)
 
     actualValue = speicher.read(file);
     if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     int newValue = actualValue | (1 << bit);
     writeBack(file,newValue,WRITE_TO_FILE_REGISTER);
@@ -544,7 +595,10 @@ void Prozessor::btfsc(int command, Steuerwerk* steuerwerk)
 
     actualValue = speicher.read(file);
     if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     if(actualValue & (1<<bit))
     {
@@ -578,7 +632,10 @@ void Prozessor::btfss(int command, Steuerwerk* steuerwerk)
 
     actualValue = speicher.read(file);
     if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
         return;
+    }
 
     if(actualValue & (1<<bit))
     {
@@ -726,7 +783,10 @@ void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
 void Prozessor::preturn(Steuerwerk* steuerwerk)
 {
 	if(steuerwerk->stack.empty())
+    {
+        cycles+=2;
 		return;
+    }
 	steuerwerk->pc = (steuerwerk->stack.top()) -1;
 	steuerwerk->stack.pop();
 	cycles += 2;
