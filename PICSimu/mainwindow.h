@@ -42,6 +42,8 @@ private slots:
 	void on_lw_lstFile_doubleClicked(const QModelIndex &index);
     void on_frequency_valueChanged(int arg1);
 
+    void on_clearRuntime_clicked();
+
 public slots:
     void connectSteuerwerk(Steuerwerk*);
     void slotRefreshSpeicher(void);

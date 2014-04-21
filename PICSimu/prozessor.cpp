@@ -25,6 +25,11 @@ bool Prozessor::clearProzessor()
 	return speicher.clearSpeicher();
 
 }
+bool Prozessor::clearRuntime()
+{
+    cycles = 0;
+    return true;
+}
 
 /*
  *

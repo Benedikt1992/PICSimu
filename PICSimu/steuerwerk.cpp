@@ -34,6 +34,10 @@ bool Steuerwerk::clearSteuerwerk()
 	return true;
 
 }
+bool Steuerwerk::clearRuntime()
+{
+    return alu->clearRuntime();
+}
 
 bool Steuerwerk::clearProgrammspeicher()
 {

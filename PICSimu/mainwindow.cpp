@@ -458,3 +458,9 @@ void MainWindow::refreshRuntime(void)
     //cout << "Runtime: " << steuerwerk->computeRuntime() << endl;
     ui->runtime->setText(QString::fromStdString(ss.str()));
 }
+
+void MainWindow::on_clearRuntime_clicked()
+{
+    steuerwerk->clearRuntime();
+    refreshRuntime();
+}

@@ -19,6 +19,7 @@ public:
 
     void execute(int);
 	bool clearProzessor(void);
+    bool clearRuntime(void);
 
     void addwf(int);
     void andwf(int);
