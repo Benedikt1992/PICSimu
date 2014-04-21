@@ -17,7 +17,8 @@ public:
 	bool clearSpeicher(void);
     bool write(int,int);
     int read(int);
-    int readForGUI(int,int);
+    int readOnBank(int,int);
+    void writeOnBank(int bank,int file,int wert);
     int readW(void);
     void writeW(int value);
     void setZBit(void);

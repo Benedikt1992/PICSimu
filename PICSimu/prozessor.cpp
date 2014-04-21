@@ -767,8 +767,25 @@ void Prozessor::movlw(int command)
     cycles++;
 }
 
+void Prozessor::retfie(Steuerwerk* steuerwerk)
+{
+    //GIE aktivieren
+    int newValue = speicher.readOnBank(0,0xb) | 0x0080;
+    speicher.writeOnBank(0,0xb,newValue);
+    if(steuerwerk->stack.empty())
+    {
+        cycles+=2;
+        return;
+    }
+    steuerwerk->pc = (steuerwerk->stack.top()) -1;
+    steuerwerk->stack.pop();
+    cycles += 2;
+}
+
 void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
 {
+
+
 	if(steuerwerk->stack.empty())
 		return;
 	// 11 01xx kkkk kkkk
@@ -777,6 +794,7 @@ void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
 
 	steuerwerk->pc = (steuerwerk->stack.top()) -1;
 	steuerwerk->stack.pop();
+
 	cycles += 2;
 }
 

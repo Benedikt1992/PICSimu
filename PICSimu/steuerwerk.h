@@ -42,6 +42,9 @@ public:
     int getPCInt(void);
     void setTimePerCycle(double);
     double computeRuntime(void);
+
+    void testForInterrupt(void);
+    void callInterrupt(void);
 };
 
 

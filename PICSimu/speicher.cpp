@@ -177,7 +177,7 @@ int Speicher::read( int file)
     return *getFileReference(file);
 }
 
-int Speicher::readForGUI (int bank, int file)
+int Speicher::readOnBank (int bank, int file)
 {
    // cout << "Speicher read" << endl;
 
@@ -185,6 +185,11 @@ int Speicher::readForGUI (int bank, int file)
 			return 0;
 	return *(refBank[bank][file]);
 
+}
+
+void Speicher::writeOnBank(int bank,int file,int wert)
+{
+    *refBank[bank][file] = wert;
 }
 
 int Speicher::readW()

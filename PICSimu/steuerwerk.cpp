@@ -71,6 +71,7 @@ bool Steuerwerk::executeStep(void)
 {
     if(programmEndeErreicht())
 		return true;
+    testForInterrupt();
     if(pc->breakpoint)
         mainWindow->setLineColorRed(getCurrentLineNumber()-1);
     else
@@ -94,6 +95,55 @@ bool Steuerwerk::executeStep(void)
     mainWindow->setLineColorGreen(getCurrentLineNumber()-1);
     mainWindow->gotoLineNumber(getCurrentLineNumber()-1);
     return true;
+}
+
+void Steuerwerk::testForInterrupt()
+{
+    int intcon = alu->speicher.readOnBank(0,0x0b); //Intconregister lesen
+    if(intcon & 0x0080) //ist das GIE Bit gesetzt?
+    {
+        if((intcon&0x0020)&&(intcon&0x0004)) //sind T0IE unf T0IF gesetzt?
+        {
+            callInterrupt();
+            return;
+        }
+        if((intcon&0x0010)&&(intcon&0x0002)) //sind INTE unf INTF gesetzt?
+        {
+            callInterrupt();
+            return;
+        }
+        if((intcon&0x0008)&&(intcon&0x0001)) //sind RBIE unf RBIF gesetzt?
+        {
+            callInterrupt();
+            return;
+        }
+        if((intcon&0x0040)&&(alu->speicher.readOnBank(1,0x08)&0x0010)) //sind EEIE unf EEIF (in EECON1 Register) gesetzt?
+        {
+            callInterrupt();
+            return;
+        }
+
+    }
+}
+void Steuerwerk::callInterrupt()
+{
+    //GIE deaktivieren
+    int newValue = alu->speicher.readOnBank(0,0xb) & 0x007f;
+    alu->speicher.writeOnBank(0,0xb,newValue);
+    //aktuelle Zeile deaktivieren
+    if(pc->breakpoint)
+        mainWindow->setLineColorRed(getCurrentLineNumber()-1);
+    else
+        mainWindow->setLineColorWhite(getCurrentLineNumber()-1);
+    //PC--
+    pc--;
+    //Call 0x0004
+    alu->call(0x0004,this);
+    //neuen PC in PCL schreiben
+    alu->speicher.writePC(pc - maschinencode.begin());
+    //Befehl 0x0004 aktivieren
+    mainWindow->setLineColorGreen(getCurrentLineNumber()-1);
+    mainWindow->gotoLineNumber(getCurrentLineNumber()-1);
 }
 
 void Steuerwerk::run(void)
@@ -285,6 +335,9 @@ void Steuerwerk::execute(int command)
 		alu->movlw(command);
 
 	//RETFIE
+    //  00 0000 0000 1001 = 0x0009
+    if(command==0x0009)
+        alu->retfie(this);
 
 	//RETLW
 	//	11 01xx kkkk kkkk = 0x3400
@@ -315,7 +368,7 @@ void Steuerwerk::execute(int command)
 // Mario
 int Steuerwerk::readForGUI(int bank,int file){
     //cout << "steuerwerk read" << endl;
-    return alu->speicher.readForGUI(bank,file);
+    return alu->speicher.readOnBank(bank,file);
 }
 // Mario ende
 
