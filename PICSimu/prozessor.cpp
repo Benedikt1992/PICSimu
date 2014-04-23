@@ -710,7 +710,7 @@ void Prozessor::call(int command, Steuerwerk* steuerwerk)
 
     // Push PC+1 to stack
 	vector<Codeline>::iterator stackAddress = steuerwerk->pc + 1;
-    steuerwerk->stack.push(stackAddress);
+    steuerwerk->picStack.push(stackAddress);
 
 
 
@@ -777,13 +777,13 @@ void Prozessor::retfie(Steuerwerk* steuerwerk)
     //GIE aktivieren
     int newValue = speicher.readOnBank(0,0xb) | 0x0080;
     speicher.writeOnBank(0,0xb,newValue);
-    if(steuerwerk->stack.empty())
+    if(steuerwerk->picStack.empty())
     {
         cycles+=2;
         return;
     }
-    steuerwerk->pc = (steuerwerk->stack.top()) -1;
-    steuerwerk->stack.pop();
+    steuerwerk->pc = (steuerwerk->picStack.top()) -1;
+    steuerwerk->picStack.pop();
     cycles += 2;
 }
 
@@ -791,27 +791,27 @@ void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
 {
 
 
-	if(steuerwerk->stack.empty())
+    if(steuerwerk->picStack.empty())
 		return;
 	// 11 01xx kkkk kkkk
     writeBackToW(command & 0x00ff);
     //speicher.writeW(command & 0x00ff);
 
-	steuerwerk->pc = (steuerwerk->stack.top()) -1;
-	steuerwerk->stack.pop();
+    steuerwerk->pc = (steuerwerk->picStack.top()) -1;
+    steuerwerk->picStack.pop();
 
 	cycles += 2;
 }
 
 void Prozessor::preturn(Steuerwerk* steuerwerk)
 {
-	if(steuerwerk->stack.empty())
+    if(steuerwerk->picStack.empty())
     {
         cycles+=2;
 		return;
     }
-	steuerwerk->pc = (steuerwerk->stack.top()) -1;
-	steuerwerk->stack.pop();
+    steuerwerk->pc = (steuerwerk->picStack.top()) -1;
+    steuerwerk->picStack.pop();
 	cycles += 2;
 }
 

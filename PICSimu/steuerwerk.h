@@ -22,7 +22,7 @@ public:
     vector<Codeline> maschinencode;
     vector<Codeline>::iterator pc;
 
-    std::stack<vector<Codeline>::iterator> stack; // genius...
+    std::stack<vector<Codeline>::iterator> picStack; // genius...
     bool isRunning;
 
     Steuerwerk(MainWindow*);
@@ -42,6 +42,7 @@ public:
     int readForGUI(int,int);
     int readWForGUI(void);
     int getPCInt(void);
+    int getStackInt(void);
     void setTimePerCycle(double);
     double computeRuntime(void);
 
@@ -57,6 +58,7 @@ signals:
     void refreshSFRWidget();
     void refreshRuntime();
     void gotoLineNumber(int);
+    void refreshStack(void);
 };
 
 

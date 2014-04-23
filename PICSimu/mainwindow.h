@@ -31,6 +31,7 @@ private:
     int getIntFromFile(int, int);
     int getIntFromW();
     int getIntFromPC();
+    int getFirstIntFromStack();
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);
@@ -57,8 +58,7 @@ public slots:
     void refreshSFRWidget(void);
     void readVerzoegerung(int*);
     void refreshRuntime(void);
-
-
+    void refreshStack(void);
 };
 
 #endif // MAINWINDOW_H

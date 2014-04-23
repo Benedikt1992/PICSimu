@@ -23,6 +23,7 @@ signals:
     void slotRefreshSpeicher(void);
     void getVerzoegerung(int*);
     void refreshRuntime(void);
+    void refreshStack(void);
 
 };
 

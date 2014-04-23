@@ -74,8 +74,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->frequency->setMinimum(1);
     ui->cycle->setText(QString::fromStdString("0.4"));
     ui->runtime->setText(QString::fromStdString("0"));
-
-
 }
 
 MainWindow::~MainWindow()
@@ -234,6 +232,11 @@ int MainWindow::getIntFromPC()
     return steuerwerk->getPCInt();
 }
 
+int MainWindow::getFirstIntFromStack()
+{
+    return steuerwerk->getStackInt();
+}
+
 QString MainWindow::convertIntToBinString(int value)
 {
    int mask = 0x0080; // entspricht 0b10000000
@@ -382,6 +385,7 @@ void MainWindow::slotResetClicked()
     slotRefreshSpeicher();
     refreshSFRWidget();
     refreshRuntime();
+    refreshStack();
 
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
@@ -427,6 +431,7 @@ void MainWindow::slotGoClicked()
         connect(worker,SIGNAL(slotRefreshSpeicher()),SLOT(slotRefreshSpeicher()));
         connect(worker,SIGNAL(getVerzoegerung(int*)),SLOT(readVerzoegerung(int*)));
         connect(worker,SIGNAL(refreshRuntime()),SLOT(refreshRuntime()));
+        connect(worker,SIGNAL(refreshStack()),SLOT(refreshStack()));
 
         //worker object in Threadkontext verschieben
         worker->moveToThread(workerThread);
@@ -463,4 +468,38 @@ void MainWindow::on_clearRuntime_clicked()
 {
     steuerwerk->clearRuntime();
     refreshRuntime();
+}
+
+void MainWindow::refreshStack()
+{
+    cout << "refreshStack()" << endl;
+
+    int elements = ui->lw_stack->count();
+    int stackElements = steuerwerk->picStack.size();
+
+    cout << "elements = " << elements << "---" << " stackElements = " << stackElements << endl;
+
+    if(stackElements == 0)
+    {
+        ui->lw_stack->clear();
+        return;
+    }
+
+    if(elements == stackElements)
+        return;
+
+    if(elements > stackElements)
+    {
+        ui->lw_stack->takeItem(0);
+        return;
+
+        cout << "removedElement" << endl;
+    }
+
+    if(stackElements > elements)
+    {
+        QString newStackValue = convertIntToHexString(getFirstIntFromStack());
+
+        ui->lw_stack->addItem(newStackValue);
+    }
 }

@@ -14,6 +14,7 @@ Steuerwerk::Steuerwerk(MainWindow* mainWindow)
     connect(this,SIGNAL(slotRefreshSpeicher()),mainWindow,SLOT(slotRefreshSpeicher()));
     connect(this,SIGNAL(refreshSFRWidget()),mainWindow,SLOT(refreshSFRWidget()));
     connect(this,SIGNAL(refreshRuntime()),mainWindow,SLOT(refreshRuntime()));
+    connect(this,SIGNAL(refreshStack()),mainWindow,SLOT(refreshStack()));
     emit connectSteuerwerk(this);
     alu = new Prozessor();
     isRunning = false;
@@ -31,6 +32,10 @@ bool Steuerwerk::clearSteuerwerk()
 		return false;
 	if(0!=maschinencode.size())
 		pc = maschinencode.begin(); // PC auf beginn setzen
+
+    while(!picStack.empty())        // Stack leeren
+        picStack.pop();
+
 	return true;
 
 }
@@ -100,6 +105,7 @@ bool Steuerwerk::executeStep(void)
     emit slotRefreshSpeicher();
     emit refreshSFRWidget();
     emit refreshRuntime();
+    emit refreshStack();
 
     if(programmEndeErreicht())
         return true;
@@ -405,6 +411,11 @@ int Steuerwerk::getCurrentLineNumber()
 int Steuerwerk::getPCInt()
 {
     return pc - maschinencode.begin();
+}
+
+int Steuerwerk::getStackInt()
+{
+    return picStack.top() - maschinencode.begin();
 }
 
 void Steuerwerk::setTimePerCycle(double value)
