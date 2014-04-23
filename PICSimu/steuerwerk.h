@@ -41,6 +41,8 @@ public:
     int getCurrentLineNumber(void);
     int readForGUI(int,int);
     int readWForGUI(void);
+    void writeRAFromGUI(int value);
+    void writeRBFromGUI(int value);
     int getPCInt(void);
     int getStackInt(void);
     void setTimePerCycle(double);

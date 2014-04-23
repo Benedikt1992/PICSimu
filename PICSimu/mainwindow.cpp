@@ -8,6 +8,7 @@
 #include <string>
 #include <QFileDialog>
 #include "goklasse.h"
+#include <stdlib.h>
 
 #define n_register 48
 
@@ -32,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pb_executeStep, SIGNAL(clicked()), SLOT(slotExecuteStep()));
 	connect(ui->resetButton,SIGNAL(clicked()),SLOT(slotResetClicked()));
     connect(ui->goButton,SIGNAL(clicked()),SLOT(slotGoClicked()));
+    connect(ui->tw_RA, SIGNAL(cellClicked(int,int)), SLOT(slotRAValueChanged(int,int)));
+    connect(ui->tw_RB, SIGNAL(cellClicked(int,int)), SLOT(slotRBValueChanged(int,int)));
 
     // Mario
     // Tabelle für Speicherausgabe definieren
@@ -74,6 +77,37 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->frequency->setMinimum(1);
     ui->cycle->setText(QString::fromStdString("0.4"));
     ui->runtime->setText(QString::fromStdString("0"));
+
+    // RA initialisieren
+    ui->tw_RA->setRowCount(2);
+    ui->tw_RA->setColumnCount(8);
+
+    for(int i = 0; i < 8; i++)
+    {
+        ui->tw_RA->setColumnWidth(i,17);
+        ui->tw_RA->setHorizontalHeaderItem(i,new QTableWidgetItem(QString::number(7-i)));
+        ui->tw_RA->setItem(0,i,new QTableWidgetItem("i"));
+        ui->tw_RA->setItem(1,i,new QTableWidgetItem("0"));
+    }
+
+    ui->tw_RA->setVerticalHeaderItem(0,new QTableWidgetItem("Tris"));
+    ui->tw_RA->setVerticalHeaderItem(1,new QTableWidgetItem("Pins"));
+    ui->tw_RA->verticalHeader()->sizeHint().width();
+
+    // RB initialisieren
+    ui->tw_RB->setRowCount(2);
+    ui->tw_RB->setColumnCount(8);
+
+    for(int i = 0; i < 8; i++)
+    {
+        ui->tw_RB->setColumnWidth(i,17);
+        ui->tw_RB->setHorizontalHeaderItem(i,new QTableWidgetItem(QString::number(7-i)));
+        ui->tw_RB->setItem(0,i,new QTableWidgetItem("i"));
+        ui->tw_RB->setItem(1,i,new QTableWidgetItem("0"));
+    }
+
+    ui->tw_RB->setVerticalHeaderItem(0,new QTableWidgetItem("Tris"));
+    ui->tw_RB->setVerticalHeaderItem(1,new QTableWidgetItem("Pins"));
 }
 
 MainWindow::~MainWindow()
@@ -390,6 +424,66 @@ void MainWindow::slotResetClicked()
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
     gotoLineNumber(steuerwerk->getCurrentLineNumber()-1);
+}
+
+void MainWindow::slotRAValueChanged(int row, int column)
+{
+    if(steuerwerk == NULL)
+        return;
+
+    if(row == 0)
+        return;
+
+    int currentValue = ui->tw_RA->item(row, column)->text().toInt();
+    int newValue = (~currentValue) & 1;
+
+    ui->tw_RA->item(row, column)->setText(QString::number(newValue));
+
+    ui->tw_RA->setCurrentCell(-1,-1);
+    ui->tw_RA->clearSelection();
+
+    int value = steuerwerk->readForGUI(0, 0x05);
+    int bit = 7 - column;
+
+    if(newValue == 0)
+        value &= ~(1 << bit);
+    else
+        value |= 1 << bit;
+
+    cout << value << endl;
+
+    steuerwerk->writeRAFromGUI(value);
+    slotRefreshSpeicher();
+}
+
+void MainWindow::slotRBValueChanged(int row, int column)
+{
+    if(steuerwerk == NULL)
+        return;
+
+    if(row == 0)
+        return;
+
+    int currentValue = ui->tw_RB->item(row, column)->text().toInt();
+    int newValue = (~currentValue) & 1;
+
+    ui->tw_RB->item(row, column)->setText(QString::number(newValue));
+
+    ui->tw_RB->setCurrentCell(-1,-1);
+    ui->tw_RB->clearSelection();
+
+    int value = steuerwerk->readForGUI(0, 0x06);
+    int bit = 7 - column;
+
+    if(newValue == 0)
+        value &= ~(1 << bit);
+    else
+        value |= 1 << bit;
+
+    cout << value << endl;
+
+    steuerwerk->writeRBFromGUI(value);
+    slotRefreshSpeicher();
 }
 
 void MainWindow::slotGoClicked()

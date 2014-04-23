@@ -2,6 +2,8 @@
 #define PROZESSOR_H
 
 #include "speicher.h"
+#define WRITE_TO_FILE_REGISTER 1
+#define WRITE_TO_WORKING_REGISTER 0
 
 class Steuerwerk;
 

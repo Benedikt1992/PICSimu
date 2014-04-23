@@ -395,6 +395,16 @@ int Steuerwerk::readWForGUI()
     return alu->speicher.readW();
 }
 
+void Steuerwerk::writeRAFromGUI(int value)
+{
+    alu->speicher.writeOnBank(0, 0x05, value);
+}
+
+void Steuerwerk::writeRBFromGUI(int value)
+{
+    alu->speicher.writeOnBank(0, 0x06, value);
+}
+
 bool Steuerwerk::programmEndeErreicht()
 {
     if(pc == maschinencode.end())

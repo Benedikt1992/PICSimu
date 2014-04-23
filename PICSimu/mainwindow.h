@@ -37,6 +37,8 @@ private slots:
     void slotLoad_FileDialog(void);
     void slotExecuteStep(void);
 	void slotResetClicked(void);
+    void slotRAValueChanged(int, int);
+    void slotRBValueChanged(int row, int column);
 
 
 	//Benedikt:

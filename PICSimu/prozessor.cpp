@@ -4,8 +4,6 @@
 #include <vector>
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
-#define WRITE_TO_FILE_REGISTER 1
-#define WRITE_TO_WORKING_REGISTER 0
 
 using namespace std;
 
