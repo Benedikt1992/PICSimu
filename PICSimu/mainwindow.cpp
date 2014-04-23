@@ -483,6 +483,14 @@ void MainWindow::slotRBValueChanged(int row, int column)
         steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
     }
 
+    // RB7:RB4 - Interrupt ausgelöst
+    if(bit >= 4 && bit <= 7)
+    {
+        int intcon = steuerwerk->readForGUI(0, 0x0B);
+        intcon |= 1;
+        steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
+    }
+
     if(newValue == 0)
         value &= ~(1 << bit);
     else
