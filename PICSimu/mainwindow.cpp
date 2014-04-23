@@ -475,6 +475,14 @@ void MainWindow::slotRBValueChanged(int row, int column)
     int value = steuerwerk->readForGUI(0, 0x06);
     int bit = 7 - column;
 
+    // RB0/INT - Interrupt ausgelöst
+    if(bit == 0)
+    {
+        int intcon = steuerwerk->readForGUI(0, 0x0B);
+        intcon |= 1 << 1;
+        steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
+    }
+
     if(newValue == 0)
         value &= ~(1 << bit);
     else
@@ -566,12 +574,8 @@ void MainWindow::on_clearRuntime_clicked()
 
 void MainWindow::refreshStack()
 {
-    cout << "refreshStack()" << endl;
-
     int elements = ui->lw_stack->count();
     int stackElements = steuerwerk->picStack.size();
-
-    cout << "elements = " << elements << "---" << " stackElements = " << stackElements << endl;
 
     if(stackElements == 0)
     {
@@ -586,8 +590,6 @@ void MainWindow::refreshStack()
     {
         ui->lw_stack->takeItem(0);
         return;
-
-        cout << "removedElement" << endl;
     }
 
     if(stackElements > elements)
