@@ -319,6 +319,9 @@ void Prozessor::movf(int command)
     // Operation
     int newValue = currentValue;
 
+    // betroffene Flags prüfen und setzen/löschen
+    checkZeroFlag(newValue);
+
     writeBack(file, newValue, storeInFileRegister);
 
     cycles++;
@@ -735,7 +738,15 @@ void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
      */
 
     steuerwerk->pc = steuerwerk->maschinencode.begin() + sprungAdresse - 1;
-    cycles += 2;
+
+    /*
+     *  Es muss nach jedem Befehlszyklus geprüft werden,
+     *  ob der Timer gesetzt werden soll, da sonst Inkrements
+     *  von TMR0 verpasst werden können.
+     */
+    cycles++;
+    steuerwerk->checkTimer0();
+    cycles++;
 }
 
 void Prozessor::iorlw(int command)

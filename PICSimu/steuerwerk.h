@@ -26,6 +26,7 @@ public:
     bool isRunning;
 
     bool RA4alt;
+    int externalClockCycles;
 
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);
@@ -54,7 +55,8 @@ public:
     void callInterrupt(void);
 
     void checkTimer0(void);
-    bool checkOverflow(int timer);
+    bool incrementTimerAndCheckOverflow(int timer);
+    void setTimer0InterruptFlag(int intcon);
 
 signals:
     void connectSteuerwerk(Steuerwerk*);
