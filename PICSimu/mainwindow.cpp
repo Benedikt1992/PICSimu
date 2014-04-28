@@ -435,7 +435,9 @@ void MainWindow::slotRAValueChanged(int row, int column)
         return;
 
     int currentValue = ui->tw_RA->item(row, column)->text().toInt();
-    int newValue = (~currentValue) & 1;
+
+	//der Wert muss geändert werden, bit1-31 muss 0 sein!
+	int newValue = (~currentValue) &1;
 
     ui->tw_RA->item(row, column)->setText(QString::number(newValue));
 
