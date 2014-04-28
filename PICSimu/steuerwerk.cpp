@@ -208,11 +208,13 @@ void Steuerwerk::execute(int command)
     //& 11 1111 1000 0000 == 0x3f80
     if( (command&0x3f80) == 0x0180)
             alu->clrf(command);
+
     //CLRW
     //  00 0001 0xxx xxxx = 0x0100
 	//& 11 1111 1000 0000 = 0x3F80
     if((command & 0x3f80)== 0x0100)
         alu->clrw();
+
 	//COMF
 	//	00 1001 dfff ffff = 0x0900
 	//&	11 1111 0000 0000 = 0x3f00

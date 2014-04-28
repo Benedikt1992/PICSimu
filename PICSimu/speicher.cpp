@@ -71,7 +71,7 @@ void Speicher::ausgeben(int bank)
 int* Speicher::getFileReference(int file)
 {
     int bank;
-    if(CHECK_BIT(bank1[3],5))
+    if(CHECK_BIT(bank0[3],5))
         bank = 1;
     else
         bank = 0;
@@ -86,8 +86,13 @@ bool Speicher::write(int file, int wert)
 	if((FileReference=getFileReference(file))==NULL)
 		return false; // kein gültiges file...
 
-	if(CHECK_BIT(bank1[3],5))
-	{//Bank 1
+    bool checkBit = (CHECK_BIT(bank1[3],5));
+    cout << checkBit << " <- Bank" << endl;
+
+    if(CHECK_BIT(bank0[3],5))
+    {
+        cout << "writing on Bank 1" << endl;
+        //Bank 1
         //Indirect addr. adressiert die Adresse die im FSR Register hinterlegt ist
         //-> siehe abschnitt FSR für implementierung
 		//Option Register ist voll schreibbar
@@ -132,7 +137,9 @@ bool Speicher::write(int file, int wert)
 		//INTCON ist voll schreibbar
 	}
 	else
-	{//Bank 0
+    {
+        cout << "writing on Bank 0" << endl;
+        //Bank 0
         //Indirect addr. adressiert die Adresse die im FSR Register hinterlegt ist
         //-> siehe abschnitt FSR für implementierung
 		//TMR0 ist voll schreibbar

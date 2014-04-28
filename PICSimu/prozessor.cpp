@@ -334,13 +334,15 @@ void Prozessor::movwf(int command)
 
     // Register laden
     int currentValue = speicher.readW();
+
+    cout << "W=" << currentValue << endl;
+    cout << "file= " << file << endl;
+
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
     {
         cycles++;
         return;
     }
-
-
 
     writeBack(file, currentValue, WRITE_TO_FILE_REGISTER);
 
