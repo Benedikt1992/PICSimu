@@ -454,12 +454,40 @@ void Steuerwerk::checkTimer0()
 
     int timerRate = 2*(0x07 & option);
 
+    cout << "t0cs = " << t0cs << endl;
+    cout << "t0se = " << t0se << endl;
+    cout << "psa = " << psa << endl;
+
     if(t0cs)    // RA4 - externer Takt
     {
+        cout << "externer Takt" << endl;
 
+        int ra = alu->speicher.readOnBank(0, 0x05);
+        bool RA4 = CHECK_BIT(ra, 4);
+
+        cout << "alt - neu\t" << RA4alt << " - " << RA4 << endl;
+
+        if(t0se)    // negative Flanke
+        {
+           if(RA4alt && !RA4)
+               if(checkOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
+                   intcon |= 1 << 2;
+        }
+        else        // positive Flanke
+        {
+            if(!RA4alt && RA4)
+                if(checkOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
+                    intcon |= 1 << 2;
+        }
+
+        ra = alu->speicher.readOnBank(0, 0x05);
+
+        RA4alt = CHECK_BIT(ra, 4);
     }
     else        // interner Takt
     {
+        cout << "interner Takt" << endl;
+
         if(psa) // ohne Vorteiler
         {
             if(checkOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
@@ -477,11 +505,11 @@ void Steuerwerk::checkTimer0()
 bool Steuerwerk::checkOverflow(int timer)
 {
     timer++;
+
+    alu->speicher.writeOnBank(0, 0x01, (timer & 0xFF));
+
     if(timer > 0xFF)
-    {
-        alu->speicher.writeOnBank(0, 0x01, 0x00);
         return true;
-    }
 
     return false;
 }

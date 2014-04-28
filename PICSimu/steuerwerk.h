@@ -25,6 +25,8 @@ public:
     std::stack<vector<Codeline>::iterator> picStack; // genius...
     bool isRunning;
 
+    bool RA4alt;
+
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);
 
