@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "codeline.h"
 
+#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+
 Steuerwerk::Steuerwerk(MainWindow* mainWindow)
 {
     connect(this,SIGNAL(connectSteuerwerk(Steuerwerk*)),mainWindow,SLOT(connectSteuerwerk(Steuerwerk*)));
@@ -18,7 +20,6 @@ Steuerwerk::Steuerwerk(MainWindow* mainWindow)
     emit connectSteuerwerk(this);
     alu = new Prozessor();
     isRunning = false;
-
 }
 
 
@@ -87,7 +88,8 @@ bool Steuerwerk::toggleBreakpoint(int textzeile)
 bool Steuerwerk::executeStep(void)
 {
     if(programmEndeErreicht())
-		return true;
+        return false;
+
     testForInterrupt();
     if(pc->breakpoint)
         emit setLineColorRed(getCurrentLineNumber()-1);
@@ -108,10 +110,11 @@ bool Steuerwerk::executeStep(void)
     emit refreshStack();
 
     if(programmEndeErreicht())
-        return true;
+        return false;
 
     emit setLineColorGreen(getCurrentLineNumber()-1);
     emit gotoLineNumber(getCurrentLineNumber()-1);
+
     return true;
 }
 
@@ -182,6 +185,8 @@ void Steuerwerk::run(void)
 
 void Steuerwerk::execute(int command)
 {
+    checkTimer0();
+
     command = command & 0x3FFF;
 
     // BYTE-ORIENTED FILE REGISTER OPERATIONS
@@ -435,4 +440,48 @@ void Steuerwerk::setTimePerCycle(double value)
 double Steuerwerk::computeRuntime(void)
 {
     return alu->computeRuntime();
+}
+
+void Steuerwerk::checkTimer0()
+{
+    int option = alu->speicher.readOnBank(1, 0x01);
+    int timer0 = alu->speicher.readOnBank(0, 0x01);
+    int intcon = alu->speicher.readOnBank(0, 0x0B);
+
+    bool t0cs = CHECK_BIT(option, 5);
+    bool t0se = CHECK_BIT(option, 4);
+    bool psa = CHECK_BIT(option, 3);
+
+    int timerRate = 2*(0x07 & option);
+
+    if(t0cs)    // RA4 - externer Takt
+    {
+
+    }
+    else        // interner Takt
+    {
+        if(psa) // ohne Vorteiler
+        {
+            if(checkOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
+                intcon |= 1 << 2;
+        }
+        else    // mit Vorteiler
+        {
+            if(alu->getCycles() % timerRate == 0)
+                if(checkOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
+                    intcon |= 1 << 2;
+        }
+    }
+}
+
+bool Steuerwerk::checkOverflow(int timer)
+{
+    timer++;
+    if(timer > 0xFF)
+    {
+        alu->speicher.writeOnBank(0, 0x01, 0x00);
+        return true;
+    }
+
+    return false;
 }

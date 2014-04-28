@@ -51,6 +51,9 @@ public:
     void testForInterrupt(void);
     void callInterrupt(void);
 
+    void checkTimer0(void);
+    bool checkOverflow(int timer);
+
 signals:
     void connectSteuerwerk(Steuerwerk*);
     void setLineColorRed (int);

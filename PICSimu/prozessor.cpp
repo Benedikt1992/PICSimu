@@ -924,3 +924,8 @@ double Prozessor::computeRuntime(void)
     //cout << "cycles: " << cycles << " timePerCycle: "<<timePerCycle<<endl;
     return cycles * timePerCycle;
 }
+
+int Prozessor::getCycles()
+{
+    return cycles;
+}

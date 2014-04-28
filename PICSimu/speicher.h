@@ -17,7 +17,7 @@ public:
 	bool clearSpeicher(void);
     bool write(int,int);
     int read(int);
-    int readOnBank(int,int);
+    int readOnBank(int bank, int file);
     void writeOnBank(int bank,int file,int wert);
     int readW(void);
     void writeW(int value);

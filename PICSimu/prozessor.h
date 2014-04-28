@@ -69,6 +69,8 @@ public:
 
     void writeBack(int file, int result, bool storeInFileRegister);
     void writeBackToW(int result);
+
+    int getCycles(void);
 };
 
 #endif // PROZESSOR_H
