@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->goButton,SIGNAL(clicked()),SLOT(slotGoClicked()));
     connect(ui->tw_RA, SIGNAL(cellClicked(int,int)), SLOT(slotRAValueChanged(int,int)));
     connect(ui->tw_RB, SIGNAL(cellClicked(int,int)), SLOT(slotRBValueChanged(int,int)));
+	connect(ui->tw_RA, SIGNAL(cellDoubleClicked(int,int)),SLOT(slotPortDoubleClicked(int,int)));
+	connect(ui->tw_RB, SIGNAL(cellDoubleClicked(int,int)),SLOT(slotPortDoubleClicked(int,int)));
+
 
     // Mario
     // Tabelle für Speicherausgabe definieren
@@ -608,4 +611,13 @@ void MainWindow::refreshStack()
 
         ui->lw_stack->addItem(newStackValue);
     }
+}
+
+void MainWindow::slotPortDoubleClicked(int row, int column)
+{
+	//TODO Textmarkierung entfernen
+	ui->tw_RA->setCurrentCell(-1,-1);
+	ui->tw_RA->clearSelection();
+	ui->tw_RB->setCurrentCell(-1,-1);
+	ui->tw_RB->clearSelection();
 }
