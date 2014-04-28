@@ -13,7 +13,10 @@ void GoKlasse::run()
     while(sW->isRunning)
     {
 		if(!sW->executeStep())
+		{
 			emit slotGoClicked();
+			return;
+		}
 
 
         //Stop falls breakpoint erreicht
