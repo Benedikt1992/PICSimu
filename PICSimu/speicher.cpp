@@ -86,9 +86,6 @@ bool Speicher::write(int file, int wert)
 	if((FileReference=getFileReference(file))==NULL)
 		return false; // kein gültiges file...
 
-    bool checkBit = (CHECK_BIT(bank1[3],5));
-    cout << checkBit << " <- Bank" << endl;
-
     if(CHECK_BIT(bank0[3],5))
     {
         cout << "writing on Bank 1" << endl;
