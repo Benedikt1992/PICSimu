@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Initialisieren Frequenz
     ui->frequency->setValue(10);
     ui->frequency->setMinimum(1);
+	ui->frequency->setDecimals(4);
     ui->cycle->setText(QString::fromStdString("0.4"));
     ui->runtime->setText(QString::fromStdString("0"));
 
@@ -563,7 +564,7 @@ void MainWindow::readVerzoegerung(int* value)
     *value = ui->verzoegerung->value();
 }
 
-void MainWindow::on_frequency_valueChanged(int arg1)
+void MainWindow::on_frequency_valueChanged(double arg1)
 {
     stringstream ss;
     ss << (double)4*(1/(double)arg1);
@@ -621,3 +622,5 @@ void MainWindow::slotPortDoubleClicked(int row, int column)
 	ui->tw_RB->setCurrentCell(-1,-1);
 	ui->tw_RB->clearSelection();
 }
+
+

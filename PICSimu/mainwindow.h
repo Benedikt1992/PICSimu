@@ -44,9 +44,11 @@ private slots:
 
 	//Benedikt:
 	void on_lw_lstFile_doubleClicked(const QModelIndex &index);
-    void on_frequency_valueChanged(int arg1);
+	//void on_frequency_valueChanged(int arg1);
 
     void on_clearRuntime_clicked();
+
+	void on_frequency_valueChanged(double arg1);
 
 public slots:
     void connectSteuerwerk(Steuerwerk*);
