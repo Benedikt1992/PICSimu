@@ -35,6 +35,8 @@ private:
     int workingregister;
     int bank0[n_register];
     int bank1[n_register];
+	int latchA;
+	int latchB;
 };
 
 #endif // SPEICHER_H

@@ -39,6 +39,7 @@ Speicher::~Speicher(void)
 
 bool Speicher::clearSpeicher()
 {
+	latchA = latchB = 0;
     workingregister =0;
 	for(int i = 0; i < n_register; i++)
 		bank0[i] = bank1[i] = 0;
@@ -49,6 +50,7 @@ bool Speicher::clearSpeicher()
 	*refBank[0][11] = 0x0000; //INCON Register alles 0 (S.16)
 	*refBank[1][5] = 0x00ff; //TRISA untere 5 Bit sind 1 (es existieren nur 5) S.13
 	*refBank[1][6] = 0x00ff; //TRISB alle bit sind 1 S.13
+
 	return true;
 }
 
@@ -110,8 +112,20 @@ bool Speicher::write(int file, int wert)
                 refBank[1][0]= NULL;
             }
         }
-		//TRISA ist voll schreibbar
-		//TRISB ist voll schreibbar
+		//TRISA ist voll schreibbar, Latch muss in den speicher übernommen werden
+		if(file==5)
+		{
+			*FileReference=wert;
+			writeOnBank(0,5,(latchA & (~bank1[5])) + (readOnBank(0,5) & bank1[5]));
+			return true;
+		}
+		//TRISB ist voll schreibbar, latch muss in speicher geschrieben werden
+		if(file==6)
+		{
+			*FileReference=wert;
+			writeOnBank(0,6,(latchB & (~bank1[6])) + (readOnBank(0,6) & bank1[6]));
+			return true;
+		}
 		//EECON1 ist voll schreibbar
 		//EECON2 ist voll schreibbar
 		//PCLATH ist voll schreibbar
@@ -146,12 +160,14 @@ bool Speicher::write(int file, int wert)
 		//PortA nur die Bit bei denen TRISA = 0 können geschrieben werden
 		if(file==5)
 		{
+			latchA = wert;
 			*FileReference = (wert & (~bank1[5])) + (*FileReference & bank1[5]);
 			return true;
 		}
 		//PortB nur die Bit bei denen TRISA = 0 können geschrieben werden
 		if(file==6)
 		{
+			latchB = wert;
 			*FileReference = (wert & (~bank1[6])) + (*FileReference & bank1[6]);
 			return true;
 		}
@@ -231,6 +247,7 @@ void Speicher::clearCBit()
     bank0[3]= bank0[3] & (~1);
 }
 
+//Den Wert des PC (intern) in die Register des PIC schreiben
 void Speicher::writePC(int value)
 {
 	// PCL = value & 0x00FF
