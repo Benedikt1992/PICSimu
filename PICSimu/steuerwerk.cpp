@@ -457,10 +457,6 @@ void Steuerwerk::checkTimer0()
 
     int timerRate = (int) pow(2.0d, (double)((0x07 & option) + 1));
 
-    cout << "t0cs = " << t0cs << endl;
-    cout << "t0se = " << t0se << endl;
-    cout << "psa = " << psa << endl;
-
     if(t0cs)    // RA4 - externer Takt
     {
         int ra = alu->speicher.readOnBank(0, 0x05);
@@ -505,6 +501,9 @@ void Steuerwerk::checkTimer0()
         }
         else    // mit Vorteiler
         {
+            cout << "Cycles: " << alu->getCycles();
+            cout << "\t" << "TimerRate: " << timerRate << endl;
+            cout << "> Modulo: " << (alu->getCycles() % timerRate) << endl;
             if(alu->getCycles() % timerRate == 0)
                 if(incrementTimerAndCheckOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
                     setTimer0InterruptFlag(intcon);
