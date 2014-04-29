@@ -6,7 +6,7 @@
 class Speicher
 {
 public:
-
+    int address_2007h;
 
 
     Speicher(void);
@@ -37,6 +37,7 @@ private:
     int bank1[n_register];
 	int latchA;
 	int latchB;
+
 };
 
 #endif // SPEICHER_H

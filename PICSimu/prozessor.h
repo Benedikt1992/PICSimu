@@ -12,7 +12,8 @@ class Prozessor
 public:
     Speicher speicher;
     int cycles;
-    double timePerCycle;
+    int vorherigeCycles;
+    double timePerCycle; //in mikro sekunden
     void setTimePerCycle(double);
     double computeRuntime(void);
 

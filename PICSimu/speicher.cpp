@@ -41,6 +41,7 @@ bool Speicher::clearSpeicher()
 {
 	latchA = latchB = 0;
     workingregister =0;
+    address_2007h = 0xffff;
 	for(int i = 0; i < n_register; i++)
 		bank0[i] = bank1[i] = 0;
 

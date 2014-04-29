@@ -27,11 +27,13 @@ public:
 
     bool RA4alt;
     int externalClockCycles;
+    int wdt;
 
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);
 
-
+    void countWDT(void);
+    bool isWDTReset(void);
     bool loadFile(string);
     bool executeStep(void);
     void run(void);
@@ -68,6 +70,7 @@ signals:
     void refreshRuntime();
     void gotoLineNumber(int);
     void refreshStack(void);
+    void reset(void);
 };
 
 
