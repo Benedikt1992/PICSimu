@@ -30,6 +30,7 @@ public:
     void clearCBit(void);
 	void writePC(int value);
 
+    bool terminateEEPROM;
 
 private:
     int* refBank[2][n_register];
@@ -46,6 +47,7 @@ private:
     int eeprom[EEPROM_SIZE+1];
     void eepromRead();
     void eepromWrite();
+
 
 };
 

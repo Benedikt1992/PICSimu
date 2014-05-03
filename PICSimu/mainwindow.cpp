@@ -117,6 +117,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    steuerwerk->alu->speicher.terminateEEPROM = true;
     delete ui;
 }
 

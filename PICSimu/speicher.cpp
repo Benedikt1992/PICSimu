@@ -8,6 +8,7 @@ using namespace std;
 
 Speicher::Speicher(void)
 {
+    terminateEEPROM = false;
 
     // Mapping
     // ungemappte Register (z.B. 00h oder 07h) noch nicht berücksichtigt!!! - mit null-Zeiger abfangen?)
@@ -40,6 +41,7 @@ Speicher::Speicher(void)
 
     QtConcurrent::run(this,&Speicher::eepromRead);
     QtConcurrent::run(this,&Speicher::eepromWrite);
+
 }
 Speicher::~Speicher(void)
 {
@@ -297,7 +299,7 @@ void Speicher::writePC(int value)
 //EEPROM
 void Speicher::eepromRead()
 {
-    while(1)
+    while(!terminateEEPROM)
     {
         if(*eecon1&0x0001)// RD Bit ist 1
         {
@@ -312,11 +314,11 @@ void Speicher::eepromRead()
 
 void Speicher::eepromWrite()
 {
-    while(1)
+    while(!terminateEEPROM)
     {
         if(eecon2==0x0055)
         {
-            while(1)
+            while(!terminateEEPROM)
             {
                 if(eecon2==0x00aa)
                 {
