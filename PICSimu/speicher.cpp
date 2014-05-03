@@ -130,7 +130,9 @@ bool Speicher::write(int file, int wert)
 			return true;
 		}
 		//EECON1 ist voll schreibbar
-		//EECON2 ist voll schreibbar
+        //EECON2 ist nicht schreibbar
+        if(file==9)
+            return true;
 		//PCLATH ist voll schreibbar
 		//INTCON ist voll schreibbar
 	}
