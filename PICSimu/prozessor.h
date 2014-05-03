@@ -55,10 +55,10 @@ public:
     void go_to(int, Steuerwerk*);
     void iorlw(int command);
     void movlw(int command);
-    void retfie(Steuerwerk* steuerwerk);          // unimplemented
+    void retfie(Steuerwerk* steuerwerk);
 	void retlw(int command, Steuerwerk* steuerwerk);
 	void preturn(Steuerwerk* steuerwerk);
-    void psleep();              // unimplemented
+    void psleep(Steuerwerk* steuerwerk);              // unimplemented
     void sublw(int command);
     void xorlw(int command);
 

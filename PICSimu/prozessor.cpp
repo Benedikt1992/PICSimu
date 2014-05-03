@@ -1,7 +1,9 @@
 #include "prozessor.h"
 #include "steuerwerk.h"
+#include "sleepklasse.h"
 #include <iostream>
 #include <vector>
+#include <QThread>
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 
@@ -825,6 +827,18 @@ void Prozessor::preturn(Steuerwerk* steuerwerk)
     steuerwerk->pc = (steuerwerk->picStack.top()) -1;
     steuerwerk->picStack.pop();
 	cycles += 2;
+}
+
+void Prozessor::psleep(Steuerwerk* steuerwerk)
+{
+    QThread* workerThread = new QThread();
+    SleepKlasse* worker = new SleepKlasse(steuerwerk);
+    //worker object in Threadkontext verschieben
+    worker->moveToThread(workerThread);
+    //arbeit starten
+    workerThread->start();
+    QMetaObject::invokeMethod(worker, "run", Qt::QueuedConnection);
+
 }
 
 void Prozessor::sublw(int command)

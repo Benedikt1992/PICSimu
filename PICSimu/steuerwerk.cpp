@@ -21,7 +21,8 @@ Steuerwerk::Steuerwerk(MainWindow* mainWindow)
     connect(this,SIGNAL(reset()),mainWindow,SLOT(slotResetClicked()));
     emit connectSteuerwerk(this);
     alu = new Prozessor();
-    isRunning = false;
+    isRunning = iAmSleeping = false;
+
     wdt = 0;
 }
 
@@ -30,8 +31,15 @@ Steuerwerk::~Steuerwerk(void)
 {
 }
 
+bool Steuerwerk::isSleeping()
+{
+    return iAmSleeping;
+}
+
 bool Steuerwerk::clearSteuerwerk()
 {
+
+    iAmSleeping = false;
 	if(!alu->clearProzessor()) // Prozessor resetten
 		return false;
 	if(0!=maschinencode.size())
@@ -41,6 +49,7 @@ bool Steuerwerk::clearSteuerwerk()
         picStack.pop();
 
     wdt=0;
+
 
 	return true;
 
@@ -92,6 +101,8 @@ bool Steuerwerk::toggleBreakpoint(int textzeile)
  */
 bool Steuerwerk::executeStep(void)
 {
+    if(isSleeping())
+        return false;
     if(programmEndeErreicht())
         return false;
 
@@ -118,10 +129,10 @@ bool Steuerwerk::executeStep(void)
     emit refreshRuntime();
     emit refreshStack();
 
-    if(isWDTReset())
+    if(isWDTTimeOut())
     {//WDT reset, Power on Reset
         emit reset();
-        alu->speicher.writeOnBank(1,3,0x0008); //TO Bit im Status register clearen
+        alu->speicher.writeOnBank(0,3,0x0008); //TO Bit im Status register clearen
         emit slotRefreshSpeicher();
         emit refreshSFRWidget();
         return false;
@@ -141,7 +152,7 @@ void Steuerwerk::countWDT(void)
     wdt += alu->cycles - alu->vorherigeCycles;
 }
 
-bool Steuerwerk::isWDTReset()
+bool Steuerwerk::isWDTTimeOut()
 {
     if((alu->speicher.address_2007h & 0x0004)==0) //WDT ist deaktiviert
         return false;
@@ -149,56 +160,83 @@ bool Steuerwerk::isWDTReset()
     if((alu->speicher.readOnBank(1,1)&0x0008)==0) //Prescaler ist auf TMR0 gerichtet -> 18ms (1:1)
     {
         if(wdt*alu->timePerCycle>=18000) //timer >= 18 ms?
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
     }
     switch (alu->speicher.readOnBank(1,1)&0x0007) {
     case 0: //1:1
         if(wdt*alu->timePerCycle>=18000) //timer >= 18 ms?
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
     case 1: //1:2
         if(wdt*alu->timePerCycle>=2*18000)
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
     case 2: //1:4
         if(wdt*alu->timePerCycle>=4*18000)
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
     case 3: //1:8
         if(wdt*alu->timePerCycle>=8*18000)
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
     case 4: //1:16
         if(wdt*alu->timePerCycle>=16*18000)
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
     case 5: //1:32
         if(wdt*alu->timePerCycle>=32*18000)
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
     case 6: //1:64
         if(wdt*alu->timePerCycle>=64*18000)
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
     case 7: //1:128
         if(wdt*alu->timePerCycle>=128*18000)
+        {
+            wdt=0;
             return true;
+        }
         else
             return false;
         break;
@@ -469,6 +507,9 @@ void Steuerwerk::execute(int command)
 		alu->preturn(this);
 
 	// SLEEP
+    // 00 0000 0110 0011 = 0x0063
+    if(command==0x0063)
+        alu->psleep(this);
 
 	// SUBLW
 	//	11 110x kkkk kkkk = 0x3c00
