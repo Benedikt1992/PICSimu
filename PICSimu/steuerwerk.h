@@ -39,7 +39,7 @@ public:
     bool loadFile(string);
     bool executeStep(void);
     void run(void);
-    void execute(int);
+    void analyzeAndExecute(int);
 	bool toggleBreakpoint(int);
     bool programmEndeErreicht(void);
 	bool clearSteuerwerk(void);
