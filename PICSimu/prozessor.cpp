@@ -727,6 +727,13 @@ void Prozessor::call(int command, Steuerwerk* steuerwerk)
     cycles+=2;
 }
 
+void Prozessor::clrwdt(Steuerwerk* steuerwerk)
+{
+    steuerwerk->wdt=0;
+    cycles++;
+    speicher.writeOnBank(0,3,speicher.readOnBank(0,3)|0x0018); //set TO und PD Bit in Status register
+}
+
 void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
 {
     //      10 1fff ffff ffff

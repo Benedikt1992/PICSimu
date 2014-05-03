@@ -476,6 +476,9 @@ void Steuerwerk::execute(int command)
 		alu->call(command,this);
 
     // CLRWDT
+    // 00 0000 0110 0100 = 0x0064
+    if(command==0x0064)
+        alu->clrwdt(this);
 
     // GOTO
     if( (command & 0x3800) == 0x2800 )

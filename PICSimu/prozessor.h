@@ -51,14 +51,14 @@ public:
     void addlw(int command);
     void andlw(int command);
 	void call(int command, Steuerwerk*);
-    void clrwdt(void);          // unimplemented
+    void clrwdt(Steuerwerk* steuerwerk);
     void go_to(int, Steuerwerk*);
     void iorlw(int command);
     void movlw(int command);
     void retfie(Steuerwerk* steuerwerk);
 	void retlw(int command, Steuerwerk* steuerwerk);
 	void preturn(Steuerwerk* steuerwerk);
-    void psleep(Steuerwerk* steuerwerk);              // unimplemented
+    void psleep(Steuerwerk* steuerwerk);
     void sublw(int command);
     void xorlw(int command);
 

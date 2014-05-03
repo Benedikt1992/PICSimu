@@ -615,7 +615,7 @@ void MainWindow::refreshStack()
     }
 }
 
-void MainWindow::slotPortDoubleClicked(int row, int column)
+void MainWindow::slotPortDoubleClicked(int /*unused*/, int /*unused*/)
 {
 	//TODO Textmarkierung entfernen
 	ui->tw_RA->setCurrentCell(-1,-1);
