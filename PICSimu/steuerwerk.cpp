@@ -133,6 +133,8 @@ bool Steuerwerk::executeStep(void)
     {//WDT reset, Power on Reset
         emit reset();
         alu->speicher.writeOnBank(0,3,0x0008); //TO Bit im Status register clearen
+        if(*(alu->speicher.eecon1)&0x0002)// Führt eeprom gerade ein schreibaktion durch?
+            *(alu->speicher.eecon1) |= 0x0008; //-> WRERR bit setzen
         emit slotRefreshSpeicher();
         emit refreshSFRWidget();
         return false;

@@ -1,5 +1,6 @@
 #include "speicher.h"
 #include <iostream>
+#include <QtConcurrent/QtConcurrentRun>
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 
@@ -29,9 +30,16 @@ Speicher::Speicher(void)
     refBank[1][8] = &(bank1[8]);    // EECON1-Register
     refBank[1][9] = &(bank1[9]);    // EECON2-Register
 
+    eecon1 = refBank[1][8];
+    eedata = refBank[0][8];
+    eeadr = refBank[0][9];
+
 	// Registerinhalte mit 0 initialisieren
 	clearSpeicher();
 	workingregister =0;
+
+    QtConcurrent::run(this,&Speicher::eepromRead);
+    QtConcurrent::run(this,&Speicher::eepromWrite);
 }
 Speicher::~Speicher(void)
 {
@@ -42,8 +50,14 @@ bool Speicher::clearSpeicher()
 	latchA = latchB = 0;
     workingregister =0;
     address_2007h = 0xffff;
+    eecon2=0;
 	for(int i = 0; i < n_register; i++)
 		bank0[i] = bank1[i] = 0;
+
+    for(int j= 0; j <= EEPROM_SIZE;j++)
+    {
+        eeprom[j]=0;
+    }
 
 	//Register mit vorwerten belegen
 	*refBank[0][3] = 0x0018; //STATUS Register TO und PD sind 1 (S.14)
@@ -129,10 +143,22 @@ bool Speicher::write(int file, int wert)
 			writeOnBank(0,6,(latchB & (~bank1[6])) + (readOnBank(0,6) & bank1[6]));
 			return true;
 		}
-		//EECON1 ist voll schreibbar
-        //EECON2 ist nicht schreibbar
+        //EECON1 ist teilweise voll schreibbar. RD und WR dürfen nur gesetzt werden
+        if(file==8)
+        {
+            if((wert&0x0001) != 0) //RD Bit gesetzt?
+                *FileReference |= 0x0001;//->RD bit setzen
+            if((wert&0x0002) != 0) //WR bit gesetzt?
+                *FileReference |= 0x0002; //->WR bit setzen
+
+            *FileReference = (wert & 0xfffc) + (*FileReference & 0x0003);
+        }
+        //EECON2 ist nicht schreibbar. Daten müssen an EEPROM weitergereicht werden
         if(file==9)
+        {
+            eecon2 = wert;
             return true;
+        }
 		//PCLATH ist voll schreibbar
 		//INTCON ist voll schreibbar
 	}
@@ -264,3 +290,55 @@ void Speicher::writePC(int value)
 	bank0[0xa]= (value&0x1f00)>>8;
 }
 
+
+
+
+
+//EEPROM
+void Speicher::eepromRead()
+{
+    while(1)
+    {
+        if(*eecon1&0x0001)// RD Bit ist 1
+        {
+            if(*eeadr > EEPROM_SIZE)
+                *eedata=0;
+            else
+                *eedata = eeprom[*eeadr];
+            *eecon1 = *eecon1 & 0xfffe; //lösche RD bit
+        }
+    }
+}
+
+void Speicher::eepromWrite()
+{
+    while(1)
+    {
+        if(eecon2==0x0055)
+        {
+            while(1)
+            {
+                if(eecon2==0x00aa)
+                {
+                    if((*eecon1&0x0006)==0x0006) //WREN und WR bit gesetzt?
+                    {
+                        if(*eeadr <=EEPROM_SIZE)
+                        {
+                            eeprom[*eeadr]= *eedata;
+                        }
+
+                        //clear WR
+                        *eecon1 &=  0xfffd;
+
+                        //set EEIF
+                        *eecon1 |= 0x0010;
+
+                    }
+
+                    break;
+                }
+            }
+        }
+
+    }
+}
