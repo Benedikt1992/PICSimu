@@ -259,14 +259,15 @@ void Prozessor::incfsz(int command, Steuerwerk *steuerwerk)
 
     if((newValue & 0xFF) == 0)
     {
-        //Bit ist 1
-        cycles++;
-    }
-    else
-    {
         //Bit ist 0 -> nächster Befehl wird übersprungen
         steuerwerk->pc++;
         cycles+=2;
+
+    }
+    else
+    {
+        //Bit ist 1
+        cycles++;
     }
 }
 
