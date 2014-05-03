@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tw_specialFunctionRegister->setColumnWidth(0,60);
     ui->tw_specialFunctionRegister->setColumnWidth(1,35);
+	ui->tw_specialFunctionRegister->setColumnWidth(2,60);
 
     ui->tw_specialFunctionRegister->setHorizontalHeaderItem(0,new QTableWidgetItem("Name"));
     ui->tw_specialFunctionRegister->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
