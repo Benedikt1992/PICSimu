@@ -210,6 +210,9 @@ int Speicher::readOnBank (int bank, int file)
 
 void Speicher::writeOnBank(int bank,int file,int wert)
 {
+    if(refBank[bank][file] == NULL)
+        return;
+
     *refBank[bank][file] = wert;
 }
 

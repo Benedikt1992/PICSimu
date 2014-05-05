@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+class QTableWidgedItem;
 
 namespace Ui {
 class MainWindow;
@@ -28,10 +29,12 @@ private:
     void initializeSFRWidget(void);
     QString convertIntToBinString(int value);
     QString convertIntToHexString(int value);
-    int getIntFromFile(int, int);
+    int getIntFromFile(int bank, int file);
     int getIntFromW();
     int getIntFromPC();
     int getFirstIntFromStack();
+
+    void restoreOldValue(int row, int column);
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);
@@ -40,6 +43,7 @@ private slots:
     void slotRAValueChanged(int, int);
     void slotRBValueChanged(int row, int column);
 	void slotPortDoubleClicked(int row, int column);
+    void slotSpeicherChanged(int row, int column);
 
 
 	//Benedikt:

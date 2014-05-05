@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tw_RB, SIGNAL(cellClicked(int,int)), SLOT(slotRBValueChanged(int,int)));
 	connect(ui->tw_RA, SIGNAL(cellDoubleClicked(int,int)),SLOT(slotPortDoubleClicked(int,int)));
 	connect(ui->tw_RB, SIGNAL(cellDoubleClicked(int,int)),SLOT(slotPortDoubleClicked(int,int)));
+    connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
 
 
     // Mario
@@ -623,4 +624,57 @@ void MainWindow::slotPortDoubleClicked(int row, int column)
 	ui->tw_RB->clearSelection();
 }
 
+void MainWindow::slotSpeicherChanged(int row, int column)
+{
+    if(steuerwerk == NULL)
+        return;
 
+    if(steuerwerk->alu == NULL)
+        return;
+
+    if(column == 0 || column == 2)
+    {
+        restoreOldValue(row, column);
+        return;
+    }
+
+//    int bank;
+
+//    bool ok;
+//    int newValue = ui->tw_speicher->item(row,column)->text().toInt(&ok, 16);
+
+//    if(row <= 0x2F)
+//        bank = 0;
+//    else
+//        bank = 1;
+
+//    cout << "boolVal = " << ok << endl;
+//    cout << "bank = " << bank << endl;
+//    cout << "file = " << row % 0x2F << endl;
+//    cout << "newValue = " << newValue << endl;
+//    cout << "----" << endl;
+
+//    steuerwerk->alu->speicher.writeOnBank(bank, row % 0x2F, newValue);
+//    ui->tw_speicher->item(row, 2)->setText(convertIntToBinString(getIntFromFile(bank,row % 0x2F)));
+}
+
+void MainWindow::restoreOldValue(int row, int column)
+{
+    if(steuerwerk == NULL)
+        return;
+
+    if(column == 0)
+    {
+        if(row <= 0x2F)
+            ui->tw_speicher->item(row, column)->setText(convertIntToHexString(row));
+        else if(row > 0x2F)
+            ui->tw_speicher->item(row, column)->setText(convertIntToHexString(row+0x80-0x2F-1));
+    }
+    else if(column == 2)
+    {
+        if(row <= 0x2F)
+            ui->tw_speicher->item(row, column)->setText(convertIntToBinString(getIntFromFile(0,row)));
+        else if(row > 0x2F)
+            ui->tw_speicher->item(row, column)->setText(convertIntToBinString(getIntFromFile(1,row % 0x2F)));
+    }
+}
