@@ -1,0 +1,314 @@
+;SimTest7
+;Programm zum Test des 16F84-Simulators.
+;Es wird die richtige Funktionsweise von PCL und PCLATH am Beispiel
+;eines Tabellenzugriffs getestet
+;(c) St. Lehmann  
+;19.04.2014 
+
+         list c=132          ;Zeilenlänge im LST auf 132 Zeichen setzen
+         
+;Definition einiger Symbole
+indirect equ 0
+pcl      equ 02h
+status   equ 03h
+fsr      equ 04h
+ra       equ 05h
+rb       equ 06h
+pclath   equ 0ah
+intcon   equ 0bh
+
+;Definition des Prozessors
+         device 16F84
+;Festlegen des Codebeginns
+         org 0
+start
+         movlw 0             ;Index für Tabellenzugriff in 0FH
+         movwf 0fh
+         movlw 5             ;insgesamt 5 Tabellenzugriffe
+         movwf 0eh
+         movlw 10h           ;Ergebnis wird ab 10H abgespeichert
+         movwf fsr
+loop
+         movlw 1             ;PCLATH setzen, damit auf den Bereich 256-511 zugegriffen werden kann
+         movwf pclath
+         movf 0fh,w         
+         call tabelle
+         movwf indirect
+         incf fsr
+         incf 0fh
+         decfsz 0eh
+         goto loop
+         clrf pclath
+         movf 0fh,w
+         call tabelle        ;Fehler, der ADDWF PCL kommt nicht in die Tabelle. Grund: in W steht 5
+                             ;im PC 109 bzw. nach dem Fetch 10A. Zu diesem Wert wird 5 addiert und
+                             ;die oberen Bits auf 0 gesetzt (PCLATH=0). Damit steht im PC der Wert
+                             ;0Fh. Dorthin springt der PIC durch den ADDWF-Befehl. Hier verweilt
+                             ;das Programm während der Stack immer weiter wächst.
+         
+
+ende
+         goto ende           ;Endlosschleife, verhindert Nirwana
+
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+Tabelle
+         addwf pcl         
+         retlw 60h
+         retlw 61h
+         retlw 62h
+         retlw 63h
+         retlw 64h
+         retlw 65h
+         retlw 66h
+         retlw 67h
+         retlw 68h
+         retlw 69h
+         retlw 6Ah
+         
+
+                  

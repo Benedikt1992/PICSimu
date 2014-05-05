@@ -1,0 +1,50 @@
+;SimTest4
+;Programm zum Test des 16F84-Simulators.
+;Es wird der Watchdog mit und ohne Vorteiler geprüft
+;(c) St. Lehmann  
+;19.04.2014 
+
+         list c=132          ;Zeilenlänge im LST auf 132 Zeichen setzen
+
+;Definition einiger Symbole
+indirect equ 0
+status   equ 03h
+fsr      equ 04h
+ra       equ 05h
+rb       equ 06h
+count    equ 0ch
+
+;Definition des Prozessors
+         device 16F84
+;Festlegen des Codebeginns
+         org 0
+start
+;zuerst wird der VT dem Timer zugewiesen. Damit bekommt der Watchdog
+;die kleinste Zeit (ca. 18 ms) zugewiesen
+         movlw 00000000B     ;Option-Register entsp. initialisieren
+         bsf status,5        ;Bank umschalten
+         movwf 1             ;Option-Register
+         bcf status,5
+         clrf 20h
+         clrf 21h
+         clrf 22h
+         clrf 23h
+loop1
+         incfsz 20h
+         goto loop1          ;kein Überlauf
+         incfsz 21h          ;nächste Stelle
+         goto loop1          ;kein Überlauf
+         incfsz 22h          ;ja
+         goto loop1
+         incfsz 23h
+         goto loop1
+
+;******************************************************************
+;in 20h steht ca. 5fH
+;in 21H ca. 17H
+;Zählerstand 16-Bit ca. 175FH = 5983d
+
+ende
+         goto ende           ;Endlosschleife, verhindert Nirwana
+
+                  
