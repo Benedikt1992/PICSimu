@@ -585,16 +585,19 @@ double Steuerwerk::computeRuntime(void)
 
 void Steuerwerk::checkTimer0()
 {
+    // wenn PIC im sleep-Modus ist, soll Timer nicht behandelt werden
     if(isSleeping())
         return;
 
+    // benötigte Register laden
     int option = alu->speicher.readOnBank(1, 0x01);
     int timer0 = alu->speicher.readOnBank(0, 0x01);
     int intcon = alu->speicher.readOnBank(0, 0x0B);
 
-    bool t0cs = CHECK_BIT(option, 5);
-    bool t0se = CHECK_BIT(option, 4);
-    bool psa = CHECK_BIT(option, 3);
+    // Flags aus Registern auslesen
+    bool t0cs = CHECK_BIT(option, 5);   // TMR0 clock select
+    bool t0se = CHECK_BIT(option, 4);   // TMR0 select edge
+    bool psa = CHECK_BIT(option, 3);    // pre-scaler activated
 
     int timerRate = (int) pow(2.0d, (double)((0x07 & option) + 1));
 
@@ -612,7 +615,6 @@ void Steuerwerk::checkTimer0()
                    if(incrementTimerAndCheckOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
                        setTimer0InterruptFlag(intcon);
 
-
                externalClockCycles++;
            }
         }
@@ -628,7 +630,6 @@ void Steuerwerk::checkTimer0()
                 externalClockCycles++;
             }
         }
-
         ra = alu->speicher.readOnBank(0, 0x05);
 
         RA4alt = CHECK_BIT(ra, 4);
@@ -642,9 +643,6 @@ void Steuerwerk::checkTimer0()
         }
         else    // mit Vorteiler
         {
-            cout << "Cycles: " << alu->getCycles();
-            cout << "\t" << "TimerRate: " << timerRate << endl;
-            cout << "> Modulo: " << (alu->getCycles() % timerRate) << endl;
             if(alu->getCycles() % timerRate == 0)
                 if(incrementTimerAndCheckOverflow(timer0))   // bei Überlauf BIT2 im INTCON-Register setzen
                     setTimer0InterruptFlag(intcon);
