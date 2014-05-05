@@ -369,14 +369,19 @@ void Prozessor::rlf(int command)
 
     // Register laden
     int currentValue = speicher.read(file);
+    int statusValue = speicher.read(0x03);  // Status-Register laden für Carry-Flag
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
     {
         cycles++;
         return;
     }
 
+    int carryFlag = CHECK_BIT(statusValue, 0);
+
     // Operation
     int newValue = currentValue <<  1;
+    newValue |= carryFlag;
+
 
     // betroffene Flags prüfen und setzen/löschen
     checkCarryFlag(newValue);

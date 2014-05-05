@@ -255,7 +255,7 @@ void MainWindow::refreshSFRWidget()
     ui->tw_specialFunctionRegister->item(4, 1)->setText(convertIntToHexString(getIntFromPC()));
     ui->tw_specialFunctionRegister->item(5, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x03)));
     ui->tw_specialFunctionRegister->item(6, 1)->setText(convertIntToHexString(getIntFromFile(1, 0x01)));
-    ui->tw_specialFunctionRegister->item(7, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x1B)));
+    ui->tw_specialFunctionRegister->item(7, 1)->setText(convertIntToHexString(getIntFromFile(0, 0x0B)));
 
     ui->tw_specialFunctionRegister->item(0, 2)->setText(convertIntToBinString(getIntFromW()));
     ui->tw_specialFunctionRegister->item(1, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x04)));
