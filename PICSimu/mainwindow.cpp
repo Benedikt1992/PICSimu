@@ -427,8 +427,12 @@ void MainWindow::slotResetClicked()
 
 	//aktuellen Befehl weiß färben
 	if(steuerwerk->pc < steuerwerk->maschinencode.end())
-		setLineColorWhite(steuerwerk->getCurrentLineNumber()-1);
-
+	{
+		if(steuerwerk->pc->breakpoint)
+			setLineColorRed(steuerwerk->getCurrentLineNumber()-1);
+		else
+			setLineColorWhite(steuerwerk->getCurrentLineNumber()-1);
+	}
 
 	//Steuerwerk resetten
 	steuerwerk->clearSteuerwerk();
