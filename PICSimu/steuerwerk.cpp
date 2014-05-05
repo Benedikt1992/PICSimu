@@ -585,6 +585,9 @@ double Steuerwerk::computeRuntime(void)
 
 void Steuerwerk::checkTimer0()
 {
+    if(isSleeping())
+        return;
+
     int option = alu->speicher.readOnBank(1, 0x01);
     int timer0 = alu->speicher.readOnBank(0, 0x01);
     int intcon = alu->speicher.readOnBank(0, 0x0B);
