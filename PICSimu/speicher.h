@@ -29,7 +29,8 @@ public:
     void setCBit(void);
     void clearCBit(void);
 	void writePC(int value);
-
+	int read2007();
+	void write2007(int value);
     bool terminateEEPROM;
 
 private:

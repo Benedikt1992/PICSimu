@@ -295,7 +295,15 @@ void Speicher::writePC(int value)
 	bank0[0xa]= (value&0x1f00)>>8;
 }
 
+int Speicher::read2007()
+{
+	return address_2007h;
+}
 
+void Speicher::write2007(int value)
+{
+	address_2007h = value | 0xffe0;
+}
 
 
 

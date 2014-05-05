@@ -399,6 +399,13 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
+      <widget class="QCheckBox" name="WDTcheckBox">
+       <property name="text">
+        <string>WDT</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="clearRuntime">
        <property name="text">
         <string>Clear</string>
