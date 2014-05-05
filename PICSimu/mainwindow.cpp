@@ -220,7 +220,7 @@ void MainWindow::initializeSFRWidget()
     ui->tw_specialFunctionRegister->setItem(5, 2, new QTableWidgetItem("00000000"));
     ui->tw_specialFunctionRegister->setItem(6, 2, new QTableWidgetItem("00000000"));
     ui->tw_specialFunctionRegister->setItem(7, 2, new QTableWidgetItem("00000000"));
-	//refreshSFRWidget();
+    //refreshSFRWidget();
 }
 
 void MainWindow::slotRefreshSpeicher()
@@ -424,6 +424,16 @@ void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 	setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
 }
 
+void MainWindow::refreshStorageElements()
+{
+    slotRefreshSpeicher();
+    refreshSFRWidget();
+    refreshRuntime();
+    refreshStack();
+    refreshRA();
+    refreshRB();
+}
+
 void MainWindow::slotResetClicked()
 {
     if(steuerwerk->lstFile.empty())
@@ -440,10 +450,7 @@ void MainWindow::slotResetClicked()
 
 	//Steuerwerk resetten
 	steuerwerk->clearSteuerwerk();
-    slotRefreshSpeicher();
-    refreshSFRWidget();
-    refreshRuntime();
-    refreshStack();
+    refreshStorageElements();
 
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
@@ -486,10 +493,10 @@ void MainWindow::slotRAValueChanged(int row, int column)
     else
         value |= 1 << bit;
 
-    cout << value << endl;
+    // TODO prüfen, ob als Input definiert!
 
     steuerwerk->writeRAFromGUI(value);
-    slotRefreshSpeicher();
+    refreshStorageElements();
 }
 
 void MainWindow::setIntf()
@@ -561,10 +568,10 @@ void MainWindow::slotRBValueChanged(int row, int column)
     else
         value |= 1 << bit;
 
-    cout << value << endl;
+    // TODO prüfen, ob als Input definiert!
 
     steuerwerk->writeRBFromGUI(value);
-    slotRefreshSpeicher();
+    refreshStorageElements();
 }
 
 void MainWindow::slotGoClicked()
@@ -714,14 +721,11 @@ void MainWindow::slotSpeicherChanged(int row, int column)
 
     // Wert nur in den Speicher schreiben, wenn valider HEX-Wert eingelesen wurde
     if(ok)
-    {
         steuerwerk->alu->speicher.writeOnBank(bank, row % 0x2F, newValue);
-        ui->tw_speicher->item(row, 2)->setText(convertIntToBinString(getIntFromFile(bank,row % 0x2F)));
-    }
 
     // Wert aus dem Speicher auslesen und ausgeben
     // für den Fall, dass zuvor kein korrekter Wert eingegeben wurde
-    ui->tw_speicher->item(row, 1)->setText(convertIntToHexString(getIntFromFile(bank,row % 0x2F)));
+    refreshStorageElements();
 }
 
 void MainWindow::restoreOldValue(int row, int column)
@@ -742,5 +746,41 @@ void MainWindow::restoreOldValue(int row, int column)
             ui->tw_speicher->item(row, column)->setText(convertIntToBinString(getIntFromFile(0,row)));
         else if(row > 0x2F)
             ui->tw_speicher->item(row, column)->setText(convertIntToBinString(getIntFromFile(1,row % 0x2F)));
+    }
+}
+
+void MainWindow::refreshRA()
+{
+    if(steuerwerk == NULL)
+        return;
+
+    int valueRA = steuerwerk->readForGUI(0, 0x05);
+
+    for(int bit=0; bit < 8; bit++)
+    {
+        int pinValue = 0;
+
+        if(CHECK_BIT(valueRA, bit))
+            pinValue = 1;
+
+        ui->tw_RB->item(1, 7-bit)->setText(QString::number(pinValue));
+    }
+}
+
+void MainWindow::refreshRB()
+{
+    if(steuerwerk == NULL)
+        return;
+
+    int valueRB = steuerwerk->readForGUI(0, 0x06);
+
+    for(int bit=0; bit < 8; bit++)
+    {
+        int pinValue = 0;
+
+        if( 0 < CHECK_BIT(valueRB, bit))
+            pinValue = 1;
+
+        ui->tw_RB->item(1, 7-bit)->setText(QString::number(pinValue));
     }
 }

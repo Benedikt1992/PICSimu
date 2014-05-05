@@ -24,6 +24,8 @@ public:
 
 
     void setIntf();
+    void setRbif();
+    void refreshStorageElements();
 private:
     Ui::MainWindow *ui;
     void initializeSpeicherWidget(void);
@@ -34,6 +36,9 @@ private:
     int getIntFromW();
     int getIntFromPC();
     int getFirstIntFromStack();
+
+    void refreshRA();   // IMPLEMENTIEREN!
+    void refreshRB();   // IMPLEMENTIEREN!
 
     void restoreOldValue(int row, int column);
 
