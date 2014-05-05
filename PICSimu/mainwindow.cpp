@@ -264,7 +264,7 @@ void MainWindow::refreshSFRWidget()
     ui->tw_specialFunctionRegister->item(4, 2)->setText(convertIntToBinString(getIntFromPC()));
     ui->tw_specialFunctionRegister->item(5, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x03)));
     ui->tw_specialFunctionRegister->item(6, 2)->setText(convertIntToBinString(getIntFromFile(1, 0x01)));
-    ui->tw_specialFunctionRegister->item(7, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x1B)));
+    ui->tw_specialFunctionRegister->item(7, 2)->setText(convertIntToBinString(getIntFromFile(0, 0x0B)));
 }
 
 int MainWindow::getIntFromFile(int bank, int file)
