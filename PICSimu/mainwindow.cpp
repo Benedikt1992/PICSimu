@@ -222,6 +222,8 @@ void MainWindow::initializeSFRWidget()
 
 void MainWindow::slotRefreshSpeicher()
 {
+    disconnect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), this, SLOT(slotSpeicherChanged(int, int)));
+
     for(int i=0; i < n_register; i++)
     {
        // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
@@ -233,6 +235,8 @@ void MainWindow::slotRefreshSpeicher()
     }
 
     refreshSFRWidget();
+
+    connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
 }
 
 /*
@@ -641,24 +645,28 @@ void MainWindow::slotSpeicherChanged(int row, int column)
         return;
     }
 
-//    int bank;
+    int bank;
 
-//    bool ok;
-//    int newValue = ui->tw_speicher->item(row,column)->text().toInt(&ok, 16);
+    bool ok;
+    int newValue = ui->tw_speicher->item(row,column)->text().toInt(&ok, 16);
 
-//    if(row <= 0x2F)
-//        bank = 0;
-//    else
-//        bank = 1;
 
-//    cout << "boolVal = " << ok << endl;
-//    cout << "bank = " << bank << endl;
-//    cout << "file = " << row % 0x2F << endl;
-//    cout << "newValue = " << newValue << endl;
-//    cout << "----" << endl;
+    if(row <= 0x2F)
+        bank = 0;
+    else
+        bank = 1;
 
-//    steuerwerk->alu->speicher.writeOnBank(bank, row % 0x2F, newValue);
-//    ui->tw_speicher->item(row, 2)->setText(convertIntToBinString(getIntFromFile(bank,row % 0x2F)));
+    if(ok)
+    {
+        steuerwerk->alu->speicher.writeOnBank(bank, row % 0x2F, newValue);
+        ui->tw_speicher->item(row, 2)->setText(convertIntToBinString(getIntFromFile(bank,row % 0x2F)));
+    }
+    else
+    {
+        ui->tw_speicher->item(row, 1)->setText(convertIntToHexString(getIntFromFile(bank,row % 0x2F)));
+    }
+
+    ui->tw_speicher->item(row, 1)->setText(convertIntToHexString(getIntFromFile(bank,row % 0x2F)));
 }
 
 void MainWindow::restoreOldValue(int row, int column)
