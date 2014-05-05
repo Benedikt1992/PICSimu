@@ -21,7 +21,10 @@ void GoKlasse::run()
 
         //Stop falls breakpoint erreicht
         if(sW->pc->breakpoint)
+        {
             emit slotGoClicked();
+            return;
+        }
 
         //Pause
         int v=50; // falls ds Signal nicht schnell genug verarbeitet wird -> mindestverzögerung 50ms
@@ -30,4 +33,5 @@ void GoKlasse::run()
         //std::cout << v << std::endl;
         QThread::msleep(v-50);
     }
+
 }

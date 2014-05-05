@@ -2,6 +2,7 @@
 #define SPEICHER_H
 
 #define n_register 48
+#define EEPROM_SIZE (0x003f)
 
 class Speicher
 {
@@ -29,6 +30,7 @@ public:
     void clearCBit(void);
 	void writePC(int value);
 
+    bool terminateEEPROM;
 
 private:
     int* refBank[2][n_register];
@@ -37,6 +39,15 @@ private:
     int bank1[n_register];
 	int latchA;
 	int latchB;
+
+    int eecon2;
+    int* eecon1;
+    int* eedata;
+    int* eeadr;
+    int eeprom[EEPROM_SIZE+1];
+    void eepromRead();
+    void eepromWrite();
+
 
 };
 

@@ -19,7 +19,9 @@ SOURCES += main.cpp\
     prozessor.cpp \
     speicher.cpp \
     steuerwerk.cpp \
-    goklasse.cpp
+    goklasse.cpp \
+    sleepklasse.cpp \
+    eepromklasse.cpp
 
 HEADERS  += mainwindow.h \
     codeline.h \
@@ -27,6 +29,8 @@ HEADERS  += mainwindow.h \
     prozessor.h \
     speicher.h \
     steuerwerk.h \
-    goklasse.h
+    goklasse.h \
+    sleepklasse.h \
+    eepromklasse.h
 
 FORMS    += mainwindow.ui

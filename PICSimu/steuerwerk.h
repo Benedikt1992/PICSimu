@@ -24,6 +24,7 @@ public:
 
     std::stack<vector<Codeline>::iterator> picStack; // genius...
     bool isRunning;
+    bool iAmSleeping;
 
     bool RA4alt;
     int externalClockCycles;
@@ -32,12 +33,13 @@ public:
     Steuerwerk(MainWindow*);
     ~Steuerwerk(void);
 
+    bool isSleeping(void);
     void countWDT(void);
-    bool isWDTReset(void);
+    bool isWDTTimeOut(void);
     bool loadFile(string);
     bool executeStep(void);
     void run(void);
-    void execute(int);
+    void analyzeAndExecute(int);
 	bool toggleBreakpoint(int);
     bool programmEndeErreicht(void);
 	bool clearSteuerwerk(void);

@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tw_specialFunctionRegister->setColumnWidth(0,60);
     ui->tw_specialFunctionRegister->setColumnWidth(1,35);
+	ui->tw_specialFunctionRegister->setColumnWidth(2,60);
 
     ui->tw_specialFunctionRegister->setHorizontalHeaderItem(0,new QTableWidgetItem("Name"));
     ui->tw_specialFunctionRegister->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
@@ -77,10 +78,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_verzoegerung->setHidden(true);
 
     //Initialisieren Frequenz
-    ui->frequency->setValue(10);
+    ui->frequency->setValue(4);
     ui->frequency->setMinimum(1);
+    ui->frequency->setMaximum(10);
 	ui->frequency->setDecimals(4);
-    ui->cycle->setText(QString::fromStdString("0.4"));
+    ui->cycle->setText(QString::fromStdString("1"));
     ui->runtime->setText(QString::fromStdString("0"));
 
     // RA initialisieren
@@ -117,6 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    steuerwerk->alu->speicher.terminateEEPROM = true;
     delete ui;
 }
 
@@ -615,7 +618,7 @@ void MainWindow::refreshStack()
     }
 }
 
-void MainWindow::slotPortDoubleClicked(int row, int column)
+void MainWindow::slotPortDoubleClicked(int /*unused*/, int /*unused*/)
 {
 	//TODO Textmarkierung entfernen
 	ui->tw_RA->setCurrentCell(-1,-1);

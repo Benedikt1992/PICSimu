@@ -1,7 +1,9 @@
 #include "prozessor.h"
 #include "steuerwerk.h"
+#include "sleepklasse.h"
 #include <iostream>
 #include <vector>
+#include <QThread>
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 
@@ -259,14 +261,15 @@ void Prozessor::incfsz(int command, Steuerwerk *steuerwerk)
 
     if((newValue & 0xFF) == 0)
     {
-        //Bit ist 1
-        cycles++;
-    }
-    else
-    {
         //Bit ist 0 -> nächster Befehl wird übersprungen
         steuerwerk->pc++;
         cycles+=2;
+
+    }
+    else
+    {
+        //Bit ist 1
+        cycles++;
     }
 }
 
@@ -724,6 +727,13 @@ void Prozessor::call(int command, Steuerwerk* steuerwerk)
     cycles+=2;
 }
 
+void Prozessor::clrwdt(Steuerwerk* steuerwerk)
+{
+    steuerwerk->wdt=0;
+    cycles++;
+    speicher.writeOnBank(0,3,speicher.readOnBank(0,3)|0x0018); //set TO und PD Bit in Status register
+}
+
 void Prozessor::go_to(int command, Steuerwerk* steuerwerk)
 {
     //      10 1fff ffff ffff
@@ -824,6 +834,18 @@ void Prozessor::preturn(Steuerwerk* steuerwerk)
     steuerwerk->pc = (steuerwerk->picStack.top()) -1;
     steuerwerk->picStack.pop();
 	cycles += 2;
+}
+
+void Prozessor::psleep(Steuerwerk* steuerwerk)
+{
+    QThread* workerThread = new QThread();
+    SleepKlasse* worker = new SleepKlasse(steuerwerk);
+    //worker object in Threadkontext verschieben
+    worker->moveToThread(workerThread);
+    //arbeit starten
+    workerThread->start();
+    QMetaObject::invokeMethod(worker, "run", Qt::QueuedConnection);
+
 }
 
 void Prozessor::sublw(int command)
