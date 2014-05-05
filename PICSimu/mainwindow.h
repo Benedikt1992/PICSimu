@@ -23,6 +23,7 @@ public:
 
 
 
+    void setIntf();
 private:
     Ui::MainWindow *ui;
     void initializeSpeicherWidget(void);
@@ -35,6 +36,8 @@ private:
     int getFirstIntFromStack();
 
     void restoreOldValue(int row, int column);
+
+    bool lastRB0Value;
 private slots:
     void slotLoadLstFile(void);
     void slotLoad_FileDialog(void);

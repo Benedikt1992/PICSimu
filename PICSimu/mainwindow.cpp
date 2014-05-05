@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #define n_register 48
+#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -491,6 +492,13 @@ void MainWindow::slotRAValueChanged(int row, int column)
     slotRefreshSpeicher();
 }
 
+void MainWindow::setIntf()
+{
+    int intcon = steuerwerk->readForGUI(0, 0x0B);
+    intcon |= 1 << 1;
+    steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
+}
+
 void MainWindow::slotRBValueChanged(int row, int column)
 {
     if(steuerwerk == NULL)
@@ -507,16 +515,31 @@ void MainWindow::slotRBValueChanged(int row, int column)
     ui->tw_RB->setCurrentCell(-1,-1);
     ui->tw_RB->clearSelection();
 
+    // Edge-Select auswählen
+    int option = steuerwerk->alu->speicher.readOnBank(1, 0x01);
+    bool intedg = CHECK_BIT(option, 6);
+
     int value = steuerwerk->readForGUI(0, 0x06);
     int bit = 7 - column;
+
+    bool newRB0Value = CHECK_BIT(value, 0);
 
     // RB0/INT - Interrupt ausgelöst
     if(bit == 0)
     {
-        int intcon = steuerwerk->readForGUI(0, 0x0B);
-        intcon |= 1 << 1;
-        steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
+        if(intedg)  // positive Flanke
+        {
+            if(!lastRB0Value && newRB0Value)
+                setIntf();
+        }
+        else        // negative Flanke
+        {
+            if(lastRB0Value && !newRB0Value)
+                setIntf();
+        }
     }
+
+    lastRB0Value = newRB0Value;
 
     // RB7:RB4 - Interrupt ausgelöst
     if(bit >= 4 && bit <= 7)
