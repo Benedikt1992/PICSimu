@@ -413,11 +413,14 @@ void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 	}
 	else
 	{
+
         setLineColorWhite(index.row());
 
 	}
     ui->lw_lstFile->clearSelection();
 	//index.row()+1 entspeichter Textzeile aus der lst Datei
+
+	setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
 }
 
 void MainWindow::slotResetClicked()
