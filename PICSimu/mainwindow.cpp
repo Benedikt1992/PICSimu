@@ -222,6 +222,7 @@ void MainWindow::initializeSFRWidget()
 
 void MainWindow::slotRefreshSpeicher()
 {
+    // cellChanged soll nicht beim Refresh aufgerufen werden
     disconnect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), this, SLOT(slotSpeicherChanged(int, int)));
 
     for(int i=0; i < n_register; i++)
@@ -236,6 +237,7 @@ void MainWindow::slotRefreshSpeicher()
 
     refreshSFRWidget();
 
+    // notwendiger Reconnect!
     connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
 }
 
@@ -633,12 +635,17 @@ void MainWindow::slotPortDoubleClicked(int /*unused*/, int /*unused*/)
 
 void MainWindow::slotSpeicherChanged(int row, int column)
 {
+    /*
+     *  NULL-Referenzen abfangen
+     */
     if(steuerwerk == NULL)
         return;
 
     if(steuerwerk->alu == NULL)
         return;
 
+    // wenn Speicheradresse oder BIN-Wert manuell geändert wurde
+    // => alten Wert wiederherstellen
     if(column == 0 || column == 2)
     {
         restoreOldValue(row, column);
@@ -647,7 +654,7 @@ void MainWindow::slotSpeicherChanged(int row, int column)
 
     int bank;
 
-    bool ok;
+    bool ok;    // valider HEX-Wert eingelesen?
     int newValue = ui->tw_speicher->item(row,column)->text().toInt(&ok, 16);
 
 
@@ -656,16 +663,15 @@ void MainWindow::slotSpeicherChanged(int row, int column)
     else
         bank = 1;
 
+    // Wert nur in den Speicher schreiben, wenn valider HEX-Wert eingelesen wurde
     if(ok)
     {
         steuerwerk->alu->speicher.writeOnBank(bank, row % 0x2F, newValue);
         ui->tw_speicher->item(row, 2)->setText(convertIntToBinString(getIntFromFile(bank,row % 0x2F)));
     }
-    else
-    {
-        ui->tw_speicher->item(row, 1)->setText(convertIntToHexString(getIntFromFile(bank,row % 0x2F)));
-    }
 
+    // Wert aus dem Speicher auslesen und ausgeben
+    // für den Fall, dass zuvor kein korrekter Wert eingegeben wurde
     ui->tw_speicher->item(row, 1)->setText(convertIntToHexString(getIntFromFile(bank,row % 0x2F)));
 }
 
