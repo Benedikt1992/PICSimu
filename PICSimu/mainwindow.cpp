@@ -499,6 +499,13 @@ void MainWindow::setIntf()
     steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
 }
 
+void MainWindow::setRbif()
+{
+    int intcon = steuerwerk->readForGUI(0, 0x0B);
+    intcon |= 1;
+    steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
+}
+
 void MainWindow::slotRBValueChanged(int row, int column)
 {
     if(steuerwerk == NULL)
@@ -515,6 +522,7 @@ void MainWindow::slotRBValueChanged(int row, int column)
     ui->tw_RB->setCurrentCell(-1,-1);
     ui->tw_RB->clearSelection();
 
+    // RB0/INT - Interrupt
     // Edge-Select auswählen
     int option = steuerwerk->alu->speicher.readOnBank(1, 0x01);
     bool intedg = CHECK_BIT(option, 6);
@@ -524,29 +532,28 @@ void MainWindow::slotRBValueChanged(int row, int column)
 
     bool newRB0Value = CHECK_BIT(value, 0);
 
-    // RB0/INT - Interrupt ausgelöst
     if(bit == 0)
     {
         if(intedg)  // positive Flanke
-        {
             if(!lastRB0Value && newRB0Value)
                 setIntf();
-        }
         else        // negative Flanke
-        {
             if(lastRB0Value && !newRB0Value)
                 setIntf();
-        }
     }
 
     lastRB0Value = newRB0Value;
 
+
     // RB7:RB4 - Interrupt ausgelöst
+    int trisbValue = steuerwerk->readForGUI(1, 0x06);
+
     if(bit >= 4 && bit <= 7)
     {
-        int intcon = steuerwerk->readForGUI(0, 0x0B);
-        intcon |= 1;
-        steuerwerk->alu->speicher.writeOnBank(0, 0x0B, intcon);
+        bool isInput = CHECK_BIT(trisbValue, bit);
+
+        if(isInput)
+            setRbif();
     }
 
     if(newValue == 0)

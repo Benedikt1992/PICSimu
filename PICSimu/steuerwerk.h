@@ -46,7 +46,7 @@ public:
 	bool clearProgrammspeicher(void);
     bool clearRuntime(void);
     int getCurrentLineNumber(void);
-    int readForGUI(int,int);
+    int readForGUI(int bank,int file);
     int readWForGUI(void);
     void writeRAFromGUI(int value);
     void writeRBFromGUI(int value);
