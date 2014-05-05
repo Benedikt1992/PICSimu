@@ -79,11 +79,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Initialisieren Frequenz
     ui->frequency->setValue(4);
-    ui->frequency->setMinimum(1);
+	ui->frequency->setMinimum(0.1);
     ui->frequency->setMaximum(10);
 	ui->frequency->setDecimals(4);
     ui->cycle->setText(QString::fromStdString("1"));
     ui->runtime->setText(QString::fromStdString("0"));
+
+	ui->WDTcheckBox->setCheckState(Qt::Checked);
 
     // RA initialisieren
     ui->tw_RA->setRowCount(2);
@@ -438,6 +440,16 @@ void MainWindow::slotResetClicked()
 	//ersten Befehl einfärben
     setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
     gotoLineNumber(steuerwerk->getCurrentLineNumber()-1);
+
+	//WDT aktiviert?
+	if(ui->WDTcheckBox->isChecked())
+	{
+		steuerwerk->alu->speicher.write2007(steuerwerk->alu->speicher.read2007()|0x0004);
+	}
+	else
+	{
+		steuerwerk->alu->speicher.write2007(steuerwerk->alu->speicher.read2007()&0xfffb);
+	}
 }
 
 void MainWindow::slotRAValueChanged(int row, int column)
