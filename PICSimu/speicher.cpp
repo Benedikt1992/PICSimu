@@ -111,10 +111,10 @@ bool Speicher::write(int file, int wert)
         //-> siehe abschnitt FSR für implementierung
 		//Option Register ist voll schreibbar
 		//PCL ist voll schreibbar
-		//Status Register: nur die oberen 3 Bit sind schreibbar
+		//Status Register: bit 3 und 4 sind nicht schreibbar
 		if(file == 3)
 		{
-			*FileReference= (wert & 0x00E0) + (*FileReference & 0x001F); //Speicher die oberen 3 Bit aus wert und die unteren 5 Bit aus dem Vorherigen wert
+			*FileReference= (wert & 0x00E7) + (*FileReference & 0x0018);
 			return true;
 		}
         //FSR ist voll schreibbar; der Wert wird als adresse aufgefasst und durch Adrees 0x00 Adressiert
@@ -172,10 +172,10 @@ bool Speicher::write(int file, int wert)
         //-> siehe abschnitt FSR für implementierung
 		//TMR0 ist voll schreibbar
 		//PCL ist voll schreibbar
-		//Status Register: nur die oberen 3 Bit sind schreibbar
+		//Status Register: bit 3 und 4 sind nicht schreibbar
 		if(file == 3)
 		{
-			*FileReference= (wert & 0x00E0) + (*FileReference & 0x001F); //Speicher die oberen 3 Bit aus wert und die unteren 5 Bit aus dem Vorherigen wert
+			*FileReference= (wert & 0x00E7) + (*FileReference & 0x0018);
 			return true;
 		}
         //FSR ist voll schreibbar; der Wert wird als adresse aufgefasst und durch Adrees 0x00 Adressiert
