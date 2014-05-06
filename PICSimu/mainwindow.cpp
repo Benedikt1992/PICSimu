@@ -754,6 +754,8 @@ void MainWindow::refreshRA()
     if(steuerwerk == NULL)
         return;
 
+    cout << "RA refreshed" << endl;
+
     int valueRA = steuerwerk->readForGUI(0, 0x05);
 
     for(int bit=0; bit < 8; bit++)
@@ -763,7 +765,7 @@ void MainWindow::refreshRA()
         if(CHECK_BIT(valueRA, bit))
             pinValue = 1;
 
-        ui->tw_RB->item(1, 7-bit)->setText(QString::number(pinValue));
+        ui->tw_RA->item(1, 7-bit)->setText(QString::number(pinValue));
     }
 }
 
