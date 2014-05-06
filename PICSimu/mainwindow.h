@@ -37,8 +37,8 @@ private:
     int getIntFromPC();
     int getFirstIntFromStack();
 
-    void refreshRA();   // IMPLEMENTIEREN!
-    void refreshRB();   // IMPLEMENTIEREN!
+    void refreshRA();
+    void refreshRB();
 
     void restoreOldValue(int row, int column);
 

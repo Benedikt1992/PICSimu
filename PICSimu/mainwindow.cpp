@@ -493,9 +493,13 @@ void MainWindow::slotRAValueChanged(int row, int column)
     else
         value |= 1 << bit;
 
-    // TODO prüfen, ob als Input definiert!
+    // nur schreiben, wenn im TrisRegister der PIN als Input definiert ist
+    int trisAValue = steuerwerk->readForGUI(1, 0x05);
+    bool isInput = CHECK_BIT(trisAValue, bit);
 
-    steuerwerk->writeRAFromGUI(value);
+    if(isInput)
+        steuerwerk->writeRAFromGUI(value);
+
     refreshStorageElements();
 }
 
@@ -542,11 +546,15 @@ void MainWindow::slotRBValueChanged(int row, int column)
     if(bit == 0)
     {
         if(intedg)  // positive Flanke
+        {
             if(!lastRB0Value && newRB0Value)
                 setIntf();
+        }
         else        // negative Flanke
+        {
             if(lastRB0Value && !newRB0Value)
                 setIntf();
+        }
     }
 
     lastRB0Value = newRB0Value;
@@ -568,9 +576,13 @@ void MainWindow::slotRBValueChanged(int row, int column)
     else
         value |= 1 << bit;
 
-    // TODO prüfen, ob als Input definiert!
+    // nur schreiben, wenn im TrisRegister der PIN als Input definiert ist
+    int trisBValue = steuerwerk->readForGUI(1, 0x06);
+    bool isInput = CHECK_BIT(trisBValue, bit);
 
-    steuerwerk->writeRBFromGUI(value);
+    if(isInput)
+        steuerwerk->writeRBFromGUI(value);
+
     refreshStorageElements();
 }
 
@@ -721,7 +733,7 @@ void MainWindow::slotSpeicherChanged(int row, int column)
 
     // Wert nur in den Speicher schreiben, wenn valider HEX-Wert eingelesen wurde
     if(ok)
-        steuerwerk->alu->speicher.writeOnBank(bank, row % 0x2F, newValue);
+        steuerwerk->alu->speicher.writeOnBank(bank, row % 0x30, newValue);
 
     // Wert aus dem Speicher auslesen und ausgeben
     // für den Fall, dass zuvor kein korrekter Wert eingegeben wurde
@@ -754,8 +766,6 @@ void MainWindow::refreshRA()
     if(steuerwerk == NULL)
         return;
 
-    cout << "RA refreshed" << endl;
-
     int valueRA = steuerwerk->readForGUI(0, 0x05);
 
     for(int bit=0; bit < 8; bit++)
@@ -766,6 +776,19 @@ void MainWindow::refreshRA()
             pinValue = 1;
 
         ui->tw_RA->item(1, 7-bit)->setText(QString::number(pinValue));
+    }
+
+    int trisA = steuerwerk->readForGUI(1, 0x05);
+    for(int bit=0; bit < 8; bit++)
+    {
+        QString pinValue;
+
+        if(CHECK_BIT(trisA, bit))
+            pinValue = "i";
+        else
+            pinValue = "o";
+
+        ui->tw_RA->item(0, 7-bit)->setText(pinValue);
     }
 }
 
@@ -784,5 +807,18 @@ void MainWindow::refreshRB()
             pinValue = 1;
 
         ui->tw_RB->item(1, 7-bit)->setText(QString::number(pinValue));
+    }
+
+    int trisB = steuerwerk->readForGUI(1, 0x06);
+    for(int bit=0; bit < 8; bit++)
+    {
+        QString pinValue;
+
+        if(CHECK_BIT(trisB, bit))
+            pinValue = "i";
+        else
+            pinValue = "o";
+
+        ui->tw_RB->item(0, 7-bit)->setText(pinValue);
     }
 }
