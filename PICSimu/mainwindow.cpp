@@ -239,6 +239,8 @@ void MainWindow::slotRefreshSpeicher()
     }
 
     refreshSFRWidget();
+	refreshRA();
+	refreshRB();
 
     // notwendiger Reconnect!
     connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
