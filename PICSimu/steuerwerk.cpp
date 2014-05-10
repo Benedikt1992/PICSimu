@@ -140,11 +140,13 @@ bool Steuerwerk::executeStep(void)
         return false;
     }
 
-    if(programmEndeErreicht())
-        return false;
 
-    emit setLineColorGreen(getCurrentLineNumber()-1);
-    emit gotoLineNumber(getCurrentLineNumber()-1);
+    if(!programmEndeErreicht())
+    {
+
+        emit setLineColorGreen(getCurrentLineNumber()-1);
+        emit gotoLineNumber(getCurrentLineNumber()-1);
+    }
 
     return true;
 }
