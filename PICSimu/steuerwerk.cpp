@@ -116,7 +116,7 @@ bool Steuerwerk::executeStep(void)
     {
         //Ursprünglichen Cycle Wert für Watchdog speichern
         alu->vorherigeCycles = alu->cycles;
-
+        checkTimer0();
         analyzeAndExecute(pc->command);
         pc++;
 		alu->speicher.writePC(pc - maschinencode.begin());
@@ -318,7 +318,6 @@ void Steuerwerk::run(void)
 
 void Steuerwerk::analyzeAndExecute(int command)
 {
-    checkTimer0();
 
     command = command & 0x3FFF;
 
