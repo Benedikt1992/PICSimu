@@ -147,6 +147,11 @@ bool Steuerwerk::executeStep(void)
         emit setLineColorGreen(getCurrentLineNumber()-1);
         emit gotoLineNumber(getCurrentLineNumber()-1);
     }
+    else
+    {
+        //GoKlasse muss beendet werden
+        return false;
+    }
 
     return true;
 }
