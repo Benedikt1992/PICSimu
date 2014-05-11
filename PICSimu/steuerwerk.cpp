@@ -308,21 +308,7 @@ void Steuerwerk::callInterrupt()
     emit gotoLineNumber(getCurrentLineNumber()-1);
 }
 
-void Steuerwerk::run(void)
-{
-    alu->speicher.ausgeben(0);
-    getchar();
-    alu->speicher.ausgeben(1);
-    getchar();
 
-    while(!executeStep())
-        getchar();
-
-    alu->speicher.ausgeben(0);
-    getchar();
-    alu->speicher.ausgeben(1);
-    getchar();
-}
 
 void Steuerwerk::analyzeAndExecute(int command)
 {

@@ -38,7 +38,6 @@ public:
     bool isWDTTimeOut(void);
     bool loadFile(string);
     bool executeStep(void);
-    void run(void);
     void analyzeAndExecute(int);
 	bool toggleBreakpoint(int);
     bool programmEndeErreicht(void);
