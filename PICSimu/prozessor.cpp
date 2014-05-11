@@ -200,7 +200,14 @@ void Prozessor::decfsz(int command, Steuerwerk *steuerwerk)
     {
         // Bit ist 0 -> nächster Befehl wird übersprungen
         steuerwerk->pc++;
-        cycles+=2;
+        /*
+         *  Es muss nach jedem Befehlszyklus geprüft werden,
+         *  ob der Timer gesetzt werden soll, da sonst Inkrements
+         *  von TMR0 verpasst werden können.
+         */
+        cycles++;
+        steuerwerk->checkTimer0();
+        cycles++;
     }
     else
     {
@@ -262,7 +269,14 @@ void Prozessor::incfsz(int command, Steuerwerk *steuerwerk)
     {
         // Bit ist 0 -> nächster Befehl wird übersprungen
         steuerwerk->pc++;
-        cycles+=2;
+        /*
+         *  Es muss nach jedem Befehlszyklus geprüft werden,
+         *  ob der Timer gesetzt werden soll, da sonst Inkrements
+         *  von TMR0 verpasst werden können.
+         */
+        cycles++;
+        steuerwerk->checkTimer0();
+        cycles++;
     }
     else
     {
@@ -631,7 +645,14 @@ void Prozessor::btfsc(int command, Steuerwerk* steuerwerk)
     {
         //Bit ist 0 -> nächster Befehl wird übersprungen
         steuerwerk->pc++;
-        cycles+=2;
+        /*
+         *  Es muss nach jedem Befehlszyklus geprüft werden,
+         *  ob der Timer gesetzt werden soll, da sonst Inkrements
+         *  von TMR0 verpasst werden können.
+         */
+        cycles++;
+        steuerwerk->checkTimer0();
+        cycles++;
     }
 }
 
@@ -663,7 +684,14 @@ void Prozessor::btfss(int command, Steuerwerk* steuerwerk)
     {
         //Bit ist 1 -> nächster Befehl wird übersprungen
         steuerwerk->pc++;
-        cycles+=2;
+        /*
+         *  Es muss nach jedem Befehlszyklus geprüft werden,
+         *  ob der Timer gesetzt werden soll, da sonst Inkrements
+         *  von TMR0 verpasst werden können.
+         */
+        cycles++;
+        steuerwerk->checkTimer0();
+        cycles++;
     }
     else
     {
@@ -735,7 +763,14 @@ void Prozessor::call(int command, Steuerwerk* steuerwerk)
 
     steuerwerk->pc = subroutineAddress;
 
-    cycles+=2;
+    /*
+     *  Es muss nach jedem Befehlszyklus geprüft werden,
+     *  ob der Timer gesetzt werden soll, da sonst Inkrements
+     *  von TMR0 verpasst werden können.
+     */
+    cycles++;
+    steuerwerk->checkTimer0();
+    cycles++;
 }
 
 void Prozessor::clrwdt(Steuerwerk* steuerwerk)
@@ -811,12 +846,26 @@ void Prozessor::retfie(Steuerwerk* steuerwerk)
     speicher.writeOnBank(0,0xb,newValue);
     if(steuerwerk->picStack.empty())
     {
-        cycles+=2;
+        /*
+         *  Es muss nach jedem Befehlszyklus geprüft werden,
+         *  ob der Timer gesetzt werden soll, da sonst Inkrements
+         *  von TMR0 verpasst werden können.
+         */
+        cycles++;
+        steuerwerk->checkTimer0();
+        cycles++;
         return;
     }
     steuerwerk->pc = (steuerwerk->picStack.top()) -1;
     steuerwerk->picStack.pop();
-    cycles += 2;
+    /*
+     *  Es muss nach jedem Befehlszyklus geprüft werden,
+     *  ob der Timer gesetzt werden soll, da sonst Inkrements
+     *  von TMR0 verpasst werden können.
+     */
+    cycles++;
+    steuerwerk->checkTimer0();
+    cycles++;
 }
 
 void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
@@ -832,19 +881,40 @@ void Prozessor::retlw(int command, Steuerwerk* steuerwerk)
     steuerwerk->pc = (steuerwerk->picStack.top()) -1;
     steuerwerk->picStack.pop();
 
-	cycles += 2;
+    /*
+     *  Es muss nach jedem Befehlszyklus geprüft werden,
+     *  ob der Timer gesetzt werden soll, da sonst Inkrements
+     *  von TMR0 verpasst werden können.
+     */
+    cycles++;
+    steuerwerk->checkTimer0();
+    cycles++;
 }
 
 void Prozessor::preturn(Steuerwerk* steuerwerk)
 {
     if(steuerwerk->picStack.empty())
     {
-        cycles+=2;
+        /*
+         *  Es muss nach jedem Befehlszyklus geprüft werden,
+         *  ob der Timer gesetzt werden soll, da sonst Inkrements
+         *  von TMR0 verpasst werden können.
+         */
+        cycles++;
+        steuerwerk->checkTimer0();
+        cycles++;
 		return;
     }
     steuerwerk->pc = (steuerwerk->picStack.top()) -1;
     steuerwerk->picStack.pop();
-	cycles += 2;
+    /*
+     *  Es muss nach jedem Befehlszyklus geprüft werden,
+     *  ob der Timer gesetzt werden soll, da sonst Inkrements
+     *  von TMR0 verpasst werden können.
+     */
+    cycles++;
+    steuerwerk->checkTimer0();
+    cycles++;
 }
 
 void Prozessor::psleep(Steuerwerk* steuerwerk)
