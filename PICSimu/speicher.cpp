@@ -71,19 +71,7 @@ bool Speicher::clearSpeicher()
 	return true;
 }
 
-// nur zum Testen
-void Speicher::ausgeben(int bank)
-{
-    cout << "Bank" << bank << endl;
-    cout << "Zelle\t" << "Wert" << endl;
-    for(int i=0; i < n_register; i++)
-        if(refBank[bank][i] != 0)
-            cout << i << "\t" << *(refBank[bank][i]) << endl;
-        else
-            cout << i << "\t" << "N/A" << endl;
 
-    cout << "Bank Content Ende!" << endl;
-}
 
 int* Speicher::getFileReference(int file)
 {

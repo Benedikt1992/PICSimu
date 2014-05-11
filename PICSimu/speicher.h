@@ -14,7 +14,6 @@ public:
     ~Speicher(void);
 
     int* getFileReference(int);
-    void ausgeben(int);
 	bool clearSpeicher(void);
     bool write(int,int);
     int read(int);

@@ -14,7 +14,7 @@ class Parser
 public:
     Parser();
 
-    static void ausgeben(list<string> lstDatei);
+
 	static bool auslesen(list<QString>* lstDatei, string filename, Steuerwerk* pic);
 
 };

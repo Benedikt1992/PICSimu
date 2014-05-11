@@ -12,7 +12,6 @@ Parser::Parser()
 bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steuerwerk)
 // lstDatei nicht notwendig... Zugriff über steuerwerk
 {
-    // cout << "auslesen() gestartet" << endl;
 
     string line;
     ifstream lesestream(filename.c_str());
@@ -22,20 +21,15 @@ bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steu
 
     while(!lesestream.eof())
     {
-        // cout << "while-Schleife Anfang" << endl;
         getline(lesestream, line, '\n');
-        //cout << line << endl;
-        // cout << "Zeile an lst-Liste anfügen" << endl;
 
 
 		//Benedikt: gändert
 		lstDatei->push_back((QString::fromStdString(line)));
 
-        // cout << "push_back() erfolgreich" << endl;
 
         if(line[0] != ' ' && line[0] != 0)	// Codezeile erkennen!
         {
-            // cout << "if-Bedingung erfüllt" << endl;
             int textZeile = 0;
             int command = 0;
 
@@ -57,11 +51,9 @@ bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steu
 
             Codeline* newLine = new Codeline(textZeile, command);
 
-            // cout << "Zeile zu Maschinencode hinzufügen" << endl;
             steuerwerk->maschinencode.push_back(*newLine);
         }
 
-        // cout << "Programmcounter gesetzt" << endl;
 
     }
 
@@ -71,10 +63,5 @@ bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steu
 }
 
 
-// für Testzwecke auf Console
-void Parser::ausgeben(list<string> lstDatei)
-{
-    for(list<string>::iterator i=lstDatei.begin(); i != lstDatei.end(); i++)
-        cout << *i << endl;
-}
+
 
