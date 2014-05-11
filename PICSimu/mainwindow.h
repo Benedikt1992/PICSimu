@@ -50,7 +50,6 @@ private slots:
 	void slotResetClicked(void);
     void slotRAValueChanged(int, int);
     void slotRBValueChanged(int row, int column);
-	void slotPortDoubleClicked(int row, int column);
     void slotSpeicherChanged(int row, int column);
 
 

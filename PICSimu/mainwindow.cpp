@@ -104,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tw_RA->setVerticalHeaderItem(0,new QTableWidgetItem("Tris"));
     ui->tw_RA->setVerticalHeaderItem(1,new QTableWidgetItem("Pins"));
     ui->tw_RA->verticalHeader()->sizeHint().width();
+    ui->tw_RA->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     // RB initialisieren
     ui->tw_RB->setRowCount(2);
@@ -120,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tw_RB->setVerticalHeaderItem(0,new QTableWidgetItem("Tris"));
     ui->tw_RB->setVerticalHeaderItem(1,new QTableWidgetItem("Pins"));
+    ui->tw_RB->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 
 }
@@ -690,14 +692,7 @@ void MainWindow::refreshStack()
     }
 }
 
-void MainWindow::slotPortDoubleClicked(int /*unused*/, int /*unused*/)
-{
-	//TODO Textmarkierung entfernen
-	ui->tw_RA->setCurrentCell(-1,-1);
-	ui->tw_RA->clearSelection();
-	ui->tw_RB->setCurrentCell(-1,-1);
-	ui->tw_RB->clearSelection();
-}
+
 
 void MainWindow::slotSpeicherChanged(int row, int column)
 {
