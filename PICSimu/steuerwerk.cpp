@@ -522,12 +522,12 @@ void Steuerwerk::analyzeAndExecute(int command)
 }
 
 
-// Mario
+
 int Steuerwerk::readForGUI(int bank,int file){
-    //cout << "steuerwerk read" << endl;
+
     return alu->speicher.readOnBank(bank,file);
 }
-// Mario ende
+
 
 int Steuerwerk::readWForGUI()
 {

@@ -229,7 +229,6 @@ void MainWindow::slotRefreshSpeicher()
 
     for(int i=0; i < n_register; i++)
     {
-       // cout << "Adresse: " << i << "-" << steuerwerk->readForGUI(0,i) << endl;
         ui->tw_speicher->item(i,1)->setText(convertIntToHexString(getIntFromFile(0,i)));
         ui->tw_speicher->item(i+n_register,1)->setText(convertIntToHexString(getIntFromFile(1 ,i)));
 
@@ -237,9 +236,7 @@ void MainWindow::slotRefreshSpeicher()
         ui->tw_speicher->item(i+n_register,2)->setText(convertIntToBinString(getIntFromFile(1,i)));
     }
 
-    /*refreshSFRWidget();
-	refreshRA();
-    refreshRB();*/
+
 
     // notwendiger Reconnect!
     connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
@@ -656,7 +653,6 @@ void MainWindow::refreshRuntime(void)
     steuerwerk->setTimePerCycle(4*(1/(double)ui->frequency->value()));
     stringstream ss;
     ss << steuerwerk->computeRuntime();
-    //cout << "Runtime: " << steuerwerk->computeRuntime() << endl;
     ui->runtime->setText(QString::fromStdString(ss.str()));
 }
 

@@ -344,7 +344,6 @@ void Prozessor::movf(int command)
 
 void Prozessor::movwf(int command)
 {
-	cout << "MOVWF" <<endl;
     //      00 0000 1fff ffff
     //  &   00 0000 0111 1111  = 0x7F
     //      00 0000 0fff ffff
@@ -353,8 +352,6 @@ void Prozessor::movwf(int command)
     // Register laden
     int currentValue = speicher.readW();
 
-    cout << "W=" << currentValue << endl;
-    cout << "file= " << file << endl;
 
     if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
     {
@@ -536,7 +533,6 @@ void Prozessor::xorwf(int command)
 
 void Prozessor::bcf(int command)
 {
-    //cout << " BCF ";
 
     int bit;
     int file;
@@ -577,7 +573,6 @@ void Prozessor::bcf(int command)
 
 void Prozessor::bsf(int command)
 {
-    //cout << " BSF ";
 
     int bit;
     int file;
@@ -1037,7 +1032,6 @@ void Prozessor::setTimePerCycle(double value)
 
 double Prozessor::computeRuntime(void)
 {
-    //cout << "cycles: " << cycles << " timePerCycle: "<<timePerCycle<<endl;
     return cycles * timePerCycle;
 }
 

@@ -24,7 +24,7 @@ bool Parser::auslesen(list<QString>* lstDatei, string filename, Steuerwerk* steu
         getline(lesestream, line, '\n');
 
 
-		//Benedikt: gändert
+
 		lstDatei->push_back((QString::fromStdString(line)));
 
 

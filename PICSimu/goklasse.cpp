@@ -30,7 +30,6 @@ void GoKlasse::run()
         int v=50; // falls ds Signal nicht schnell genug verarbeitet wird -> mindestverzögerung 50ms
         emit getVerzoegerung(&v);
         QThread::msleep(50); // warte darauf, dass signal abgearbeitet wurde
-        //std::cout << v << std::endl;
         QThread::msleep(v-50);
     }
 

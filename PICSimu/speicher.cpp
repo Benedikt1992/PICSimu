@@ -84,7 +84,6 @@ int* Speicher::getFileReference(int file)
     return refBank[bank][file];
 }
 
-//TODO Hier wird in den Speicher geschrieben und fehler abgefangen; z.B. nicht Schreibbare Bits
 bool Speicher::write(int file, int wert)
 {
 	int* FileReference;
@@ -204,7 +203,7 @@ bool Speicher::write(int file, int wert)
 }
 
 int Speicher::read( int file)
-{ //TODO Fehler abfangen. Bisher zeigt Adresse 0 z.B. auf NULL
+{
     /*
      * Fehlerwerte:
      * 0x0100 == Speicher existiert nicht
@@ -218,7 +217,7 @@ int Speicher::read( int file)
 
 int Speicher::readOnBank (int bank, int file)
 {
-   // cout << "Speicher read" << endl;
+
 
 	if(refBank[bank][file] == NULL)
 			return 0;
