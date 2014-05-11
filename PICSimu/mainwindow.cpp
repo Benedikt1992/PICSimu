@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
 
 
-    // Mario
+
     // Tabelle für Speicherausgabe definieren
     ui->tw_speicher->setRowCount(2*n_register);
     ui->tw_speicher->setColumnCount(3);
@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->tw_speicher->setFont(font);
 
     initializeSpeicherWidget();
-    // Mario ende
+
 
     ui->tw_specialFunctionRegister->setRowCount(8);
     ui->tw_specialFunctionRegister->setColumnCount(3);
@@ -62,12 +62,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tw_specialFunctionRegister->setColumnWidth(0,60);
     ui->tw_specialFunctionRegister->setColumnWidth(1,35);
-	ui->tw_specialFunctionRegister->setColumnWidth(2,60);
+    ui->tw_specialFunctionRegister->setColumnWidth(2,65);
 
     ui->tw_specialFunctionRegister->setHorizontalHeaderItem(0,new QTableWidgetItem("Name"));
     ui->tw_specialFunctionRegister->setHorizontalHeaderItem(1,new QTableWidgetItem("Hex"));
     ui->tw_specialFunctionRegister->setHorizontalHeaderItem(2,new QTableWidgetItem("Bin"));
-    ui->tw_speicher->setFont(font);
+    ui->tw_specialFunctionRegister->setFont(font);
 
     initializeSFRWidget();
 
@@ -91,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // RA initialisieren
     ui->tw_RA->setRowCount(2);
     ui->tw_RA->setColumnCount(8);
+    ui->tw_RA->setFont(font);
 
     for(int i = 0; i < 8; i++)
     {
@@ -107,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // RB initialisieren
     ui->tw_RB->setRowCount(2);
     ui->tw_RB->setColumnCount(8);
+    ui->tw_RB->setFont(font);
 
     for(int i = 0; i < 8; i++)
     {
@@ -118,6 +120,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tw_RB->setVerticalHeaderItem(0,new QTableWidgetItem("Tris"));
     ui->tw_RB->setVerticalHeaderItem(1,new QTableWidgetItem("Pins"));
+
+
 }
 
 MainWindow::~MainWindow()
@@ -131,22 +135,18 @@ void MainWindow::connectSteuerwerk(Steuerwerk* steuerwerk)
     this->steuerwerk = steuerwerk;
 }
 
-void MainWindow::slotLoadLstFile() // Benedikt: geändert
+void MainWindow::slotLoadLstFile()
 {
-    // cout << "slotLoadLstFile() gestartet" << endl;
 	// evtl. vorhandene Inhalte löschen
 	steuerwerk->clearProgrammspeicher();
 	steuerwerk->clearSteuerwerk();
 	ui->lw_lstFile->clear();    // LineWidget leeren
 	slotRefreshSpeicher();
 
-    // refreshSFRWidget();
 
     if(steuerwerk->loadFile(ui->le_filename->text().toStdString()))  // auslesen erfolgreich?
     {
         ui->lw_lstFile->clear();    // LineWidget leeren
-
-        // cout << "Ausgabe gestartet" << endl;
 
 		for(list<QString>::iterator it=steuerwerk->lstFile.begin(); it!=steuerwerk->lstFile.end(); it++)
 		{
@@ -154,13 +154,12 @@ void MainWindow::slotLoadLstFile() // Benedikt: geändert
 		}
 
 		//ersten Befehl einfärben
-
         setLineColorGreen(steuerwerk->getCurrentLineNumber()-1);
 
     }
     else
         ui->lw_lstFile->addItem("File does not exist!");
-    // cout << "slotLoadLstFile() beendet" << endl;
+
     slotResetClicked();
 }
 
@@ -173,7 +172,7 @@ void MainWindow::slotLoad_FileDialog()
 	ui->le_filename->setText(fileName);
 }
 
-// Mario
+
 void MainWindow::initializeSpeicherWidget()
 {
     for(int i=0; i < n_register; i++)
@@ -220,7 +219,7 @@ void MainWindow::initializeSFRWidget()
     ui->tw_specialFunctionRegister->setItem(5, 2, new QTableWidgetItem("00000000"));
     ui->tw_specialFunctionRegister->setItem(6, 2, new QTableWidgetItem("00000000"));
     ui->tw_specialFunctionRegister->setItem(7, 2, new QTableWidgetItem("00000000"));
-    //refreshSFRWidget();
+
 }
 
 void MainWindow::slotRefreshSpeicher()
@@ -238,9 +237,9 @@ void MainWindow::slotRefreshSpeicher()
         ui->tw_speicher->item(i+n_register,2)->setText(convertIntToBinString(getIntFromFile(1,i)));
     }
 
-    refreshSFRWidget();
+    /*refreshSFRWidget();
 	refreshRA();
-	refreshRB();
+    refreshRB();*/
 
     // notwendiger Reconnect!
     connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
@@ -376,7 +375,7 @@ QString MainWindow::convertIntToHexString(int value)
    return sresult;
 }
 
-// Mario ende
+
 
 void MainWindow::setLineColorWhite(int linenumber)
 {
@@ -407,9 +406,10 @@ void MainWindow::gotoLineNumber(int linenumber)
     ui->lw_lstFile->clearSelection();
 }
 
-//Benedikt:
+
 void MainWindow::on_lw_lstFile_doubleClicked(const QModelIndex &index)
 {
+    // wechsle den Breakpint und färbe Zeile entsprechend
 	if(steuerwerk->toggleBreakpoint(index.row()+1))
 	{
         setLineColorRed(index.row());
@@ -441,7 +441,7 @@ void MainWindow::slotResetClicked()
     if(steuerwerk->lstFile.empty())
         return;
 
-	//aktuellen Befehl weiß färben
+    //aktuellen Befehl entfärben, je nachdem ob breakpoint oder nicht
 	if(steuerwerk->pc < steuerwerk->maschinencode.end())
 	{
 		if(steuerwerk->pc->breakpoint)
@@ -645,7 +645,7 @@ void MainWindow::readVerzoegerung(int* value)
 }
 
 void MainWindow::on_frequency_valueChanged(double arg1)
-{
+{//Berechne die Zeit pro Zyklus neu
     stringstream ss;
     ss << (double)4*(1/(double)arg1);
     ui->cycle->setText(QString::fromStdString(ss.str()));

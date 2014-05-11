@@ -73,6 +73,7 @@ signals:
     void gotoLineNumber(int);
     void refreshStack(void);
     void reset(void);
+    void refreshStorageGUI(void);
 };
 
 

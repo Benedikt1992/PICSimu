@@ -19,11 +19,16 @@ Steuerwerk::Steuerwerk(MainWindow* mainWindow)
     connect(this,SIGNAL(refreshRuntime()),mainWindow,SLOT(refreshRuntime()));
     connect(this,SIGNAL(refreshStack()),mainWindow,SLOT(refreshStack()));
     connect(this,SIGNAL(reset()),mainWindow,SLOT(slotResetClicked()));
+    connect(this,SIGNAL(refreshStorageGUI()),mainWindow,SLOT(refreshStorageElements()));
     emit connectSteuerwerk(this);
     alu = new Prozessor();
     isRunning = iAmSleeping = false;
 
     wdt = 0;
+
+    //GUI aktualisieren (Speicheranzeige)
+    emit slotRefreshSpeicher();
+    emit refreshSFRWidget();
 }
 
 
@@ -124,10 +129,7 @@ bool Steuerwerk::executeStep(void)
     }
     else
         return false;
-    emit slotRefreshSpeicher();
-    emit refreshSFRWidget();
-    emit refreshRuntime();
-    emit refreshStack();
+    emit refreshStorageGUI();
 
     if(isWDTTimeOut())
     {//WDT reset, Power on Reset
@@ -135,8 +137,7 @@ bool Steuerwerk::executeStep(void)
         alu->speicher.writeOnBank(0,3,0x0008); //TO Bit im Status register clearen
         if(int currentEECON1=alu->speicher.readOnBank(1,8)&0x0002)// Führt eeprom gerade ein schreibaktion durch?
             alu->speicher.writeOnBank(1,8,currentEECON1 |= 0x0008); //-> WRERR bit (EECON1) setzen
-        emit slotRefreshSpeicher();
-        emit refreshSFRWidget();
+        emit refreshStorageGUI();
         return false;
     }
 

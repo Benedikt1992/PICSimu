@@ -25,7 +25,7 @@ public:
 
     void setIntf();
     void setRbif();
-    void refreshStorageElements();
+
 private:
     Ui::MainWindow *ui;
     void initializeSpeicherWidget(void);
@@ -54,6 +54,7 @@ private slots:
     void slotSpeicherChanged(int row, int column);
 
 
+
 	//Benedikt:
 	void on_lw_lstFile_doubleClicked(const QModelIndex &index);
 	//void on_frequency_valueChanged(int arg1);
@@ -63,11 +64,13 @@ private slots:
 	void on_frequency_valueChanged(double arg1);
 
 public slots:
+    //werden durch Steuerwerk/GoKlasse/SleepKlasse ausgelöst:
     void connectSteuerwerk(Steuerwerk*);
     void slotRefreshSpeicher(void);
     void slotGoClicked(void);
+    void refreshStorageElements();
 
-    //werden durch GoThread ausgelöst:
+
     void setLineColorWhite(int linenumber);
     void setLineColorGreen(int linenumber);
     void setLineColorRed(int linenumber);

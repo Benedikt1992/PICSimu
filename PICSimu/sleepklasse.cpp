@@ -36,9 +36,7 @@ void SleepKlasse::run()
             currentStatus=sW->alu->speicher.readOnBank(0,3); //Lese Status register
             currentStatus = currentStatus & 0xffef;  //clear TO bit in Status register
             sW->alu->speicher.writeOnBank(0,3,currentStatus);
-            emit sW->slotRefreshSpeicher();
-            emit sW->refreshRuntime();
-            emit sW->refreshSFRWidget();
+            emit sW->refreshStorageGUI();
             return;
         }
         QThread::msleep(50); //verzögerung um GUI nicht zu überlasten
