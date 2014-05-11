@@ -1,0 +1,184 @@
+                    00001           ;SimTest2
+                    00002           ;Programm zum Test des 16F84-Simulators.
+                    00003           ;Es werden alle Befehle überprüft.
+                    00004           ;(c) St. Lehmann   Ersterstellung: 23.01.2003
+                    00005           ;19.04.2014 überarbeitet 
+                    00006           ;05.05.2014 Fehler in den Kommentaren behoben
+                    00007           
+                    00008           list c=132          ;Zeilenlänge im LST auf 132 Zeichen setzen
+                    00009           
+                    00010           ;Definition einiger Symbole
+                    00011           indirect equ 0
+                    00012           status   equ 03h
+                    00013           fsr      equ 04h
+                    00014           ra       equ 05h
+                    00015           rb       equ 06h
+                    00016           count    equ 0ch
+                    00017           
+                    00018           ;Definition des Prozessors
+                    00019           device 16F84
+                    00020           ;Festlegen des Codebeginns
+                    00021           org 0
+                    00022  start    
+                    00023           ;teste GOTO
+0000 2816           00024           goto main           ;Unterprogramme überspringen
+                    00025           ;****** Hier liegen die gesamten Unterprogramme
+                    00026  up1      
+0001 2004           00027           call up2
+0002 07A0           00028           addwf 20h
+0003 3401           00029           retlw 1
+                    00030  up2      
+0004 2007           00031           call up3
+0005 07A0           00032           addwf 20h
+0006 3402           00033           retlw 2
+                    00034  up3      
+0007 200A           00035           call up4
+0008 07A0           00036           addwf 20h
+0009 3403           00037           retlw 3
+                    00038  up4      
+000A 200D           00039           call up5
+000B 07A0           00040           addwf 20h
+000C 3404           00041           retlw 4
+                    00042  up5      
+000D 2010           00043           call up6
+000E 07A0           00044           addwf 20h
+000F 3405           00045           retlw 5
+                    00046  up6      
+0010 2013           00047           call up7
+0011 07A0           00048           addwf 20h
+0012 3406           00049           retlw 6
+                    00050  up7      
+0013 3020           00051           movlw 20h
+0014 00A0           00052           movwf 20h
+0015 0008           00053           return                                                               
+                    00054           ;****** Hier beginnt das Hauptprogramm  **************         
+                    00055  main       
+0016 3055           00056           movlw 55h           ;Werte zur Verknüfung mit INDIRECT
+0017 008D           00057           movwf 0dh           ;55H an 0DH speichern
+0018 30AA           00058           movlw 0AAh          
+0019 008E           00059           movwf 0eh           ;0AAH an 0eh speichern
+001A 303C           00060           movlw 3ch
+001B 008F           00061           movwf 0fh           ;3ch an 0f speichern
+001C 300D           00062           movlw 0dh
+001D 0084           00063           movwf fsr           ;FSR zeigt auf Adresse 0DH
+                    00064             
+                    00065           ;teste ADDWF       
+001E 3010           00066           movlw 10h
+001F 0090           00067           movwf 10h
+0020 301A           00068           movlw 1ah
+0021 0790           00069           addwf 10h           ;2AH in 10H
+0022 0700           00070           addwf indirect,w
+0023 0091           00071           movwf 11h           ;6FH in 11H
+                    00072           ;teste C,DC und Z
+0024 30A0           00073           movlw 0A0h
+0025 0711           00074           addwf 11h,w         ;W = 0FH, ;C=1, DC=0, Z=0
+                    00075           ;teste MOVF
+0026 0803           00076           movf 3,w
+0027 009D           00077           movwf 1dh           ;C=1, DC=0, Z=0
+                    00078           ;teste C,DC und Z
+0028 3091           00079           movlw 91H
+0029 0711           00080           addwf 11h,w          ;w = 00, C=1, DC=1, Z=1
+002A 0803           00081           movf 3,w             ;C=1, DC=1, Z=0
+002B 009E           00082           movwf 1eh 
+                    00083           ;teste C,DC und Z
+002C 3081           00084           movlw 81h
+002D 0711           00085           addwf 11h,w         ;w = f0, C=0, DC=1, Z=0
+002E 0803           00086           movf 3,w
+002F 009F           00087           movwf 1fh           ;C=0, DC=1, Z=0                
+                    00088           ;teste ANDWF
+0030 30C7           00089           movlw 0C7h
+0031 0511           00090           andwf 11h,w
+0032 0092           00091           movwf 12h           ;47H in 12H
+0033 0500           00092           andwf indirect,w
+0034 0093           00093           movwf 13h           ;45H in 13H
+0035 0094           00094           movwf 14h,h          ;45H in 14H
+                    00095           ;teste CLRF
+0036 3014           00096           movlw 14h
+0037 0084           00097           movwf fsr
+0038 0180           00098           clrf indirect       ;0 in 14H
+                    00099           ;teste IORWF
+0039 0494           00100           iorwf 14h           ;14H in 14H
+                    00101           ;teste CLRW
+003A 0100           00102           clrw                ;0 in W
+                    00103           ;teste COMF
+003B 0914           00104           comf 14h,w           ;0EB in W
+003C 0080           00105           movwf indirect      ;0EBH in 14H
+                    00106           ;teste DECF
+003D 0384           00107           decf fsr            ;FSR = 13h
+                    00108           ;DECFSZ in SimTest1 getestet
+                    00109           ;teste INCF
+003E 0A11           00110           incf 11h,w
+003F 0095           00111           movwf 15h           ;70H in 15H
+                    00112           ;teste INCFSZ, BSF und RLF
+0040 0196           00113           clrf 16h            ;16h
+0041 3016           00114           movlw 16h
+0042 0084           00115           movwf fsr
+0043 1403           00116           bsf status,0        ;Carry setzen
+0044 0D96           00117           rlf 16h
+                    00118  loop1    
+0045 0D80           00119           rlf indirect
+0046 0F95           00120           incfsz 15h
+0047 2845           00121           goto loop1
+                    00122           ;teste RRF
+0048 0C96           00123           rrf 16h
+0049 0C80           00124           rrf indirect         ;80h in 16H
+                    00125           ;teste SUBWF
+004A 0090           00126           movwf 10h
+004B 0213           00127           subwf 13h,w         ;2FH in W
+004C 0097           00128           movwf 17h           ;2FH in 17h, C=1, DC=0, Z=0
+004D 0803           00129           movf 3,w            ;C=1, DC=0, Z=0,
+004E 00AD           00130           movwf 2dh
+004F 0811           00131           movf 17,w
+0050 0280           00132           subwf indirect      ;51H in 16h
+0051 3070           00133           movlw 70h
+0052 0211           00134           subwf 11h,w         ;w=0FFH, C=0, DC=0, Z=0
+0053 0803           00135           movf 3,w            ;C=0, DC=0, Z=0,
+0054 00AE           00136           movwf 2eh
+0055 306F           00137           movlw 06fh
+0056 0211           00138           subwf 11h,w         ;w = 0, C=1, DC=1, Z=1
+0057 0803           00139           movf 3,w            ;C=1, DC=1, Z=0,
+0058 00AF           00140           movwf 2fh
+                    00141           ;teste SWAPF
+0059 0E80           00142           swapf indirect      ;15H in 16h
+005A 0E93           00143           swapf 13h           ;54H in 13h
+                    00144           
+005B 300E           00145           movlw 0eh
+005C 0084           00146           movwf fsr   
+                    00147           ;teste XORWF
+005D 0600           00148           xorwf indirect,w    ;0A4H in W
+005E 0098           00149           movwf 18H           ;0A4H in 18H
+005F 30FF           00150           movlw 0ffh
+0060 0698           00151           xorwf 18h           ;5BH in 18h
+                    00152           ;teste BCF
+0061 1018           00153           bcf 18h,0           ;5AH in 18H
+0062 3018           00154           movlw 18h
+0063 0084           00155           movwf fsr
+0064 1180           00156           bcf indirect,3      ;52H in 18h
+                    00157           ;teste ADDLW
+0065 3021           00158           movlw 21h
+0066 3EAF           00159           addlw 0afh          ;w=c0
+0067 0803           00160           movf 3,w
+0068 00A8           00161           movwf 28h
+0069 3E40           00162           addlw 40h           ;w=0, C=1, DC=0, Z=1
+006A 0803           00163           movf 3,w            ;C=1, DC=0, Z=0
+006B 00A9           00164           movwf 29h                                     
+                    00165           ;teste ANDLW
+006C 3055           00166           movlw 55h
+006D 39AA           00167           andlw 0aah          ;w=0, C=?, DC=?, Z=1
+006E 0803           00168           movf 3,w            ;C=?, DC=?, Z=0
+006F 00AA           00169           movwf 2Ah
+                    00170           ;teste geschachtelte CALLs
+0070 2001           00171           call up1 
+0071 02A0           00172           subwf 20h           ;53h in 20h 
+                    00173           ;teste IORLW
+0072 3802           00174           iorlw 2             ;w=3
+                    00175           ;teste SUBLW
+0073 3C02           00176           sublw 2             ;w=0FFh, C=0,DC=0,Z=0
+                    00177           ;test xorlw
+0074 3AF0           00178           xorlw 0f0h          ;W = 0F0h
+0075 00A1           00179           movwf 21h                  
+                    00180           
+                    00181  ende     
+0076 2876           00182           goto ende           ;Endlosschleife, verhindert Nirwana
+                    00183           
+                    00184             
