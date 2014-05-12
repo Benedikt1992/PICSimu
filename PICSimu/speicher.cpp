@@ -104,7 +104,7 @@ bool Speicher::write(int file, int wert)
 		{
 			int pclath=readOnBank(0,0xa);
 			pclath = pclath << 8;
-			int pcValue = (wert & 0x00ff) + pclath;
+			unsigned int pcValue = (wert & 0x00ff) + pclath;
 
 			if(steuerwerk->maschinencode.size() > pcValue)
 				steuerwerk->pc = steuerwerk->maschinencode.begin() + pcValue;
@@ -177,7 +177,7 @@ bool Speicher::write(int file, int wert)
 		{
 			int pclath=readOnBank(0,0xa);
 			pclath = pclath << 8;
-			int pcValue = (wert & 0x00ff) + pclath;
+			unsigned int pcValue = (wert & 0x00ff) + pclath;
 
 			if(steuerwerk->maschinencode.size() > pcValue)
 				steuerwerk->pc = steuerwerk->maschinencode.begin() + pcValue;
