@@ -53,6 +53,7 @@ private slots:
     void slotRAValueChanged(int, int);
     void slotRBValueChanged(int row, int column);
     void slotSpeicherChanged(int row, int column);
+    void showHelp();
 
 
 

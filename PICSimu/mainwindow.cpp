@@ -9,6 +9,8 @@
 #include <QFileDialog>
 #include "goklasse.h"
 #include <stdlib.h>
+#include <QDesktopServices>
+#include <QUrl>
 
 #define n_register 48
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
@@ -37,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tw_RA, SIGNAL(cellClicked(int,int)), SLOT(slotRAValueChanged(int,int)));
     connect(ui->tw_RB, SIGNAL(cellClicked(int,int)), SLOT(slotRBValueChanged(int,int)));
     connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
+    connect(ui->hilfe, SIGNAL(clicked()), SLOT(showHelp()));
 
 
 
@@ -839,4 +842,9 @@ void MainWindow::refreshRB()
 
         ui->tw_RB->item(0, 7-bit)->setText(pinValue);
     }
+}
+
+void MainWindow::showHelp()
+{
+    QDesktopServices::openUrl(QUrl("./help.pdf"));
 }

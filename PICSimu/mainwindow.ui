@@ -567,6 +567,19 @@ p, li { white-space: pre-wrap; }
      <string>0</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="hilfe">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>470</y>
+      <width>93</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hilfe</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
