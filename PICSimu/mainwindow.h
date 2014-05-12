@@ -42,6 +42,8 @@ private:
 
     void restoreOldValue(int row, int column);
 
+    void refreshFlagAndPc(void);
+
     bool lastRB0Value;
 private slots:
     void slotLoadLstFile(void);

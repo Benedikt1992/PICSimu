@@ -431,6 +431,33 @@ void MainWindow::refreshStorageElements()
     refreshStack();
     refreshRA();
     refreshRB();
+    refreshFlagAndPc();
+}
+
+void MainWindow::refreshFlagAndPc()
+{
+    // PC Refresh
+    int pc = steuerwerk->getPCInt();
+
+    int upper = pc & 0xFF00;
+    upper = upper >> 8;
+    int lower = pc &   0xFF;
+
+    QString upperString = convertIntToHexString(upper);
+    QString lowerString = convertIntToHexString(lower);
+
+    ui->pc_output->setText(upperString + lowerString);
+
+    // Flags
+    int status = steuerwerk->readForGUI(0, 0x03);
+
+    QString zeroFlag = QString::number((status & 4) >> 2);
+    QString digitCarry = QString::number((status & 2) >> 1);
+    QString carry = QString::number((status & 1) >> 0);
+
+    ui->zeroFLag_output->setText(zeroFlag);
+    ui->digitCarryFlag_output->setText(digitCarry);
+    ui->carryFlag_output->setText(carry);
 }
 
 void MainWindow::slotResetClicked()
