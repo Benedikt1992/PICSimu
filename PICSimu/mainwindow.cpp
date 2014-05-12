@@ -846,5 +846,5 @@ void MainWindow::refreshRB()
 
 void MainWindow::showHelp()
 {
-    QDesktopServices::openUrl(QUrl("./help.pdf"));
+    QDesktopServices::openUrl(QUrl("help.pdf"));
 }
