@@ -3,11 +3,12 @@
 
 #define n_register 48
 #define EEPROM_SIZE (0x003f)
-
+class Steuerwerk;
 class Speicher
 {
 public:
     int address_2007h;
+	Steuerwerk* steuerwerk;
 
 
     Speicher(void);

@@ -8,6 +8,7 @@ using namespace std;
 
 Speicher::Speicher(void)
 {
+	steuerwerk=NULL;
     terminateEEPROM = false;
 
     // Mapping
@@ -282,8 +283,10 @@ void Speicher::writePC(int value)
 	// PCL = value & 0x00FF
 	bank0[2]= value & 0x00FF;
 
+
+	//-> PCLATH wird nicht aktualisiert
 	//PCLATH = (value &1F00) >> 8
-	bank0[0xa]= (value&0x1f00)>>8;
+	//bank0[0xa]= (value&0x1f00)>>8;
 }
 
 int Speicher::read2007()

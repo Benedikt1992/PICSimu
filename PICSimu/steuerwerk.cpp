@@ -21,7 +21,7 @@ Steuerwerk::Steuerwerk(MainWindow* mainWindow)
     connect(this,SIGNAL(reset()),mainWindow,SLOT(slotResetClicked()));
     connect(this,SIGNAL(refreshStorageGUI()),mainWindow,SLOT(refreshStorageElements()));
     emit connectSteuerwerk(this);
-    alu = new Prozessor();
+	alu = new Prozessor(this);
     isRunning = iAmSleeping = false;
 
     wdt = 0;

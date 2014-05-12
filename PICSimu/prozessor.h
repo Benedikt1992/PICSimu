@@ -10,14 +10,14 @@ class Steuerwerk;
 class Prozessor
 {
 public:
-    Speicher speicher;
+	Speicher speicher;
     int cycles;
     int vorherigeCycles;
     double timePerCycle; //in mikro sekunden
     void setTimePerCycle(double);
     double computeRuntime(void);
 
-    Prozessor(void);
+	Prozessor(Steuerwerk* steuerwerk);
     ~Prozessor(void);
 
     void execute(int);

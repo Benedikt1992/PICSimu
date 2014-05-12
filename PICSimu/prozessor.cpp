@@ -9,9 +9,10 @@
 
 using namespace std;
 
-Prozessor::Prozessor(void)
+Prozessor::Prozessor(Steuerwerk* steuerwerk)
 {
     cycles =0;
+	speicher.steuerwerk = steuerwerk;
 }
 
 
