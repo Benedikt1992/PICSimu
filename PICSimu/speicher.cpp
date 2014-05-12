@@ -1,4 +1,5 @@
 #include "speicher.h"
+#include "steuerwerk.h"
 #include <iostream>
 #include <QtConcurrent/QtConcurrentRun>
 
@@ -98,7 +99,17 @@ bool Speicher::write(int file, int wert)
         //Indirect addr. adressiert die Adresse die im FSR Register hinterlegt ist
         //-> siehe abschnitt FSR für implementierung
 		//Option Register ist voll schreibbar
-		//PCL ist voll schreibbar
+		//PCL ist voll schreibbar, wenn PCL geschrieben wird, wird der PCLATH in PC übernommen
+		if(file==2)
+		{
+			int pclath=readOnBank(0,0xa);
+			pclath = pclath << 8;
+			int pcValue = (wert & 0x00ff) + pclath;
+
+			if(steuerwerk->maschinencode.size() > pcValue)
+				steuerwerk->pc = steuerwerk->maschinencode.begin() + pcValue;
+
+		}
 		//Status Register: bit 3 und 4 sind nicht schreibbar
 		if(file == 3)
 		{
@@ -161,7 +172,17 @@ bool Speicher::write(int file, int wert)
         //Indirect addr. adressiert die Adresse die im FSR Register hinterlegt ist
         //-> siehe abschnitt FSR für implementierung
 		//TMR0 ist voll schreibbar
-		//PCL ist voll schreibbar
+		//PCL ist voll schreibbar, wenn PCL geschrieben wird, wird der PCLATH in PC übernommen
+		if(file==2)
+		{
+			int pclath=readOnBank(0,0xa);
+			pclath = pclath << 8;
+			int pcValue = (wert & 0x00ff) + pclath;
+
+			if(steuerwerk->maschinencode.size() > pcValue)
+				steuerwerk->pc = steuerwerk->maschinencode.begin() + pcValue;
+
+		}
 		//Status Register: bit 3 und 4 sind nicht schreibbar
 		if(file == 3)
 		{
