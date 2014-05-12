@@ -36,8 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->goButton,SIGNAL(clicked()),SLOT(slotGoClicked()));
     connect(ui->tw_RA, SIGNAL(cellClicked(int,int)), SLOT(slotRAValueChanged(int,int)));
     connect(ui->tw_RB, SIGNAL(cellClicked(int,int)), SLOT(slotRBValueChanged(int,int)));
-	connect(ui->tw_RA, SIGNAL(cellDoubleClicked(int,int)),SLOT(slotPortDoubleClicked(int,int)));
-	connect(ui->tw_RB, SIGNAL(cellDoubleClicked(int,int)),SLOT(slotPortDoubleClicked(int,int)));
     connect(ui->tw_speicher, SIGNAL(cellChanged(int,int)), SLOT(slotSpeicherChanged(int, int)));
 
 
