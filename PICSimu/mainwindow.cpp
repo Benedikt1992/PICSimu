@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDir>
 
 #define n_register 48
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
@@ -846,5 +847,7 @@ void MainWindow::refreshRB()
 
 void MainWindow::showHelp()
 {
-    QDesktopServices::openUrl(QUrl("http://www.waxmar.de"));
+    QString path = QDir::currentPath();
+
+    QDesktopServices::openUrl(QUrl(path + "/help.pdf"));
 }
