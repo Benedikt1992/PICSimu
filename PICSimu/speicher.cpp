@@ -110,7 +110,9 @@ bool Speicher::write(int file, int wert)
         {
             int indFile = wert & 0x007f; //die durch 0x00 zu referenzierende Adresse
             int indBank = (wert & 0x0080) >> 7; //die durch 0x00 zu referenzierende Bank
-            refBank[0][0]= refBank[indBank][indFile];
+
+			//Speichere die Referenz der Adresse an Adress 0h
+			refBank[0][0]= refBank[indBank][indFile];
             refBank[1][0]= refBank[indBank][indFile];
             if(indFile==0) //wenn fsr wieder zurück auf 0 gesetzt wird, würde die vorherige adresse erhalten bleiben -> daher manuell NULL
             {
@@ -171,6 +173,8 @@ bool Speicher::write(int file, int wert)
         {
             int indFile = wert & 0x007f; //die durch 0x00 zu referenzierende Adresse
             int indBank = (wert & 0x0080) >> 7; //die durch 0x00 zu referenzierende Bank
+
+			//Speichere die Referenz der Adresse an Adress 0h
             refBank[0][0]= refBank[indBank][indFile];
             refBank[1][0]= refBank[indBank][indFile];
             if(indFile==0) //wenn fsr wieder zurück auf 0 gesetzt wird, würde die vorherige adresse erhalten bleiben -> daher manuell NULL
