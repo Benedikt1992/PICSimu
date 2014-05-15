@@ -141,7 +141,6 @@ bool Steuerwerk::executeStep(void)
         return false;
     }
 
-
     if(!programmEndeErreicht())
     {
 
