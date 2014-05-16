@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FRAME GUID="2FB25471-B62C-4EE6-BD43-F819C095ACF8" FORMAT="0000" APP_VERSION="2.2.0.8" CHECKSUM="4A6489533672AB2B">
-  <PROJECT FORMAT="1.00" NAME="PICSimu" AUTHOR="Benedikt" CREATED="2014.05.08 16:32:26" MODIFIED="2014.05.10 20:05:39">
+<FRAME GUID="2FB25471-B62C-4EE6-BD43-F819C095ACF8" FORMAT="0000" APP_VERSION="2.2.0.8" CHECKSUM="F8C589B2A51D7703">
+  <PROJECT FORMAT="1.00" NAME="PICSimu" AUTHOR="Benedikt" CREATED="2014.05.08 16:32:26" MODIFIED="2014.05.16 14:23:47">
     <DIAGRAMS>
       <DIAGRAM FORMAT="1.00" ID="0" NAME="Hauptprogramm" CREATED="2014.05.08 16:32:38" MODIFIED="2014.05.08 17:14:40">
         <LAYOUT FORMAT="1.00" COLUMNS="1" ROWS="7">
@@ -579,28 +579,259 @@
           <CONNECTION FORMAT="1.00" ID="10" FROM="9" TO="2" TEXT="" />
         </CONNECTIONS>
       </DIAGRAM>
-      <DIAGRAM FORMAT="1.00" ID="7" NAME="checkTimer0" CREATED="2014.05.10 18:48:52" MODIFIED="2014.05.10 18:48:52">
-        <LAYOUT FORMAT="1.00" COLUMNS="1" ROWS="3">
+      <DIAGRAM FORMAT="1.00" ID="7" NAME="checkTimer0" CREATED="2014.05.10 18:48:52" MODIFIED="2014.05.16 14:23:47">
+        <LAYOUT FORMAT="1.00" COLUMNS="7" ROWS="18">
           <ENTRIES>
-            <ENTRY COLUMN="0" ROW="0" ANCHOR="True">
+            <ENTRY COLUMN="0" ROW="8">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="61">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="0" ROW="9">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="72">
+                <TEXT><![CDATA[RA4alt & !RA4?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="0" ROW="12">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="85">
+                <TEXT><![CDATA[kein Vorteiler aktiv ODER Takt teilbar durch TimerRate?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="0" ROW="13">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="88">
+                <TEXT><![CDATA[inkrement und intcon bei Bedarf aktualisieren (INT-Flag setzen)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="0" ROW="14">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="97">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="6">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="161">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="7">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="57">
+                <TEXT><![CDATA[Inhalt von RA4 laden]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="8">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="59">
+                <TEXT><![CDATA[t0se gesetzt(neg. Flanke)?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="9">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="112">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="12">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="111">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="14">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="100">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="15">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="105">
+                <TEXT><![CDATA[RA4alt <- aktueller Wert RA4]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="16">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="164">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="0" ANCHOR="True">
               <FIGURE SUBTYPE="PapTitle" FORMAT="1.00" ID="0">
                 <TEXT><![CDATA[checkTimer0]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="0" ROW="1">
+            <ENTRY COLUMN="2" ROW="1">
               <FIGURE SUBTYPE="PapStart" FORMAT="1.00" ID="1">
                 <TEXT><![CDATA[Start]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="0" ROW="2">
+            <ENTRY COLUMN="2" ROW="2">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="4">
+                <TEXT><![CDATA[sleep?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="3">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="14">
+                <TEXT><![CDATA[Speicherinhalte von option-, timer0- und intcon-Register laden]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="4">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="16">
+                <TEXT><![CDATA[benötigte Bits extrahieren (t0cs, t0se, psa)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="5">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="18">
+                <TEXT><![CDATA[timerRate berechnen (Formel: 2^(option[0:2] + 1)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="6">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="20">
+                <TEXT><![CDATA[t0cs gesetzt(ext. Takt)?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="8">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="68">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="9">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="73">
+                <TEXT><![CDATA[!RA4alt & RA4?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="12">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="91">
+                <TEXT><![CDATA[kein Vorteiler aktiv ODER Takt teilbar durch TimerRate?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="13">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="94">
+                <TEXT><![CDATA[inkrement und intcon bei Bedarf aktualisieren (INT-Flag setzen)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="14">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="95">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="16">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="108">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="17">
               <FIGURE SUBTYPE="PapEnd" FORMAT="1.00" ID="2">
                 <TEXT><![CDATA[Ende]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="3" ROW="9">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="120">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="3" ROW="10">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="128">
+                <TEXT><![CDATA[inkrement und intcon bei Bedarf aktualisieren (INT-Flag setzen)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="3" ROW="16">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="148">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="4" ROW="6">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="32">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="4" ROW="9">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="119">
+                <TEXT><![CDATA[psa gesetz (ohne Vorteiler)?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="5" ROW="9">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="122">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="5" ROW="10">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="132">
+                <TEXT><![CDATA[Takt durch TimerRate teilbar?]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="5" ROW="11">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="134">
+                <TEXT><![CDATA[inkrement und intcon bei Bedarf aktualisieren (INT-Flag setzen)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="5" ROW="12">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="136">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="5" ROW="16">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="157">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="6" ROW="2">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="36">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="6" ROW="10">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="139">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="6" ROW="12">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="48">
+                <TEXT><![CDATA[]]></TEXT>
               </FIGURE>
             </ENTRY>
           </ENTRIES>
         </LAYOUT>
         <CONNECTIONS>
-          <CONNECTION FORMAT="1.00" ID="3" FROM="1" TO="2" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="3" FROM="1" TO="4" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="150" FROM="148" TO="108" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="109" FROM="108" TO="2" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="8" FROM="4" TO="36" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="5" FROM="4" TO="14" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="162" FROM="20" TO="161" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="15" FROM="14" TO="16" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="17" FROM="16" TO="18" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="19" FROM="18" TO="20" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="140" FROM="139" TO="48" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="107" FROM="105" TO="164" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="35" FROM="32" TO="119" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="33" FROM="20" TO="32" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="58" FROM="57" TO="59" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="62" FROM="59" TO="61" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="64" FROM="61" TO="72" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="69" FROM="59" TO="68" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="71" FROM="68" TO="73" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="87" FROM="85" TO="88" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="84" FROM="72" TO="85" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="160" FROM="91" TO="94" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="90" FROM="73" TO="91" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="96" FROM="94" TO="95" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="98" FROM="88" TO="97" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="99" FROM="97" TO="100" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="102" FROM="95" TO="100" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="104" FROM="100" TO="105" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="166" FROM="164" TO="108" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="129" FROM="128" TO="148" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="163" FROM="161" TO="57" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="113" FROM="72" TO="112" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="114" FROM="73" TO="112" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="115" FROM="112" TO="111" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="116" FROM="85" TO="111" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="117" FROM="91" TO="111" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="118" FROM="111" TO="100" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="121" FROM="119" TO="120" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="123" FROM="119" TO="122" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="126" FROM="120" TO="128" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="127" FROM="122" TO="132" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="152" FROM="136" TO="157" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="159" FROM="157" TO="148" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="133" FROM="132" TO="134" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="39" FROM="36" TO="139" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="53" FROM="48" TO="136" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="135" FROM="134" TO="136" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="141" FROM="132" TO="139" TEXT="" />
         </CONNECTIONS>
       </DIAGRAM>
       <DIAGRAM FORMAT="1.00" ID="8" NAME="analyzeAndExecute" CREATED="2014.05.10 18:49:44" MODIFIED="2014.05.10 19:24:47">
