@@ -556,6 +556,7 @@ void MainWindow::slotRBValueChanged(int row, int column)
         return;
 
     int currentValue = ui->tw_RB->item(row, column)->text().toInt();
+    //wert an der stelle toggeln
     int newValue = (~currentValue) & 1;
 
     ui->tw_RB->item(row, column)->setText(QString::number(newValue));
