@@ -1,0 +1,295 @@
+1. EINLEITUNG
+#############
+
+Das in diesem Dokument beschriebene Projekt zur Implementierung eines Simulators für den Mikrocontroller "PIC16F84",
+dient dazu die Funktionsweise des im dritten Semester verwendeten Mikrocontrollers besser nachzuvollziehen. Mithilfe
+des Simulators ist es möglich die Speicherinhalte der einzelnen Register einzusehen sowie zu manipulieren. Überdies kann
+der Ablauf übersetzter Programme in Form von .LST-Dateien simulieren und mit Hilfe von Breakpoints genauer verfolgt werden.
+Der Umsetzung des Simulators liegt zu großen Teilen das Datenblatt des "PIC16C84" von "Mikrochip Technology Inc." zugrunde.
+
+
+2. PIC16C84
+###########
+
+2.1 BEFEHLSSATZ
+###############
+
+Der PIC16C84 arbeitet bis auf wenige Ausnahmen (z.B. Programmcounter) mit 8 Bit Registern.
+Diese werden mit einem aus 35 Anweisungen bestehenden RISC-Befehlssatz beschrieben, welche
+nur grundlegende Operationen durchführen können (vlg. CISC-Befehlssätze haben für komplexere Operationen
+fertige Befehle). Dabei unterscheidet man zwischen bit- und byteorientierten Befehlen sowie Programmflussoperationen
+und solche Befehle, die mit Konstanten arbeiten, wobei sich die letzten beiden teilweise überschneiden z.B.) RETLW.
+Im Programmspeicher liegen die Befehle kodiert als 14-Bitwerte vor.
+
+2.2 ARCHITEKTUR
+###############
+
+Alle Mikrocontroller der PIC-Familie sind nach der Harvard-Architektur konzipiert. Im Gegensatz zur Von-Neumann-Architektur
+werden dabei Programm- und Datenspeicher von unterschiedlichen Bussen angesteuert, was die Geschwindigkeit des Systems um den
+Faktor zwei steigern kann. Die zugrunde liegende Busstruktur wurde im Rahmen des Simulators jedoch nicht berücksichtig, da sie
+für die korrekte Ausführung der Programme keine Rolle spielen.
+
+Im Speicher findet die sogenannte Adressspiegelung Einsatz. Der Speicher ist in zwei Bänke unterteilt. Zu großen Teilen
+verweisen die Einträge von Bank 0 und Bank 1 auf die selben Registerinhalte (z.B. General Purpose Register). Unter den
+Special Function Registern gibt es doppelt belegte Adressen. Ein Beispiel heirfür sind die Register PORTA und TRISA.
+
+
+
+BEFEHLSIMPLEMENTIERUNGEN
+########################
+
+x.1 MOVF
+########
+
+x.1.1 ECKDATEN
+##############
+
+Syntax: 	MOVF f,d
+Operanden:	0 <= f <= 127
+		d € [0,1]
+Operaton:	(f) -> (d)
+Status bits:	Zero-Flag
+Befehlscode:	00 1000 dfff ffff
+Beschreibung:	Der Inhalt des Registers f wird in ein Zielregister geschrieben,
+		das vom Wert des Parameters d abhängt. Bei d=0 wird der Inhalt in
+		das W-Register geschrieben, für d=1 zurück in das Quellregister.
+Zyklen:		1
+
+x.1.2 IMPLEMENTIERUNG
+#####################
+
+Zunächst wird der Parameter d aus dem Befehl extrahiert, um den Speicherort zu bestimmen.
+Durch Maskieren des Befehlscodes wird die Speicheradresse ausgelesen und danach der Inhalt
+an dieser Stelle geladen. Die Funktion read(int) berücksichtigt dabei den Wert des RP0-Bits
+im Satus-Register. Kann der Inhalt nicht gelesen werden, da eine ungültige Adresse vorliegt, gibt
+die Funktionen einen Wert zurück der mit 8 Bit nicht dargestellt werden kann. Nun wird mit der Methode
+checkZeroFlag(int) geprüft, ob das von der Operation affektierte Zero-Flag gesetzt bzw. gelöscht werden soll.
+Schlussendlich wird der "neue" Wert in das Zielregister zurückgeschrieben.
+Um einen homogeneren Ablauf der einzelnen Operationen zu erhalten, wird hier auch die Funktion writeBack mit dem Parameter file
+aufgerufen, auch wenn dieser im Falle von d=0 nicht benötigt wird.
+
+
+QUELLCODE
+void Prozessor::movf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 1000 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
+        return;
+    }
+
+    // Operation
+    int newValue = currentValue;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkZeroFlag(newValue);
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    cycles++;
+}
+
+
+x.2 BTFSC
+#########
+
+x.2.1 ECKDATEN
+##############
+
+Syntax: 	BTFSC f,b
+Operanden:	0 <= f <= 127
+		0 <= b <= 7
+Operaton:	skip if (f<b>) = 0
+Status bits:	keine
+Befehlscode:	01 10bb bfff ffff
+Beschreibung:	Wenn das entsprechende Bit im Register f '1' ist,
+		wird er nächste Befehl ausgeführt. Ansonsten wird der
+		nächste Befehl übersprungen und stattdessen ein NOP
+		ausgeführt.
+Zyklen:		1(2)
+
+x.2.2 IMPLEMENTIERUNG
+#####################
+
+Der Grundlegende unterschied zu dem MOVF-Befehl besteht darin, dass der PC verändert wird bzw. verändert werden kann.
+Da dieser im Steuerwerk liegt, muss der Funktion eine Referenz darauf übergeben werden. Über diese kann der PC verändert werden.
+Zunächst werden aus dem Befehlscode erneut durch Maskieren die Parameter extrahiert, welche in diesem Fall b und f sind.
+Wie in MOVF wird darauf der Speicherinhalt von f gelesen. Nun wird mittels der Bedingung actualValue & (1<<bit) geprüft, ob
+das Bit an der Stelle b gesetzt ist. Ist es gesetzt wird ein Befehlszyklus angerechnet, wenn nicht wird der PC zusätzlich inkrementiert
+und zwei Befehlszyklen angerechnet. Um einen möglichen Timer-Inkrement zwischen den beiden Zyklen nicht zu übergehen wird zwischen den
+beiden cycles++ Befehlen die checkTimer0()-Methode aufgerufen.
+
+QUELLCODE
+void Prozessor::btfsc(int command, Steuerwerk* steuerwerk)
+{
+    int bit, file, actualValue;
+    //      01 01bb bfff ffff
+    //  &   00 0011 1000 0000  = 0x380
+    //      00 00bb b000 0000
+    //  >>  00 0000 0000 0bbb
+
+    bit = command & 0x380;
+    bit = bit >> 7;
+
+    //      01 01bb bfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+
+    file = command & 0x7F;
+
+    actualValue = speicher.read(file);
+    if(actualValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
+        return;
+    }
+
+    if(actualValue & (1<<bit))
+    {
+        //Bit ist 1
+        cycles++;
+    }
+    else
+    {
+        //Bit ist 0 -> nächster Befehl wird übersprungen
+        steuerwerk->pc++;
+        /*
+         *  Es muss nach jedem Befehlszyklus geprüft werden,
+         *  ob der Timer gesetzt werden soll, da sonst Inkrements
+         *  von TMR0 verpasst werden können.
+         */
+        cycles++;
+        steuerwerk->checkTimer0();
+        cycles++;
+    }
+}
+
+
+x.3 SUBWF
+#########
+
+x.3.1 ECKDATEN
+##############
+
+Syntax: 	SUBWF f,d
+Operanden:	0 <= f <= 127
+		d € [0,1]
+Operaton:	(f) -> (d)
+Status bits:	Carry-, Digit-Carry-, Zero-Flag
+Befehlscode:	00 0010 dfff ffff
+Beschreibung:	Subtraktion per 2er-Komplement W-Register minus Register f.
+		Für d=0 wird das Ergebnis im W-Register gespeichert, für
+		d=1 im Register f.
+Zyklen:		1
+
+x.3.2 IMPLEMENTIERUNG
+#####################
+
+Der Mikrocontroller selbst arbeitet zwar mit der 2er-Komplement-Methode, da bei der Programmierung
+in C++ die Subtraktion zur Verfügung steht, kann dieser Umweg ausgespart werden. Die Funktion gleicht
+zu großen Teilen der Funktion MOVF. Unterschiede sind zu finden in der Operationszeile
+int newValue = currentValue - workingRegisterValue;
+und in der Prüfung der Flags, da hier mehrere betroffen sind. Für das Digit-Carry gibt es für Subtraktion
+und Addition verschiedene Kriterien. Aus diesem Grund wird hier nicht die Funktion checkDigitCarry() sondern
+checkDigitCarryFlagSubtraktion() aufgerufen.
+
+QUELLCODE
+void Prozessor::subwf(int command)
+{
+    bool storeInFileRegister = (CHECK_BIT(command,7));
+
+    //      00 0010 dfff ffff
+    //  &   00 0000 0111 1111  = 0x7F
+    //      00 0000 0fff ffff
+    int file = command & 0x7F;
+
+    // Register laden
+    int currentValue = speicher.read(file);
+    int workingRegisterValue = speicher.readW();
+    if(currentValue== 0x0100) //die Speicheradresse ist nicht belegt!!
+    {
+        cycles++;
+        return;
+    }
+
+    // Rechenoperation
+    int newValue = currentValue - workingRegisterValue;
+
+    // betroffene Flags prüfen und setzen/löschen
+    checkCarryFlag(newValue);
+    checkDigitCarryFlagSubtraktion(currentValue, workingRegisterValue);
+    checkZeroFlag(newValue);
+
+    writeBack(file, newValue, storeInFileRegister);
+
+    cycles++;
+}
+
+
+x.3 CALL
+########
+
+x.3.1 ECKDATEN
+##############
+
+Syntax: 	CALL k
+Operanden:	0 <= f <= 127
+Operaton:	PC)+ 1 -> TOS,
+		k -> PC<10:0>,
+		(PCLATH<4:3>) -> PC<12:11>
+Status bits:	keine
+Befehlscode:	10 0kkk kkkk kkkk
+Beschreibung:	Subroutine wird aufgerufen. Die Rücksprungadresse wird auf den Stack
+		gelegt. Der untere Teil des PC ergibt sich aus k (untere 11 Bit). Der
+		obere Teil stammt aus dem dritten und vierten Bit des PCLATH-Registers.
+Zyklen:		1
+
+
+x.3.2 IMPLEMENTIERUNG
+#####################
+
+QUELLCODE
+void Prozessor::call(int command, Steuerwerk* steuerwerk)
+{
+    //      10 0kkk kkkk kkkk
+    //  &   00 0111 1111 1111  = 0x07FF
+    //      00 0000 kkkk kkkk
+    int address = (command & 0x7FF); //Der Programmcounter hat 13 BIT die 2 fehlenden oberen Bits werden aus dem aktuellen PC extrahiert
+    int pclath = speicher.read(0x0A);
+    //PCLATH ist jetz in Adresse integriert
+
+    // Push PC+1 to stack
+	vector<Codeline>::iterator stackAddress = steuerwerk->pc + 1;
+    steuerwerk->picStack.push(stackAddress);
+
+//     PCLATH maskieren
+//          xxxp pxxx
+//      &   0001 1000 = 0x18
+//      =   000p p000
+    pclath = pclath & 0x18;
+
+    // PCLATH shiften um 8 Bit nach links
+    pclath = pclath << 8;
+
+    vector<Codeline>::iterator subroutineAddress = steuerwerk->maschinencode.begin() + address + pclath - 1;//PC wird noch um inkrementiert
+
+    steuerwerk->pc = subroutineAddress;
+
+    /*
+     *  Es muss nach jedem Befehlszyklus geprüft werden,
+     *  ob der Timer gesetzt werden soll, da sonst Inkrements
+     *  von TMR0 verpasst werden können.
+     */
+    cycles++;
+    steuerwerk->checkTimer0();
+    cycles++;
+}
