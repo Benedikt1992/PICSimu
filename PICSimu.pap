@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FRAME GUID="2FB25471-B62C-4EE6-BD43-F819C095ACF8" FORMAT="0000" APP_VERSION="2.2.0.8" CHECKSUM="629F77DE5577DF1D">
-  <PROJECT FORMAT="1.00" NAME="PICSimu" AUTHOR="Benedikt" CREATED="2014.05.08 16:32:26" MODIFIED="2014.05.17 11:11:03">
+<FRAME GUID="2FB25471-B62C-4EE6-BD43-F819C095ACF8" FORMAT="0000" APP_VERSION="2.2.0.8" CHECKSUM="8B08931AC45CD28C">
+  <PROJECT FORMAT="1.00" NAME="PICSimu" AUTHOR="Benedikt" CREATED="2014.05.08 16:32:26" MODIFIED="2014.05.18 09:37:52">
     <DIAGRAMS>
       <DIAGRAM FORMAT="1.00" ID="0" NAME="Hauptprogramm" CREATED="2014.05.08 16:32:38" MODIFIED="2014.05.08 17:14:40">
         <LAYOUT FORMAT="1.00" COLUMNS="1" ROWS="7">
@@ -804,7 +804,7 @@
           <CONNECTION FORMAT="1.00" ID="206" FROM="200" TO="204" TEXT="" />
         </CONNECTIONS>
       </DIAGRAM>
-      <DIAGRAM FORMAT="1.00" ID="8" NAME="analyzeAndExecute" CREATED="2014.05.10 18:49:44" MODIFIED="2014.05.10 19:24:47">
+      <DIAGRAM FORMAT="1.00" ID="8" NAME="analyzeAndExecute" CREATED="2014.05.10 18:49:44" MODIFIED="2014.05.18 09:37:52">
         <LAYOUT FORMAT="1.00" COLUMNS="2" ROWS="4">
           <ENTRIES>
             <ENTRY COLUMN="0" ROW="0" ANCHOR="True">
@@ -829,7 +829,7 @@
             </ENTRY>
             <ENTRY COLUMN="1" ROW="2">
               <FIGURE SUBTYPE="PapComment" FORMAT="1.00" ID="6">
-                <TEXT><![CDATA[In den jeweiligen Funktionen werde auch die Cyclen mit berechnet. (Nötig um die Laufzeit zu berechnen)]]></TEXT>
+                <TEXT><![CDATA[In den jeweiligen Funktionen werde auch die Zyklen mit berechnet. (Nötig um die Laufzeit zu berechnen)]]></TEXT>
               </FIGURE>
             </ENTRY>
           </ENTRIES>
