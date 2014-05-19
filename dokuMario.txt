@@ -33,7 +33,77 @@ Im Speicher findet die sogenannte Adressspiegelung Einsatz. Der Speicher ist in 
 verweisen die Einträge von Bank 0 und Bank 1 auf die selben Registerinhalte (z.B. General Purpose Register). Unter den
 Special Function Registern gibt es doppelt belegte Adressen. Ein Beispiel heirfür sind die Register PORTA und TRISA.
 
+SIMULATOR
+#########
 
+1. ALLGEMEINE DEFINITION
+########################
+
+Ein Simulator bzw. eine Simulation soll in erster Linie Vorgänge, Zusammenhänge und Objekte der realen Welt
+abstrahieren und vereinfacht nachstellen. Somit lassen sich aus der Simulation Rückschlüsse auf das echte System
+ziehen. Darüber hinaus lassen sich Szenarien ohne Risiken durchspielen und ihr Ablauf in der Realität besser abschätzen.
+
+2. VOR- UND NACHTEILE DER SIMULATION
+####################################
+
+Wie bereits im vorigen Abschnitt erwähnt, können mittels einer Simulation Erfahrung über das zugehörige reale System
+gesammelt werden. Das bedeutet im Klartext, dass Lernwillige sich im Falle des PIC16C84 die Hardware nicht kaufen müssen
+und damit auch keine Gefahr besteht diese durch falsche Handhabung zu beschädigen.
+
+Nachteilig an der Verwendung eines Simulationsprogrammes ist im konkreten Fall des PIC-Simulators mangels
+identischer Taktung zum echten Mikrocontroller die Gegebenheit zeitkritische Anwendungen nicht sinnvoll nachbilden
+zu können.
+
+
+
+
+BEDIENUNG
+#########
+
+1. PROGRAMM LADEN
+#################
+
+Um ein Programm zu laden klickt man unten rechts auf den Button "Browse". Darauf öffnet sich ein Dialog,
+über den man die gewünschte .LST-Datei auswählt. Nach einem Klick auf "Load LST" erscheint in der darüber liegenden
+Tabelle der gesamte Inhalt des gewählten Dokuments. Dabei wird die Startadresse 0000 direkt grün markiert.
+
+2. PROGRAMM STARTEN UND DEBUGGEN
+################################
+
+Um das geladene Programm zu starten genügt ein Klick auf "Go" (links unter dem angezeigten Quelltext). Wurde dieser
+betätigt läuft das Programm ohne Unterbrechungen durch bis man auf "Stop" klickt. Während des Programmlaufes ist es
+außerdem möglich, die Geschwindigkeit zu ändern. Dafür verändert man den Wert Verzögerung (rechts neben "Go").
+
+Möchte man das Programm Schritt für Schritt ausführen lassen, so erreicht man dies durch den Button "Execute Step".
+Auch das setzen von Breakpoints ist möglich. Durch Doppelklicken auf eine Codezeile färbt sich diese rot und das Programm stoppt
+während eines aktiven "Go"-Befehls, wenn es an dieser Stelle angelangt. 
+Es muss sich hierbei um eine Zeile mit übersetztem Maschinencode handeln. Ein equ Befehl kann also nicht als Breapoint gewählt werden.
+
+3. HÄNDISCHE SPEICHERMANIPULATION
+#################################
+
+Links von der Programmansicht sind zwei Fenster zur Visualisierung des Speicherinhaltes vorhanden. Der obere zeigt die gesamten Register
+des RAMs, das andere listet die Special Function Register auf. Möchte man einen Wert im Speicher händisch Manipulieren, so kann dies über einen
+Doppelklick auf den entsprechenden HEX-Eintrag der gewünschten Speicherzelle bewerkstelligt werden. Das ist allerdings nur in der allgemeinen
+Speicheransicht möglich. Über das SFR-Widget können keine Werte geändert werden.
+
+Auf der rechten Seite lassen sich zwei Kontrollbausteine zur Ansteuerung der beiden Ports RA und RB finden. Durch einfaches Anklicken des aktuellen
+Wertes eines Pins wird selbiger zum toggeln gebracht.
+
+
+4. WATCHDOG, STACK UND WEITERE ANZEIGEN
+#######################################
+
+Neben den bisher genannten GUI-Elementen, gibt es noch eine Checkbox mit der sich der Watchdog an-/abschalten lässt. Darüber wird die aktuelle
+Laufzeit in µs angegeben. Damit lässt sich erkennen wie viel Zeit noch nötig ist, bis der Watchdog eingreift.
+Außerdem kann die Frequenz mit der die Befehle abgearbeitet werden verändert werden. Abhängig davon wird die Dauer pro Befehlszyklus berechnet
+und ebenfalls ausgegeben. Mittels des Clear-Buttons kann die momentane Gesamtlaufzeit des Programms auf 0 zurückgesetzt werden.
+
+Oberhalb der Port-Visualisierung findet man den Stack. Dort werden die Rücksprungadressen von CALL-Befehlen abgelegt und angezeigt. Im Gegensatz
+zum echten PIC gibt es hier keine Begrengzung der Stackgröße auf 8 Einträge.
+
+Unterhalb des Programmlistings werden explizit die von den Prozessoroperationen betroffenen Flags im Status-Register und der gesamte Programmcounter
+als HEX-Wert angezeigt.
 
 BEFEHLSIMPLEMENTIERUNGEN
 ########################
